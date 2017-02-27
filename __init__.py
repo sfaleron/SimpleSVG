@@ -1,0 +1,2 @@
+
+from simplesvg import *
