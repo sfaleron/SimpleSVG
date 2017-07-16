@@ -41,9 +41,9 @@ class SVG(Element):
    def __str__(self):
       return '<?xml version="1.0" encoding="utf-8"?>\n' + Element.__str__(self)
 
-class SVGStack(list):
-   def __init__(self, *args, **kwargs):
-      list.__init__(self, [SVG(*args, **kwargs)])
+class _Stack(list):
+   def __init__(self, *args):
+      list.__init__(self, *args)
       self.layers = set()
       self._n = 0
 
@@ -76,8 +76,24 @@ class SVGStack(list):
    def push_defs(self):
       return self._push(Defs())
 
+class SVGStack(_Stack):
+   def __init__(self, *args, **kwargs):
+      args += ([SVG(**kwargs)],)
+      _Stack.__init__(self, *args)
+
    def __str__(self):
       return str(self[0])
+
+class EmbedStack(_Stack):
+   def __init__(self, *args):
+      _Stack.__init__(self, *args)
+
+   def embed(self, parent):
+      for e in self:
+         parent.add_child(e)
+
+   def __str__(self):
+      return '\n'.join(map(str, self))
 
 
 # only relative movements!
@@ -88,7 +104,7 @@ class Path(StyledElement):
 
    def lineTo(self, pt):
       self.steps.append('l%s %s' % tuple(pt))
-   
+
    def lineToMany(self, many):
       self.steps.append('l' + 'l'.join(['%s %s' % tuple(i) for i in many]))
 
