@@ -28,6 +28,11 @@ SIDE = 400.0
 # is true because MN = FN and BN = AM. The equality of the proportions at the
 # ends defines the golden ratio.
 
+# The equivalence of the segments used in the center equality follows clearly
+# from the symmetry of the figure, but full rigor might demand more. I am
+# doubtful that the rigor presented here is less than what appears on the web
+# page, however!
+
 # Maybe later: http://www.cut-the-knot.org/do_you_know/Buratino2.shtml
 
 # Not triangular, but also interesting: http://www.cut-the-knot.org/do_you_know/Buratino6.shtml
