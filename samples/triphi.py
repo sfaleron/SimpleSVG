@@ -15,6 +15,19 @@ SIDE = 400.0
 # Construct a figure like that at http://www.cut-the-knot.org/do_you_know/Buratino7.shtml
 # our points are labeled counterclockwise, which doesn't always correspond to the diagram on this page
 
+# Concerning the proof on that page: it is terse, and at best misleading, I
+# would say incorrect, but I am not accustomed to judging geometric proofs.
+# Here is a clearer, correct proof, using their labels:
+
+# AF   MN   FN   BF
+# -- = -- = -- = --
+# BF   BN   AM   AB
+
+# The first equality comes from Thales, as stated. The last equality is due to
+# triangle similarity. The center equality took me a while to figure out, but
+# is true because MN = FN and BN = AM. The equality of the proportions at the
+# ends defines the golden ratio.
+
 # Maybe later: http://www.cut-the-knot.org/do_you_know/Buratino2.shtml
 
 # Not triangular, but also interesting: http://www.cut-the-knot.org/do_you_know/Buratino6.shtml
