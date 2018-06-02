@@ -33,6 +33,9 @@ SIDE = 400.0
 # doubtful that the rigor presented here is less than what appears on the web
 # page, however!
 
+# The interior segments are also in the Golden Ratio. They form the remaining
+# side of the similar triangles.
+
 # Maybe later: http://www.cut-the-knot.org/do_you_know/Buratino2.shtml
 
 # Not triangular, but also interesting: http://www.cut-the-knot.org/do_you_know/Buratino6.shtml
