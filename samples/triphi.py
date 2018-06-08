@@ -7,7 +7,7 @@ from collections import namedtuple
 
 # for an SVG canvas
 def transform(p):
-   return Point(SIDE + p.x, SIDE - p.y)
+    return Point(SIDE + p.x, SIDE - p.y)
 
 Point = namedtuple('Point', ('x', 'y'))
 
@@ -46,7 +46,7 @@ A,B,C = [transform(Point(r*cos(a), r*sin(a))) for a in [(2./3*i+.5)*pi for i in 
 invphi = 2/(1+5**2**-1)
 
 def between(p1, p2, pos):
-   return Point((p1.x-p2.x)*pos+p2.x, (p1.y-p2.y)*pos+p2.y)
+    return Point((p1.x-p2.x)*pos+p2.x, (p1.y-p2.y)*pos+p2.y)
 
 
 D = between(A, B, invphi)
@@ -60,7 +60,7 @@ F = between(C, A, invphi)
 # the midpoints of the sides of the previous triangle.
 
 def midpoint(p1, p2):
-   return Point((p1.x+p2.x)/2, (p1.y+p2.y)/2)
+    return Point((p1.x+p2.x)/2, (p1.y+p2.y)/2)
 
 G = midpoint(D, E)
 
@@ -70,12 +70,12 @@ I = midpoint(F, D)
 
 
 def mkdumpfunc(lw, rw):
-   fmtstr = ' '.join([','.join(['%%%d.%df' % (lw+rw+1, rw)]*2)]*3)
-   return lambda p1, p2, p3: fmtstr % (p1.x, p1.y, p2.x, p2.y, p3.x, p3.y)
+    fmtstr = ' '.join([','.join(['%%%d.%df' % (lw+rw+1, rw)]*2)]*3)
+    return lambda p1, p2, p3: fmtstr % (p1.x, p1.y, p2.x, p2.y, p3.x, p3.y)
 
 if __name__ == '__main__':
-   dumpfunc = mkdumpfunc(3, 4)
+    dumpfunc = mkdumpfunc(3, 4)
 
-   print(dumpfunc(A, B, C))
-   print(dumpfunc(D, E, F))
-   print(dumpfunc(G, H, I))
+    print(dumpfunc(A, B, C))
+    print(dumpfunc(D, E, F))
+    print(dumpfunc(G, H, I))
