@@ -1,2 +1,2 @@
 
-from simplesvg import *
+from . simplesvg import *

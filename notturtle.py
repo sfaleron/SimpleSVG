@@ -1,4 +1,6 @@
 
+from __future__ import print_function
+
 # SVG's coordinate system has an inverted y-axis from the conventional
 # cartesian coordinate system used outside computer graphics:
 # positive y is down, increasing angles go clockwise, the quadrants are
@@ -71,7 +73,7 @@ def RoundedRect(w, h, r, pos=(0.0, 0.0), **attrs):
    w = float(w)
    h = float(h)
 
-   pos = map(float, pos)
+   pos = tuple(map(float, pos))
 
    if not isinstance(r, Mapping):
       r = dict(ul=r, ur=r, ll=r, lr=r)
@@ -137,4 +139,4 @@ if __name__ == '__main__':
       stk.add(path)
       stk.pop()
 
-   print stk
+   print(stk)

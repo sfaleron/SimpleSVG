@@ -1,4 +1,6 @@
 
+from __future__ import print_function
+
 DARK  = '#5c84d0'
 LIGHT = '#acc8e4'
 BG    = '#e0ecf8'
@@ -109,4 +111,4 @@ def make_svg(args=[]):
 if __name__ == '__main__':
    import sys
 
-   print str(make_svg(sys.argv[1:]))
+   print(make_svg(sys.argv[1:]))

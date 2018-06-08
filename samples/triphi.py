@@ -1,4 +1,6 @@
 
+from __future__ import print_function
+
 from math import sin, cos, pi
 
 from collections import namedtuple
@@ -74,6 +76,6 @@ def mkdumpfunc(lw, rw):
 if __name__ == '__main__':
    dumpfunc = mkdumpfunc(3, 4)
 
-   print dumpfunc(A, B, C)
-   print dumpfunc(D, E, F)
-   print dumpfunc(G, H, I)
+   print(dumpfunc(A, B, C))
+   print(dumpfunc(D, E, F))
+   print(dumpfunc(G, H, I))

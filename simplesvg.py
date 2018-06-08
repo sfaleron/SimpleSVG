@@ -8,6 +8,12 @@ even the Standard Libary! EDIT: Oh drat. Almost."""
 # note that coordinate values may be numeric or stringy, or
 # indeed, anything that has a __str__() member!
 
+import sys
+
+_PY3 = sys.version_info[0] == 3
+
+del sys
+
 try:
    from copy import deepcopy as _deepcopy
 except ImportError:
@@ -36,11 +42,21 @@ class Element(dict):
       return '<%s %s%s\n' % (self._tag, ' '.join(['%s="%s"' % i for i in self.iteritems()]),
          '>\n%s\n</%s>' % ('\n'.join(map(str, self._children)), self._tag) if self._children else ' />')
 
+   if _PY3:
+      @property
+      def iteritems(self):
+         return self.items
+
 class Style(dict):
    """What it says on the tin. A dictionary representation of the style attribute.
    Not to be confused with the Style element!"""
    def __str__(self):
       return ';'.join(['%s:%s' % i for i in self.iteritems()])
+
+   if _PY3:
+      @property
+      def iteritems(self):
+         return self.items
 
 class StyledElement(Element):
    def __init__(self, tag, **attrs):
