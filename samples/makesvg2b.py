@@ -16,48 +16,52 @@ if __name__ == '__main__':
     GAP    = 4.5
     WIDER  = 1.5
     RADIUS = 1.5
-    STROKE_WIDTH  = 0.01
     STRAIGHT_SIDE = 28.4
 
+    attrs = {
+        'stroke'        : '#0000ff',
+        'stroke-width'  : 0.01,
+        'stroke-opacity': 1,
+        'fill-opacity'  : 0
+    }
+
     doc = SVG()
-    path = doc.add_child(NotTurtle(
-        **{'stroke-width':str(STROKE_WIDTH), 'stroke':'#0000ff',
-            'stroke-opacity':'1', 'fill-opacity':'0'}))
+    path = doc.add_child(NotTurtle(**attrs))
 
     path.turnRight(RADIUS)
 
     if WIDER:
-        path.forwards(WIDER)
+        path.forward(WIDER)
 
     path.turnRight(RADIUS)
     path.turnLeft( RADIUS)
 
-    path.forwards(GAP)
+    path.forward(GAP)
 
     path.turnLeft( RADIUS)
     path.turnRight(RADIUS)
 
     if WIDER:
-        path.forwards(WIDER)
+        path.forward(WIDER)
 
     path.turnRight(RADIUS)
-    path.forwards(STRAIGHT_SIDE)
+    path.forward(STRAIGHT_SIDE)
 
     path.turnRight(RADIUS)
 
     if WIDER:
-        path.forwards(WIDER)
+        path.forward(WIDER)
 
     path.turnRight(RADIUS)
     path.turnLeft( RADIUS)
 
-    path.forwards(GAP)
+    path.forward(GAP)
 
     path.turnLeft( RADIUS)
     path.turnRight(RADIUS)
 
     if WIDER:
-        path.forwards(WIDER)
+        path.forward(WIDER)
 
     path.turnRight(RADIUS)
 

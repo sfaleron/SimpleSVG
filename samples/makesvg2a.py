@@ -16,13 +16,17 @@ if __name__ == '__main__':
     GAP    = 4.5
     WIDER  = 1.5
     RADIUS = 1.5
-    STROKE_WIDTH  = 0.01
     STRAIGHT_SIDE = 28.4
 
+    attrs = {
+        'stroke'        : '#0000ff',
+        'stroke-width'  : 0.01,
+        'stroke-opacity': 1,
+        'fill-opacity'  : 0
+    }
+
     doc = SVG()
-    path = doc.add_child(NotTurtle((0, 0),
-        **{'stroke-width':str(STROKE_WIDTH), 'stroke':'#0000ff',
-            'stroke-opacity':'1', 'fill-opacity':'0'}))
+    path = doc.add_child(NotTurtle(**attrs))
 
     path.quadrant(1, RADIUS)
 
