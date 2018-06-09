@@ -22,6 +22,10 @@ TURNS = {
     (RIGHT, RIGHT): ( DOWN,  1,  1,  True)
 }
 
+SIGNS = {
+   'x': (-1, -1, 1, 1),
+   'y': ( 1, -1,-1, 1)
+}
 
 # merely inspired-by
 class NotTurtle(Path):
@@ -40,7 +44,20 @@ class NotTurtle(Path):
         else:
             raise ValueError('not a valid orientation')
 
-    def _quadrant(self, whichway, r):
+    def quadrant(self, quadrant, r, incAngle=True, flipY=True):
+        dx = r * SIGNS['x'][quadrant]
+        dy = r * SIGNS['y'][quadrant]
+
+        if flipY:
+            dy *= -1
+
+        if incAngle:
+            dx *= -1
+            dy *= -1
+
+        self.arcTo((dx, dy), r, r, 0, False, incAngle)
+
+    def _doTurn(self, whichway, r):
         orientation, sgnx, sgny, incAngle = TURNS[(self._orientation, whichway)]
 
         if r:
@@ -49,10 +66,10 @@ class NotTurtle(Path):
         self._orientation = orientation
 
     def turnLeft(self, r):
-        self._quadrant(LEFT, r)
+        self._doTurn(LEFT, r)
 
     def turnRight(self, r):
-        self._quadrant(RIGHT, r)
+        self._doTurn(RIGHT, r)
 
     def forward(self, howFar):
         self.lineTo( {
@@ -94,14 +111,20 @@ def RoundedRect(w, h, r, pos=(0.0, 0.0), **attrs):
     return path
 
 
+__all__ = ('NotTurtle', 'RoundedRect')
+
+
 if __name__ == '__main__':
     #from simplesvg import EmbedStack, Line
     from simplesvg import SVGStack, Line
     from itertools import product
 
     attrs = {
-        'stroke-width':'0.5', 'stroke':'#0000ff',
-        'stroke-opacity':'1', 'fill-opacity':'0'}
+        'stroke'        : '#0000ff',
+        'stroke-width'  : 0.5,
+        'stroke-opacity': 1,
+        'fill-opacity'  : 0
+    }
 
     #stk = EmbedStack()
     stk = SVGStack(transform='translate(100 80)')
