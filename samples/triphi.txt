@@ -1,0 +1,341 @@
+
+Proof that the outer lengths are in the Golden Ratio, using the labels from the source
+http://www.cut-the-knot.org/do_you_know/Buratino7.shtml
+
+AF:BF = MN:BN = FN:AM = BF:AB
+
+The first equality comes from propsition 2 of book 6 of The Elements, which this site refers to as "Thales' Theorem". Its usual name seems to be the "Intercept Theorem". The Wikipedia page states right away that it is also known as Thales' Theorem!
+
+Many "Thales's Theorems"
+http://www.cut-the-knot.org/pythagoras/ThalesTheorems.shtml
+
+https://www.cut-the-knot.org/Curriculum/Geometry/GeoGebra/ThalesTheorem.shtml
+https://mathcs.clarku.edu/~djoyce/java/elements/bookVI/propVI2.html
+https://en.wikipedia.org/wiki/Intercept_theorem
+
+This steps through the proof, with static web pages
+http://math.furman.edu/~jpoole/euclidselements/eubk6/prop02/prop2~1.htm
+
+The center equality is true because MN = FN and BN = AM.
+
+The last equality is due to triangle similarity.
+
+The equality of the proportions at the ends defines the Golden Ratio.
+
+Similarity can be used again on the remaining sides of the similar triangles to show that the inner lengths are also in the Golden Ratio.
+
+
+Derivation of all lengths, angles, areas:
+
+Scale is set by setting the short interior length to 1.
+
+"s" for slim: long exterior length, obtuse inner angle
+"q" for squat: short exterior length, acute inner angle
+
+angles are caps
+opposite sides lowercase
+
+side 1 is the short interior side
+side 2 is the long interior side (shared)
+side 3 is the exterior side. short:squat, long:slim
+
+Q3 is opposite an interior angle of an equilateral triangle
+S3 is Q3's supplement
+Q3=60
+S3=120
+note: sines are equal, absolute value of cosines are equal
+
+remaining angles of the slim, squat
+S1+S2=60
+Q1+Q2=120
+
+slim, squat meet at vertex of a equilateral triangle
+S1+Q1=60
+
+remaining angles of the union of slim+squat
+S2+Q2=120
+
+angles made by a line intersecting parallel lines are equal
+Q1=S2
+redundant, follows from S1+S2=S1+Q1=60
+also, requires more of the figure, the rest only needs one slim/squat set
+
+short interior
+s1=q1
+
+long interior
+s2=q2
+
+s2/q1=s3/q3=phi
+
+law of sines and sum/difference formulae
+
+A=sinS3=sinQ3=sqrt(3)/2
+B=sinS2=sinQ1
+C=cosS2=cosQ1=sqrt(1-B*B)
+-
+A/s3=Ks
+A/q3=Kq
+Ks*s3=Kq*q3
+s3/q3=Kq/Ks=phi
+-
+"s1=q1"
+
+sinS1/s1=Ks
+sin(60-S2)/s1=Ks
+(sin60cosS2-cos60sinS2)/s1=Ks
+(A*C-B/2)/s1=Ks
+
+sinQ1/q1=Kq
+B/q1=Kq
+
+B/Kq=(A*C-B/2)/Ks
+
+Ks/Kq=(A*C-B/2)/B=1/phi
+-
+"s2=q2"
+sinS2/s2=Ks
+B/s2=Ks
+
+sinQ2/q2=Kq
+sin(120-Q1)/q2=Kq
+(sin120cosQ1-cos120sinQ1)/q2=Kq
+(A*C+B/2)/q2=Kq
+
+B/Ks=(A*C+B/2)/Kq
+
+Kq/Ks=(A*C+B/2)/B=phi
+-
+(A*C-B/2)/B * (A*C+B/2)/B = 1
+(A*C/B-1/2) * (A*C/B+1/2) = 1
+
+AACC/BB - 1/4 = 1
+AA*(1-B*B)/BB - 1/4 = 1
+(AA-AA*BB)/BB - 1/4 = 1
+AA/BB-AA - 1/4 = 1
+
+BB=AA/(5/4+AA)
+BB=(3/4)/(5/4+(3/4))
+BB=3/8
+sinS2=sinQ1=sqrt(3/8)=sqrt(6/16)=sqrt(6)/4
+
+its not a nice angle, but its the product of (co)sines of nice angles, pi/4, pi/3 (-pi/2)
+could be a sum/diff formula with one term zero? not those angles..
+
+
+set the inner short (s1) to one.
+the inner long (s2,q2) is phi
+choose 60 (squat) or 120 (slim) degrees as an angle
+the rest can be found from law of cosines
+
+>>> from math import pi,sin,cos
+>>> phi=(1+5**.5)/2
+>>> phi
+1.618033988749895
+>>> s1=q1=1
+>>> s2=q2=phi
+>>> s3=(s1*s1+s2*s2-2*s1*s2*cos(2*pi/3))**.5
+>>> q3=(q1*q1+q2*q2-2*q1*q2*cos(pi/3))**.5
+>>> s3/q3
+1.618033988749895
+>>> cosS2=(s1*s1+s3*s3-s2*s2)/2/s1/s3
+>>> cosQ1=(q2*q2+q3*q3-q1*q1)/2/q2/q3
+>>> cosS2,cosQ1
+(0.7905694150420948, 0.790569415042095)
+>>> sinS2=(1-cosS2*cosS2)**.5
+>>> sinQ1=(1-cosQ1*cosQ1)**.5
+>>> sinS2,sinQ1
+(0.6123724356957946, 0.6123724356957944)
+>>> (3/8)**.5
+0.6123724356957945
+
+woot.
+
+Looks like it could have done it the easy way and still gotten the nice answer, rather than getting mired in square roots or quadtratic formulae as was feared.
+
+Mathomatic version 16.0.5
+Copyright (C) 1987-2012 George Gesslein II.
+200 equation spaces available in RAM; 2 megabytes per equation space.
+ANSI color mode enabled; manage by typing "help color".
+Anything done here is temporary, unless it is saved or redirected.
+1-> s3=(s1*s1+s2*s2+2*s1*s2/2)^.5
+
+                                       1
+#1: s3 = ((s1*s1) + (s2*s2) + (s1*s2))^-
+                                       2
+
+1-> cosS2=(s1*s1+s3*s3-s2*s2)/2/s1/s3
+
+            ((s1*s1) + (s3*s3) - (s2*s2))
+#2: cosS2 = -----------------------------
+                      (2*s1*s3)
+
+2-> sinS2=(1-cosS2*cosS2)**.5
+
+                                1
+#3: sinS2 = (1 - (cosS2*cosS2))^-
+                                2
+
+3-> replace cosS2 with #2
+
+                 ((s1^2 + s3^2 - s2^2)^2)  1
+#3: sinS2 = (1 - ------------------------)^-
+                      (4*s1^2*s3^2)        2
+
+3-> replace s3 with #1
+
+                     (((2*s1^2) + (s1*s2))^2)      1
+#3: sinS2 = (1 - --------------------------------)^-
+                 (4*s1^2*(s1^2 + s2^2 + (s1*s2)))  2
+
+3-> replace s1 with 1
+
+                    ((2 + s2)^2)      1
+#3: sinS2 = (1 - -------------------)^-
+                 (4*(1 + s2^2 + s2))  2
+
+3-> replace s2 with (1+5^.5)/2
+
+                                        1
+                                (1 + (5^-))
+                                        2
+                          ((2 + -----------)^2)
+                                     2                    1
+#3: sinS2 = (1 - ---------------------------------------)^-
+                                  1                1      2
+                          (1 + (5^-))      (1 + (5^-))
+                                  2                2
+                 (4*(1 + (-----------^2) + -----------))
+                               2                2
+
+3-> simplify
+
+             3 1
+            (-^-)
+             2 2
+#3: sinS2 = -----
+              2
+
+3-> calc
+ sinS2 = 0.61237243569579
+
+s3 = sqrt(3+sqrt(5))
+q3 = sqrt(2)
+
+18-> ((3+5^.5)/2)^.5
+Calculating...
+ answer = 1.6180339887499
+
+
+Area of small equilateral triangle is sqrt(3)/4
+
+Area by 1/2 bh
+
+As = 1 phi sinS3 /2
+Aq = 1 phi sinQ3 /2
+   = (1+sqrt(5))/2 * sqrt(3)/2 /2
+   = (1+sqrt(5))*sqrt(3)/8
+   = (sqrt(3)+sqrt(15))/8
+
+Python 3.6.4 (default, Jan  5 2018, 02:35:40)
+[GCC 7.2.1 20171224] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> phi=(1+5**.5)/2
+>>> phi
+1.618033988749895
+>>> phi/2*.75**.5
+0.7006292692220367
+
+Area by Heron's Formula
+
+Mathomatic version 16.0.5
+Copyright (C) 1987-2012 George Gesslein II.
+200 equation spaces available in RAM; 2 megabytes per equation space.
+ANSI color mode enabled; manage by typing "help color".
+Anything done here is temporary, unless it is saved or redirected.
+1-> s=(1+phi+c)/2
+
+        (1 + phi + c)
+#1: s = -------------
+              2
+
+1-> (s*(s-1)*(s-phi)*(s-c))^.5
+
+                                  1
+#2: (s*(s - 1)*(s - phi)*(s - c))^-
+                                  2
+
+2-> replace s with #1
+#2: ((1 + phi + c)*(((1 + phi + c)/2) - 1)*(((1 + phi + c)/2) - phi)*(((1 + phi + c)/2) - c)/2)^(1/2)
+
+2-> replace phi with (1+5^.5)/2
+#2: ((1 + ((1 + (5^(1/2)))/2) + c)*(((1 + ((1 + (5^(1/2)))/2) + c)/2) - 1)*(((1 + ((1 + (5^(1/2)))/2) + c)/2) - ((1 + (5^(1/2)))/2))*(((1 + ((1 + (5^(1/2)))/2) + c)/2) - c)/2)^(1/2)
+
+2-> simplify
+
+                      1                     1        1
+    ((8*((2*((c^2*((5^-) + 5)) - c^4)) - (5^-) - 3))^-)
+                      2                     2        2
+#2: ---------------------------------------------------
+                            16
+
+2-> copy
+
+                      1                     1        1
+    ((8*((2*((c^2*((5^-) + 5)) - c^4)) - (5^-) - 3))^-)
+                      2                     2        2
+#3: ---------------------------------------------------
+                            16
+
+2-> replace c with 2^.5
+
+                    1                   1        1
+    ((8*((2*((2*((5^-) + 5)) - 4)) - (5^-) - 3))^-)
+                    2                   2        2
+#2: -----------------------------------------------
+                          16
+
+2-> simplify
+
+             1        1
+    ((24*((5^-) + 3))^-)
+             2        2
+#2: --------------------
+             16
+
+2-> calc
+ 0.70062926922204
+
+2-> #3
+
+                      1                     1        1
+    ((8*((2*((c^2*((5^-) + 5)) - c^4)) - (5^-) - 3))^-)
+                      2                     2        2
+#3: ---------------------------------------------------
+                            16
+
+3-> replace c with (3+5^.5)^.5
+
+                      1       1                   1             1        1
+    ((8*((2*(((3 + (5^-))*((5^-) + 5)) - ((3 + (5^-))^2))) - (5^-) - 3))^-)
+                      2       2                   2             2        2
+#3: -----------------------------------------------------------------------
+                                      16
+
+3-> simplify
+
+                 1    1
+    ((24*(3 + (5^-)))^-)
+                 2    2
+#3: --------------------
+             16
+
+3-> calc
+ 0.70062926922204
+
+Check!
+
+Also, the fully simplified expression is sqrt(6*(3+sqrt(5)))/8
+
+hmmm, so
+sqrt(6*(3+sqrt(5))) = sqrt(3)+sqrt(15)
