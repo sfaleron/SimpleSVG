@@ -157,8 +157,8 @@ class _Stack(list):
         return str(self[0])
 
 class SVGStack(_Stack):
-    def __init__(self, *args, **kwargs):
-        args += ([SVG(**kwargs)],)
+    def __init__(self, *args, **kw):
+        args += ([SVG(**kw)],)
         _Stack.__init__(self, *args)
 
 class _EmbeddedCont(Element):
