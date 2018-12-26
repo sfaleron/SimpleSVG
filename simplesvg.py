@@ -19,6 +19,9 @@ try:
 except ImportError:
     _deepcopy = None
 
+class StackError(Exception):
+    pass
+
 def _copy(o):
     if callable(_deepcopy):
         return _deepcopy(o)
@@ -34,6 +37,9 @@ class Element(dict):
     def add_child(self, e):
         self._children.append(e)
         return e
+
+    def remove_child(self, e):
+        self._children.remove(e)
 
     def copy(self):
         return _copy(self)
@@ -99,28 +105,46 @@ class Layer(Group):
 
     visible = property(visible_get, visible_set)
 
-    def label_get(self):
+    @property
+    def label(self):
         return self['inkscape:label']
-
-    label = property(label_get)
 
     def __hash__(self):
         return hash(self.label)
 
 class SVG(Element):
     def __init__(self, **attrs):
+        self._stack = None
+
         Element.__init__(self, 'svg', xmlns='http://www.w3.org/2000/svg', version='1.1', baseProfile='tiny', **attrs)
         self['xmlns:inkscape'] = 'http://www.inkscape.org/namespaces/inkscape'
+
+    def set_stack(self, stack):
+        self._stack = stack
+
+    def clear_stack(self):
+        self._stack = None
 
     def __str__(self):
         return '<?xml version="1.0" encoding="utf-8"?>\n' + Element.__str__(self)
 
-class _Stack(list):
-    def __init__(self, *args):
-        list.__init__(self, *args)
-        self.layers = set()
-        self._n = 0
+    def remove_child(self, e):
+        if self._stack and isinstance(e, Layer):
+            self._stack.remove_layer(e)
 
+        Element.remove_child(self, e)
+
+
+    def _get_invisible_layers(self):
+        return reversed(filter(
+            lambda x: isinstance(x, Layer) and not x.visible, self._children))
+
+    def purge_invisible_layers(self):
+        for e in self._get_invisible_layers():
+            self.remove_child(e)
+
+
+class _Stack(list):
     def copy(self):
         return _copy(self)
 
@@ -133,16 +157,6 @@ class _Stack(list):
 
     def add(self, item):
         return self[-1].add_child(item)
-
-    def push_layer(self, label, visible=False):
-        if len(self) != 1:
-            raise RuntimeError('may only add layers to the root')
-
-        self._n += 1
-
-        e = self._push(Layer('layer'+str(self._n), label, visible))
-        self.layers.add(e)
-        return e
 
     def push_group(self, id_):
         return self._push(Group(id_))
@@ -157,9 +171,43 @@ class _Stack(list):
         return str(self[0])
 
 class SVGStack(_Stack):
-    def __init__(self, *args, **kw):
-        args += ([SVG(**kw)],)
-        _Stack.__init__(self, *args)
+    def __init__(self, appendTo=None, **kw):
+        if appendTo and not isinstance(appendTo, SVG):
+            raise StackError('SVGStack may only be associated to the root of a document.')
+
+        _Stack.__init__(self, [appendTo if appendTo else SVG(**kw)])
+
+        self[0].set_stack(self)
+
+        self._layers = []
+        self._n = 0
+
+    @property
+    def layers(self):
+        return tuple(self._layers)
+
+    def push_layer(self, label, visible=False):
+        if len(self) != 1:
+            raise StackError('Layers may only descend from the root.')
+
+        self._n += 1
+
+        e = self._push(Layer('layer'+str(self._n), label, visible))
+        self._layers.append(e)
+        return e
+
+    def remove_layer(self, e):
+        if e in self._layers:
+            if e in self:
+                raise StackError('Layer is active.')
+
+            self._layers.remove(e)
+
+    def purge_invisible_layers(self):
+        if len(self) != 1:
+            raise StackError('Return to root before modifying layers.')
+
+        self[0].purge_invisible_layers()
 
 class _EmbeddedCont(Element):
     def __init__(self):

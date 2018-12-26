@@ -122,7 +122,6 @@ __all__ = ('NotTurtle', 'RoundedRect', 'Quadrant')
 
 
 if __name__ == '__main__':
-    #from simplesvg import EmbedStack, Line
     from simplesvg import SVGStack, Line
     from itertools import product
 
@@ -133,7 +132,6 @@ if __name__ == '__main__':
         'fill-opacity'  : 0
     }
 
-    #stk = EmbedStack()
     stk = SVGStack(transform='translate(100 80)')
 
     stk.push_layer('rounded rectangles')

@@ -1,0 +1,8 @@
+
+The labels on the points have been rotated, gotta update the math document.. hmm, looks like the labels in there are from the web page in spite of saying "source"!
+
+The text needs to get a good check, maybe some clarifications, or maybe 2/3 of it is redundant?
+
+The glyph position.. and size, presumably, is not adjusted for side length but set for side length 400. might be best to scale afterwards? the rest renders fine; scale and position of glyph can be adjusted.
+
+it ought to center on inkscape's page, it's really wonky, not sure what for? firefox? bitmaps?

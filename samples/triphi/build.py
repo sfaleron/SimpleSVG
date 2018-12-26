@@ -49,11 +49,13 @@ def make_svg(args=()):
 
     layerReg['glyph'](stk)
 
-    layerReg['labels'](stk, opts.labels, opts.points, opts.size)
+    layerReg['labels'](stk, opts.labels, opts.points, opts.side)
 
 
     if args:
         for layer in stk.layers:
             layer.visible = layer.label in args
+
+    #stk.purge_invisible_layers()
 
     return stk
