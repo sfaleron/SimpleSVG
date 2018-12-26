@@ -10,7 +10,7 @@ This is the older version, using only the quadrant API.
 
 from simplesvg import SVG
 
-from simplesvg.notturtle import *
+from simplesvg.lib import Quadrant
 
 if __name__ == '__main__':
     GAP    = 4.5
@@ -25,45 +25,45 @@ if __name__ == '__main__':
         'fill-opacity'  : 0
     }
 
-    doc = SVG()
-    path = doc.add_child(NotTurtle(**attrs))
+    doc  = SVG()
+    path = doc.add_child(Quadrant(**attrs))
 
-    path.quadrant(1, RADIUS)
+    path.quadrant( 2, RADIUS)
 
     if WIDER:
         path.lineTo((WIDER, 0.0))
 
-    path.quadrant(0, RADIUS)
-    path.quadrant(2, RADIUS, incAngle=False)
+    path.quadrant( 1, RADIUS)
+    path.quadrant( 3, RADIUS, incAngle=False)
 
     path.lineTo((GAP, 0.0))
 
-    path.quadrant(3, RADIUS, incAngle=False)
-    path.quadrant(1, RADIUS)
+    path.quadrant( 4, RADIUS, incAngle=False)
+    path.quadrant( 2, RADIUS)
 
     if WIDER:
         path.lineTo((WIDER, 0.0))
 
-    path.quadrant(0, RADIUS)
+    path.quadrant( 1, RADIUS)
     path.lineTo((0.0, STRAIGHT_SIDE))
 
-    path.quadrant(3, RADIUS)
+    path.quadrant( 4, RADIUS)
 
     if WIDER:
         path.lineTo((-WIDER, 0.0))
 
-    path.quadrant( 2, RADIUS)
-    path.quadrant(0, RADIUS, incAngle=False)
+    path.quadrant( 3, RADIUS)
+    path.quadrant( 1, RADIUS, incAngle=False)
 
     path.lineTo((-GAP, 0.0))
 
-    path.quadrant(1, RADIUS, incAngle=False)
-    path.quadrant(3, RADIUS)
+    path.quadrant( 2, RADIUS, incAngle=False)
+    path.quadrant( 4, RADIUS)
 
     if WIDER:
         path.lineTo((-WIDER, 0.0))
 
-    path.quadrant(2, RADIUS)
+    path.quadrant( 3, RADIUS)
 
     path.close()
 

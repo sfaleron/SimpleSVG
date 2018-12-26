@@ -1,12 +1,14 @@
 
 from __future__ import print_function
+from __future__ import absolute_import
 
 # SVG's coordinate system has an inverted y-axis from the conventional
 # cartesian coordinate system used outside computer graphics:
 # positive y is down, increasing angles go clockwise, the quadrants are
 # flipped about the x-axis.
 
-from simplesvg import Path
+from .simplesvg import Path
+
 
 UP, DOWN, LEFT, RIGHT = range(4)
 
@@ -20,11 +22,6 @@ TURNS = {
     ( LEFT, RIGHT): (   UP, -1, -1,  True),
     (RIGHT,  LEFT): (   UP,  1, -1, False),
     (RIGHT, RIGHT): ( DOWN,  1,  1,  True)
-}
-
-SIGNS = {
-    'x': (-1, -1, 1, 1),
-    'y': ( 1, -1,-1, 1)
 }
 
 # merely inspired-by
@@ -43,19 +40,6 @@ class NotTurtle(Path):
             self._orientation = val
         else:
             raise ValueError('not a valid orientation')
-
-    def quadrant(self, quadrant, r, incAngle=True, flipY=True):
-        dx = r * SIGNS['x'][quadrant]
-        dy = r * SIGNS['y'][quadrant]
-
-        if flipY:
-            dy *= -1
-
-        if incAngle:
-            dx *= -1
-            dy *= -1
-
-        self.arcTo((dx, dy), r, r, 0, False, incAngle)
 
     def _doTurn(self, whichway, r):
         orientation, sgnx, sgny, incAngle = TURNS[(self._orientation, whichway)]
@@ -111,7 +95,30 @@ def RoundedRect(w, h, r, pos=(0.0, 0.0), **attrs):
     return path
 
 
-__all__ = ('NotTurtle', 'RoundedRect')
+SIGNS = {
+    'x': (-1, -1, 1, 1),
+    'y': ( 1, -1,-1, 1)
+}
+
+class Quadrant(Path):
+    def __init__(self, initial_pos=(0,0), **attrs):
+        Path.__init__(self, initial_pos, **attrs)
+
+    def quadrant(self, quadrant, r, incAngle=True, flipY=True):
+        dx = r * SIGNS['x'][quadrant-1]
+        dy = r * SIGNS['y'][quadrant-1]
+
+        if flipY:
+            dy *= -1
+
+        if incAngle:
+            dx *= -1
+            dy *= -1
+
+        self.arcTo((dx, dy), r, r, 0, False, incAngle)
+
+
+__all__ = ('NotTurtle', 'RoundedRect', 'Quadrant')
 
 
 if __name__ == '__main__':

@@ -223,6 +223,11 @@ class Circle(StyledElement):
     def __init__(self, ctr, r, **attrs):
         StyledElement.__init__(self, 'circle', cx=ctr[0], cy=ctr[1], r=r, **attrs)
 
+class Text(StyledElement):
+    def __init__(self, pt, text, **attrs):
+        StyledElement.__init__(self, 'text', x=pt[0], y=pt[1], **attrs)
+        self.add_child(text)
+
 
 class Clip(Element):
     def __init__(self, id_, **attrs):

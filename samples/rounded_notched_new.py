@@ -10,7 +10,7 @@ This is the newer version, using the NotTurtle API.
 
 from simplesvg import SVG
 
-from simplesvg.notturtle import *
+from simplesvg.lib import NotTurtle
 
 if __name__ == '__main__':
     GAP    = 4.5
@@ -25,7 +25,7 @@ if __name__ == '__main__':
         'fill-opacity'  : 0
     }
 
-    doc = SVG()
+    doc  = SVG()
     path = doc.add_child(NotTurtle(**attrs))
 
     path.turnRight(RADIUS)

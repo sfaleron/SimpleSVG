@@ -29,6 +29,8 @@ Derivation of all lengths, angles, areas:
 
 Scale is set by setting the short interior length to 1.
 
+The not-equilateral triangles are labeled:
+
 "s" for slim: long exterior length, obtuse inner angle
 "q" for squat: short exterior length, acute inner angle
 
@@ -119,9 +121,8 @@ BB=(3/4)/(5/4+(3/4))
 BB=3/8
 sinS2=sinQ1=sqrt(3/8)=sqrt(6/16)=sqrt(6)/4
 
-its not a nice angle, but its the product of (co)sines of nice angles, pi/4, pi/3 (-pi/2)
-could be a sum/diff formula with one term zero? not those angles..
 
+Alternate/check:
 
 set the inner short (s1) to one.
 the inner long (s2,q2) is phi
@@ -150,6 +151,7 @@ the rest can be found from law of cosines
 0.6123724356957945
 
 woot.
+
 
 Looks like it could have done it the easy way and still gotten the nice answer, rather than getting mired in square roots or quadtratic formulae as was feared.
 
