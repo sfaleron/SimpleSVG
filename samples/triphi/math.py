@@ -40,10 +40,13 @@ def midpoint(p1, p2):
 def outer(sideLength, rotate=0):
     """sideLength is in pixels, rotate in radians"""
 
-    # for an SVG canvas
-    transform = lambda p: Point(sideLength + p.x, sideLength - p.y)
-
     r = sideLength*3**-2**-1
+
+    # for an SVG canvas
+    # the origin of the input is the center of the triangle
+    # for a standard figure with a horizontal base, the base
+    # is at -r*sin(-pi/6) = -r/2
+    transform = lambda p: Point(sideLength/2 + p.x, sideLength*.75**.5-r/2-p.y)
 
     return tuple([ transform(Point(r*cos(a), r*sin(a))) for a in [
         (2./3*i+.5)*pi+rotate for i in range(3)] ])
