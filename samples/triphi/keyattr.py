@@ -18,7 +18,7 @@ class KeywordToAttr(object):
 
     def _copy(self, vIn, **kw):
         if isinstance(vIn, KeywordToAttr):
-            vOut = vIn.copy(**kw.get(k, {}))
+            vOut = vIn.copy(**kw.get(vIn, {}))
 
         else:
             if isinstance(vIn, Mapping):

@@ -10,7 +10,11 @@ from  simplesvg import Polygon, Text, Line, filled_polygon
 
 from   .keyattr import KeywordToAttr
 
+def rotate_left(seq):
+    return seq[ 1:] + seq[: 1]
 
+def rotate_right(seq):
+    return seq[-1:] + seq[:-1]
 
 layerReg = RegistryMap(passName=True)
 
@@ -48,12 +52,37 @@ def boundary(f):
 
     return g
 
+def mixed_up_triangles(stk, tri1, tri2, tri3, colors, flip, **kw):
+    name = kw.pop('name')
+    clr  = getattr(colors, name)
+
+    tri3 = rotate_left(tri3)
+
+    tri2 = dict(
+        squat = {True:rotate_left, False:rotate_right},
+        slim  = {True:rotate_right, False:rotate_left} )[name][flip](tri2)
+
+    pts1, pts2, pts3 = tuple(zip(tri1, tri2, tri3))
+
+    info = LayerInfo(
+        layer = stk.push_layer(name, True),
+        path  = stk.push_group(name) )
+
+    filled_polygon_layer(stk, pts1, clr, **kw)
+    filled_polygon_layer(stk, pts2, clr, **kw)
+    filled_polygon_layer(stk, pts3, clr, **kw)
+
+    stk.pop(); stk.pop()
+
+    return info
+
 layerReg('background', disabledLayer(boundary(filled_polygon_layer)))
 
+layerReg( 'slim', mixed_up_triangles)
+layerReg('squat', mixed_up_triangles)
+
 layerReg('ctrsl', disabledLayer(filled_polygon_layer))
-
 layerReg('ctrsq', disabledLayer(filled_polygon_layer))
-
 layerReg('ctrbg', layer(filled_polygon_layer))
 
 @layerReg('rays')
@@ -74,8 +103,7 @@ def _(stk, pts1, pts2, flip, name, **kw):
     info.path['clip-path'] = 'url(#trim)'
 
     if flip:
-        # rotate right one element
-        pts2 = pts2[-1:]+pts2[:-1]
+        pts2 = rotate_right(pts2)
 
     for p1, p2 in zip(pts1, pts2):
         stk.add(Line(p1, p2, **kw))
@@ -104,7 +132,7 @@ def _(stk, lbls, pts, size=None):
         if lbl.r is None:
             dx, dy = lbl.dx, lbl.dy
         else:
-            dx, dy = lbl.r*size*cos(lbl.theta), lbl.r*size*sin(lbl.theta)
+            dx, dy = lbl.r*size*cos(lbl.theta), -lbl.r*size*sin(lbl.theta)
 
         stk.add(Text((pt.x+dx, pt.y+dy), k))
 
