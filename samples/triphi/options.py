@@ -4,10 +4,10 @@
 # ========================================================
 
 from __future__ import absolute_import
+from __future__ import division
 
 from   .keyattr import KeywordToAttr
-
-from       math import pi
+from   .math    import Point, pi
 
 class Options(KeywordToAttr):
     __slots__ = ('colors', 'side', 'rotate', 'flip', 'attrs', 'points', 'labels')
@@ -35,6 +35,10 @@ class Options(KeywordToAttr):
         ymin   = min(ys); ymax = max(ys)
 
         return (xmin, ymin, (xmax-xmin), (ymax-ymin))
+
+    @property
+    def center(self):
+        return Point(*[sum(i)/3 for i in zip(*self.tri1)])
 
 class Colors(KeywordToAttr):
     __slots__ = ('bg', 'slim', 'squat')
@@ -65,17 +69,17 @@ def make_options():
 # | You were expections some options? Here they are! |
 # ====================================================
 
-pgonAttrs = {'stroke-width' : '0', 'fill-opacity' : '1'}
-lineAttrs = {'stroke' : 'black', 'stroke-width' : '3px'}
-
 DARK   = '#5c84d0'
 DARK   = '#5c84d0'
 LIGHT  = '#acc8e4'
 BG     = '#e0ecf8'
 
 ROTATE = 0
-SIDE   = 400.0
-FLIP   = False
+SIDE   = 200.0
+FLIP   = True
+
+pgonAttrs = {'stroke-width' : '0', 'fill-opacity' : '1'}
+lineAttrs = {'stroke' : 'black', 'stroke-width' : '{:f}px'.format(3/400*SIDE)}
 
 from .math import outer, inner
 

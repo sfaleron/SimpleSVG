@@ -28,11 +28,16 @@ def _copy(o):
     else:
         raise NotImplementedError('unable to comply')
 
+
 class Element(dict):
     def __init__(self, tag, **attrs):
         self._tag = tag
         self._children = []
         self.update(attrs)
+
+    @property
+    def tag(self):
+        return self._tag
 
     def add_child(self, e):
         self._children.append(e)

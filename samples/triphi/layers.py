@@ -6,7 +6,7 @@ from       math import sin, cos
 
 from   registry import RegistryMap
 
-from  simplesvg import Polygon, Text, Line, filled_polygon
+from  simplesvg import Polygon, Text, Line, StyledElement, filled_polygon
 
 from   .keyattr import KeywordToAttr
 
@@ -112,12 +112,20 @@ def _(stk, pts1, pts2, flip, name, **kw):
 
     return info
 
+
+import xml.etree.ElementTree as ET
+
 @layerReg('glyph')
 @layer
-def _(stk):
+def _(stk, side, center):
+    attribs = ET.parse(osp.join(osp.dirname(
+        __file__), 'phiglyph.svg')).getroot().attrib
+
+    attribs.update(transform='translate({:f} {:f}) scale({:f})'.format(
+        center.x, center.y, side/400))
+
     return LayerInfo(
-        path  = stk.add(open(osp.join(osp.dirname(
-            __file__), 'phiglyph.svg'), 'r').read()) )
+        path = stk.add(StyledElement('path', **attribs)) )
 
 @layerReg('labels')
 @disabledLayer

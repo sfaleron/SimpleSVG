@@ -7,4 +7,3 @@ The glyph position.. and size, presumably, is not adjusted for side length but s
 
 pass some smarter parameters to make_svg. flip/rotation at least. maybe side length..
 write a bitmap, with cairo canvas
-

@@ -41,7 +41,7 @@ def make_svg(args=(), opts=None):
 
     layerReg['rays'](stk, opts.tri1, opts.tri3, opts.flip, **opts.attrs.line)
 
-    layerReg['glyph'](stk)
+    layerReg['glyph'](stk, opts.side, opts.center)
 
     layerReg['labels'](stk, opts.labels, opts.points, opts.side)
 
