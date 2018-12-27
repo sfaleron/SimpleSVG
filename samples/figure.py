@@ -21,7 +21,9 @@ def make_svg(args=(), opts=None):
     if purgeInvisible:
         args.remove('purge')
 
-    stk = SVGStack(width=opts.side, height=opts.side*.75**.5)
+    _,_, w,h = opts.geo
+
+    stk = SVGStack(width=w, height=h)
 
     layerReg['background'](stk, opts.tri1, colors.bg, **opts.attrs.pgon)
 

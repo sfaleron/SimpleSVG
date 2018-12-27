@@ -1,5 +1,6 @@
 
 from __future__ import print_function
+
 from __future__ import absolute_import
 from __future__ import division
 
@@ -40,16 +41,21 @@ def midpoint(p1, p2):
 def outer(sideLength, rotate=0):
     """sideLength is in pixels, rotate in radians"""
 
+    # side*1/sqrt(3), or half of the height of the triangle
     r = sideLength*3**-2**-1
 
-    # for an SVG canvas
-    # the origin of the input is the center of the triangle
-    # for a standard figure with a horizontal base, the base
-    # is at -r*sin(-pi/6) = -r/2
-    transform = lambda p: Point(sideLength/2 + p.x, sideLength*.75**.5-r/2-p.y)
+    pts = [ Point(r*cos(a), r*sin(a)) for a in [
+        (2./3*i+.5)*pi+rotate for i in range(3)] ]
 
-    return tuple([ transform(Point(r*cos(a), r*sin(a))) for a in [
-        (2./3*i+.5)*pi+rotate for i in range(3)] ])
+    xs, ys = zip(*pts)
+
+    xmin = min(xs); xmax = max(xs)
+    ymin = min(ys); ymax = max(ys)
+
+    # for an SVG canvas (inverted y)
+    transform = lambda p: Point(p.x-xmin, ymax-p.y)
+
+    return tuple(map(transform, pts))
 
 
 ####################################################

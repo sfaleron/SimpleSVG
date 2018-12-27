@@ -7,24 +7,34 @@ from __future__ import absolute_import
 
 from   .keyattr import KeywordToAttr
 
+from       math import pi
 
 class Options(KeywordToAttr):
-    __slots__ = ('colors', 'side', 'flip', 'attrs', 'points', 'labels')
+    __slots__ = ('colors', 'side', 'rotate', 'flip', 'attrs', 'points', 'labels')
 
-    def tri(self, k1,k2,k3):
-        return tuple([self.points[k] for k in (k1,k2,k3)])
+    def pick_pts(self, *names):
+        return tuple([self.points[k] for k in names])
 
     @property
     def tri1(self):
-        return self.tri('A','B','C')
+        return self.pick_pts('A','B','C')
 
     @property
     def tri2(self):
-        return self.tri('D','E','F')
+        return self.pick_pts('D','E','F')
 
     @property
     def tri3(self):
-        return self.tri('G','H','I')
+        return self.pick_pts('G','H','I')
+
+    @property
+    def geo(self):
+        xs, ys = zip(*self.tri1)
+
+        xmin   = min(xs); xmax = max(xs)
+        ymin   = min(ys); ymax = max(ys)
+
+        return (xmin, ymin, (xmax-xmin), (ymax-ymin))
 
 class Colors(KeywordToAttr):
     __slots__ = ('bg', 'slim', 'squat')
@@ -37,7 +47,7 @@ class LabelInfo(KeywordToAttr):
 
 
 def make_options():
-    return Options(side=SIDE, flip=FLIP,
+    return Options(side=SIDE, flip=FLIP, rotate=ROTATE,
         colors = Colors(bg=BG, slim=DARK, squat=LIGHT),
 
         attrs  = Attributes(pgon=pgonAttrs, line=lineAttrs),
@@ -58,17 +68,18 @@ def make_options():
 pgonAttrs = {'stroke-width' : '0', 'fill-opacity' : '1'}
 lineAttrs = {'stroke' : 'black', 'stroke-width' : '3px'}
 
-DARK  = '#5c84d0'
-DARK  = '#5c84d0'
-LIGHT = '#acc8e4'
-BG    = '#e0ecf8'
+DARK   = '#5c84d0'
+DARK   = '#5c84d0'
+LIGHT  = '#acc8e4'
+BG     = '#e0ecf8'
 
-SIDE  = 400.0
-FLIP  = True
+ROTATE = 0
+SIDE   = 400.0
+FLIP   = False
 
 from .math import outer, inner
 
-A,B,C        = outer(SIDE)
+A,B,C        = outer( SIDE, ROTATE)
 D,E,F, G,H,I = inner(A,B,C, FLIP)
 
 # If not specified, r is set to None, which indicates rectangular
