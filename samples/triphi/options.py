@@ -3,11 +3,11 @@
 # | Those options you may be looking for are at the end! |
 # ========================================================
 
-from __future__ import absolute_import
-from __future__ import division
+from  __future__ import absolute_import
+from  __future__ import division
 
-from   .keyattr import KeywordToAttr
-from   .math    import Point, pi
+from    .keyattr import KeywordToAttr, ImmDict
+from    .math    import Point, pi
 
 class Options(KeywordToAttr):
     __slots__ = ('colors', 'side', 'rotate', 'flip', 'attrs', 'points', 'labels')
@@ -43,18 +43,37 @@ class Options(KeywordToAttr):
 class Colors(KeywordToAttr):
     __slots__ = ('bg', 'slim', 'squat')
 
+
+from collections import Mapping
+
+# "parent" is first in slots sequence, because it is a dependency of
+# the later ones, and the slots sequence is observed when setting the
+# attributes at instantiation.
 class Attributes(KeywordToAttr):
-    __slots__ = ('pgon', 'line')
+    __slots__  = ('parent', 'pgon', 'line')
+    _defaults  = ImmDict(pgon={}, line={})
+    _noDescent = frozenset(['parent'])
+
+    def __setattr__(self, attr, valueIn):
+        valueOut = valueIn
+
+        if attr in self.__slots__[1:]:
+            if 'stroke-width' in valueIn:
+                if valueIn['stroke-width'].endswith('nm'):
+                    valueOut = type(valueIn)(valueIn)
+                    valueOut['stroke-width'] = '{:f}px'.format(float(
+                        valueIn['stroke-width'][:-2])*self.parent.side/standardSide)
+
+        KeywordToAttr.__setattr__(self, attr, valueOut)
 
 class LabelInfo(KeywordToAttr):
     __slots__ = ('dx', 'dy', 'r', 'theta')
+    _defaults = ImmDict(r=None, dx=0, dy=0, theta=0)
 
 
 def make_options():
-    return Options(side=SIDE, flip=FLIP, rotate=ROTATE,
+    opts = Options(side=SIDE, flip=FLIP, rotate=ROTATE,
         colors = Colors(bg=BG, slim=DARK, squat=LIGHT),
-
-        attrs  = Attributes(pgon=pgonAttrs, line=lineAttrs),
 
         labels = dict([(i, defaultLabel.copy()) for i in (
             'A','B','C', 'D','E','F', 'G','H','I')]),
@@ -64,6 +83,12 @@ def make_options():
             ( A,  B,  C,   D,  E,  F,   G,  H,  I) ) )
     )
 
+    opts.attrs = Attributes(parent=opts, pgon=pgonAttrs, line=lineAttrs)
+
+    return opts
+
+
+standardSide = 480
 
 # ====================================================
 # | You were expections some options? Here they are! |
@@ -75,11 +100,14 @@ LIGHT  = '#acc8e4'
 BG     = '#e0ecf8'
 
 ROTATE = 0
-SIDE   = 200.0
-FLIP   = True
+FLIP   = False
+SIDE   = standardSide
+#SIDE = 200
 
+# "nm" is "normalized", not "nanometers"
+#
 pgonAttrs = {'stroke-width' : '0', 'fill-opacity' : '1'}
-lineAttrs = {'stroke' : 'black', 'stroke-width' : '{:f}px'.format(3/400*SIDE)}
+lineAttrs = {'stroke' : 'black', 'stroke-width' : '3nm'}
 
 from .math import outer, inner
 

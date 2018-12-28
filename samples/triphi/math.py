@@ -1,8 +1,6 @@
 
-from __future__ import print_function
-
-from __future__ import absolute_import
 from __future__ import division
+from __future__ import absolute_import
 
 from math import sin, cos, pi, atan2
 
@@ -26,8 +24,8 @@ def midpoint(p1, p2):
 # Not triangular, but also interesting: http://www.cut-the-knot.org/do_you_know/Buratino6.shtml
 
 
-####################################
-# first, find the outermost triangle
+#############################################################
+# Find the radius of the circumcircle for a given side length
 #
 # the Law of Cosines says
 # a^2 + b^2 - 2*a*b*cos(C) = c^2
@@ -41,7 +39,7 @@ def midpoint(p1, p2):
 def outer(sideLength, rotate=0):
     """sideLength is in pixels, rotate in radians"""
 
-    # side*1/sqrt(3), or half of the height of the triangle
+    # side/sqrt(3), or half of the height of the triangle
     r = sideLength*3**-2**-1
 
     pts = [ Point(r*cos(a), r*sin(a)) for a in [
@@ -61,7 +59,7 @@ def outer(sideLength, rotate=0):
 ####################################################
 # Find the inner triangle with vertices on the sides
 # of the first triangle, and the innermost triangle,
-# who's vertices are the midpoints of the first.
+# whose vertices are the midpoints of the second.
 #
 # D is colinear with AB, and the length of BD is the
 # outermost side length AB divided by phi.
@@ -70,7 +68,7 @@ def outer(sideLength, rotate=0):
 # than using it explicitly, but there's a geometric proof on the web
 # page cited, and crunching it algebraicly would only result in ex-
 # pressions equivalent to what is here. I haven't done it yet, but I
-# would start by paramaterizing the inner triangle by the position of
+# would start by parameterizing the inner triangle by the position of
 # one vertex along a side of the outer triangle and setting the mid-
 # points of the inner triangle to be colinear with the appropriate
 # vertex of the outer triangle.
@@ -96,7 +94,7 @@ def inner(A, B, C, flip=False):
 # Given two points defining a side, find the remaining vertices of
 # the two equilateral triangles that share this side.
 #
-# Draw a line perpendicular to the side, at its midpoint, and go along
+# Find the line perpendicular to the side, at its midpoint, and go along
 # the line for sqrt(3)/2 times the side length units.
 #
 # y-y1=m*(x-x1)
@@ -150,24 +148,7 @@ def triangles_from_side(p1, p2, sideLength=None):
     return (make_ccw([p1,p2,p3a], midPt), make_ccw([p1,p2,p3b], midPt))
 
 
-
 # flip the y for SVG
 def make_ccw(pts, ctr):
     return tuple(zip(*sorted(
         [(pt, atan2(ctr.y-pt.y, pt.x-ctr.x)) for pt in pts], key=lambda x:x[1]) ))[0]
-
-
-def mkdumpfunc(lw, rw):
-    fmtstr = ' '.join([','.join(['%%%d.%df' % (lw+rw+1, rw)]*2)]*3)
-    return lambda p1, p2, p3: fmtstr % (p1.x, p1.y, p2.x, p2.y, p3.x, p3.y)
-
-if __name__ == '__main__':
-
-    A,B,C        = outer(400)
-    D,E,F, G,H,I = inner(A,B,C)
-
-    dumpfunc     = mkdumpfunc(3, 4)
-
-    print(dumpfunc(A, B, C))
-    print(dumpfunc(D, E, F))
-    print(dumpfunc(G, H, I))

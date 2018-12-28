@@ -1,14 +1,16 @@
 
+from __future__ import division
 from __future__ import absolute_import
 
 import  os.path     as osp
 from       math import sin, cos
 
+from  simplesvg import Polygon, Text, Line, StyledElement, filled_polygon
+from   .keyattr import KeywordToAttr
+from   .options import standardSide
+
 from   registry import RegistryMap
 
-from  simplesvg import Polygon, Text, Line, StyledElement, filled_polygon
-
-from   .keyattr import KeywordToAttr
 
 def rotate_left(seq):
     return seq[ 1:] + seq[: 1]
@@ -122,7 +124,7 @@ def _(stk, side, center):
         __file__), 'phiglyph.svg')).getroot().attrib
 
     attribs.update(transform='translate({:f} {:f}) scale({:f})'.format(
-        center.x, center.y, side/400))
+        center.x, center.y, side/standardSide))
 
     return LayerInfo(
         path = stk.add(StyledElement('path', **attribs)) )

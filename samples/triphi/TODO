@@ -1,9 +1,18 @@
 
-The labels on the points have been rotated, gotta update the math document.. hmm, looks like the labels in there are from the web page in spite of saying "source"!
+The labels on the points have been rotated, gotta update the math document.. hmm, looks like the labels in there are from the web page in spite of saying "source"! The text needs to get a good check, maybe some clarifications, or maybe 2/3 of it is redundant?
 
-The text needs to get a good check, maybe some clarifications, or maybe 2/3 of it is redundant?
+Glyph is good for no rotation/flip. That's probably fine, but some thoughts..
+  even out the space perpendicularly from the rays to the glyph, probably weighing the pointy end less.
+  interactively adjust position based on parameters, probably with some interpolation
 
-The glyph position.. and size, presumably, is not adjusted for side length but set for side length 400. might be best to scale afterwards? the rest renders fine; scale and position of glyph can be adjusted.
+PNG output with cairo?
+svglib to reportlab looks more direct? be nice if it was all-free
+cairosvg looks not so bad, but setting up cairo might be hairy, and requires python3
+  it claims a compiler is required for windoze.. that doesn't sound right
 
-pass some smarter parameters to make_svg. flip/rotation at least. maybe side length..
-write a bitmap, with cairo canvas
+
+not triphi:
+
+the tag registry would work if the tag parameter had a default.. but it doesn't seem as useful? maybe later.. or a branch? imported elements can just be inserted directly, have the root converted, or convert recursively
+
+
