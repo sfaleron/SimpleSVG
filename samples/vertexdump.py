@@ -1,10 +1,10 @@
 
 # Prints out all nine vertices given the standard side length,
-# recentered on the origin, both flipped and unflipped. Useful
-# for comparisons/validation.
+# original center and recentered on the origin, both flipped
+# and unflipped. Useful for comparisons/validation.
 
 from __future__     import print_function
-from __future__     import absolute_import
+from __future__     import absolute_import, division
 
 from triphi.math    import inner, outer, Point
 from triphi.options import standardSide

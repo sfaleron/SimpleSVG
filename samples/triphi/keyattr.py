@@ -1,18 +1,7 @@
 
-from collections import Mapping
+from attrdictbase import ImmutableDict as ImmDict
 
-class ImmDict(Mapping):
-    def __init__(self, *args, **kw):
-        self._store = dict(*args, **kw)
-
-    def __getitem__(self, key):
-        return self._store[key]
-
-    def __iter__(self):
-        return iter(self._store)
-
-    def __len__(self):
-        return len(self._store)
+from collections  import Mapping
 
 
 class KeywordToAttr(object):
@@ -25,8 +14,8 @@ class KeywordToAttr(object):
     to its type. For instance, d1 = dict(); d2 = dict(d1)."""
 
     __slots__  = ()
-    _defaults  = ImmDict()
     _noDescent = frozenset()
+    _defaults  = ImmDict()
 
     def __init__(self, **kw):
         for k in self.__slots__:
