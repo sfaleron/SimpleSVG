@@ -1,10 +1,15 @@
 
-from attrdictbase import ImmutableDict as ImmDict
+from attrdictbase import ImmutableDict as ImmDict, DeepCopy
+
+from attrdictbase.adb import ADBImm
 
 from collections  import Mapping
 
+class KeywordToAttr(ADBImm, DeepCopy):
+    pass
 
-class KeywordToAttr(object):
+
+class _KeywordToAttr(object):
     """Attributes unspecified at instantiation are set to None.
 
     copy() method deep-copies instances of this class or its
