@@ -6,7 +6,7 @@
 from  __future__ import absolute_import
 from  __future__ import division
 
-from    .keyattr import KeywordToAttr, ImmDict
+from    .keyattr import KeywordToAttr, ImmDict, LazyEval
 from    .math    import Point, pi
 
 class Options(KeywordToAttr):
@@ -51,7 +51,7 @@ from collections import Mapping
 # attributes at instantiation.
 class Attributes(KeywordToAttr):
     __slots__  = ('parent', 'pgon', 'line')
-    _defaults  = ImmDict(pgon={}, line={})
+    _defaults  = ImmDict(pgon=LazyEval(dict), line=LazyEval(dict))
     _noDescent = frozenset(['parent'])
 
     def __setattr__(self, attr, valueIn):
