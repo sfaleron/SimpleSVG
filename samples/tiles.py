@@ -4,7 +4,7 @@ from __future__  import print_function
 from __future__  import absolute_import
 
 from simplesvg   import SVGStack, filled_polygon
-from triphi      import defaults, redraw
+from triphi      import defaults, tileOpts, redraw
 
 from triphi.keyattr import KeywordToAttr
 from triphi.layers  import mixed_up_triangles
@@ -57,10 +57,12 @@ def _make_tiles(stk, tiles, n, noFlips, path, opts):
 def make_tiles(n, noFlips=False, flipZero=False, opts=None):
     if opts is None:
         opts = defaults.copy()
+        opts.update(tileOpts)
 
     if flipZero:
         opts.flip = not opts.flip
-        redraw(opts)
+
+    redraw(opts)
 
     stk = SVGStack()
 

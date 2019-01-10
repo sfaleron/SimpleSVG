@@ -131,6 +131,10 @@ D,E,F, G,H,I = inner(A,B,C, FLIP)
 # theta is in radians.
 defaultLabel = LabelInfo(dx=0, dy=-10)
 
+
+# modifications when tiling
+tileOpts = dict(side=48, rotate=0, flip=FLIP)
+
 # ===============
 # | Options End |
 # ===============
