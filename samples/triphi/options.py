@@ -37,14 +37,16 @@ class Options(KeywordToAttr):
         return (xmin, ymin, (xmax-xmin), (ymax-ymin))
 
     @property
+    def dims(self):
+        return self.geo[2:]
+
+    @property
     def center(self):
         return Point(*[sum(i)/3 for i in zip(*self.tri1)])
 
 class Colors(KeywordToAttr):
     __slots__ = ('bg', 'slim', 'squat')
 
-
-from collections import Mapping
 
 # "parent" is first in slots sequence, because it is a dependency of
 # the later ones, and the slots sequence is observed when setting the
@@ -71,7 +73,15 @@ class LabelInfo(KeywordToAttr):
     _defaults = ImmDict(r=None, dx=0, dy=0, theta=0)
 
 
-def make_options():
+def redraw(options):
+    a,b,c = outer(options.side, options.rotate)
+    d,e,f, g,h,i = inner(a,b,c, options.flip)
+
+    options.points.update(zip(
+            ('A','B','C', 'D','E','F', 'G','H','I'),
+            ( a,  b,  c,   d,  e,  f,   g,  h,  i) ) )
+
+def _make_options():
     opts = Options(side=SIDE, flip=FLIP, rotate=ROTATE,
         colors = Colors(bg=BG, slim=DARK, squat=LIGHT),
 
@@ -124,4 +134,4 @@ defaultLabel = LabelInfo(dx=0, dy=-10)
 # ===============
 # | Options End |
 # ===============
-defaults = make_options()
+defaults = _make_options()

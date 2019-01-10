@@ -73,6 +73,12 @@ def outer(sideLength, rotate=0):
 # points of the inner triangle to be colinear with the appropriate
 # vertex of the outer triangle.
 
+# The vertices are arranged such that the labels proceed counterclockwise.
+# Outer  A,B,C: A at the apex and BC horizontal.
+# Middle D,E,F: vertices on the sides of ABC; D opposite A, E:B, F:C.
+# Inner  G,H,I: vertices on midpoints of DEF; G adjacent to A via a long
+# inner segment, H:B, I:C
+
 def inner(A, B, C, flip=False):
 
     invphi = 2/(1+5**2**-1)
@@ -84,9 +90,9 @@ def inner(A, B, C, flip=False):
     E = between(C, A, invphi)
     F = between(A, B, invphi)
 
-    G = midpoint(D, E)
-    H = midpoint(E, F)
-    I = midpoint(F, D)
+    G = midpoint(E, F)
+    H = midpoint(F, D)
+    I = midpoint(D, E)
 
     return (D,E,F, G,H,I)
 

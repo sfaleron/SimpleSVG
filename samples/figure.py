@@ -4,7 +4,7 @@ from __future__ import print_function
 from __future__ import absolute_import
 
 from  simplesvg import SVGStack
-from     triphi import layerReg, defaults
+from     triphi import layerReg, defaults, redraw
 
 class FancySet(set):
     def __init__(self, regmap):
@@ -43,7 +43,7 @@ def make_svg(args=(), opts=None):
                 opts.flip = not opts.flip
 
             if cmd == 'rot':
-                opts.rot = float(parms[0])/180*pi
+                opts.rotate = float(parms[0])/180*pi
 
             if cmd == 'side':
                 opts.side = float(parms[0])
@@ -58,7 +58,9 @@ def make_svg(args=(), opts=None):
     if not layers:
         layers.update(layerReg.names)
 
-    _,_, w,h = opts.geo
+    redraw(opts)
+
+    w,h = opts.dims
 
     stk = SVGStack(width=w, height=h)
 
@@ -82,10 +84,6 @@ def make_svg(args=(), opts=None):
 
     layers['labels'](stk, opts.labels, opts.points, opts.side)
 
-
-    if args:
-        for layer in stk.layers:
-            layer.visible = layer.label in args
 
     if purgeInvisible:
         stk.purge_invisible_layers()

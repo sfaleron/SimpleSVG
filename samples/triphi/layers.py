@@ -55,26 +55,31 @@ def boundary(f):
     return g
 
 def mixed_up_triangles(stk, tri1, tri2, tri3, colors, flip, **kw):
-    name = kw.pop('name')
+    name    = kw.pop('name')
+    noLayer = kw.pop('noLayer', False)
+
     clr  = getattr(colors, name)
 
-    tri3 = rotate_left(tri3)
+    notShared = dict(slim=rotate_left(tri2), squat=rotate_right(tri2))[
+        dict(slim='squat', squat='slim')[name] if flip else name]
 
-    tri2 = dict(
-        squat = {True:rotate_left, False:rotate_right},
-        slim  = {True:rotate_right, False:rotate_left} )[name][flip](tri2)
+    pts1, pts2, pts3 = zip(tri1, tri3, notShared)
 
-    pts1, pts2, pts3 = tuple(zip(tri1, tri2, tri3))
 
-    info = LayerInfo(
-        layer = stk.push_layer(name, True),
-        path  = stk.push_group(name) )
+    if not noLayer:
+        info = LayerInfo(
+            layer = stk.push_layer(name, True),
+            path  = stk.push_group(name) )
+    else:
+        # for tiling
+        info = None
 
-    filled_polygon_layer(stk, pts1, clr, **kw)
-    filled_polygon_layer(stk, pts2, clr, **kw)
-    filled_polygon_layer(stk, pts3, clr, **kw)
+    stk.add(filled_polygon(pts1, clr, **kw))
+    stk.add(filled_polygon(pts2, clr, **kw))
+    stk.add(filled_polygon(pts3, clr, **kw))
 
-    stk.pop(); stk.pop()
+    if not noLayer:
+        stk.pop(); stk.pop()
 
     return info
 
@@ -88,7 +93,7 @@ layerReg('ctrsq', disabledLayer(filled_polygon_layer))
 layerReg('ctrbg', layer(filled_polygon_layer))
 
 @layerReg('rays')
-def _(stk, pts1, pts2, flip, name, **kw):
+def rays(stk, pts1, pts2, flip, name, **kw):
     if len(pts1) != len(pts2):
         raise ValueError('Point sequences much be of equal length.')
 
@@ -105,6 +110,8 @@ def _(stk, pts1, pts2, flip, name, **kw):
     info.path['clip-path'] = 'url(#trim)'
 
     if flip:
+        pts2 = rotate_left(pts2)
+    else:
         pts2 = rotate_right(pts2)
 
     for p1, p2 in zip(pts1, pts2):
