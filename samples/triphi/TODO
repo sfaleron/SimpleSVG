@@ -10,16 +10,18 @@ svglib to reportlab looks more direct? be nice if it was all-free
 cairosvg looks not so bad, but setting up cairo might be hairy, and requires python3
   it claims a compiler is required for windoze.. that doesn't sound right
 
+the tile unit seems to depend on rotation, seems like a rectangle side x sqrt(3)*side is usually right, but the orientation could be either way.
 
-the flipping is fail!
+well, if it''s rotation dependent, there's all the madness in rollngon, maybe that's involved?
+
+I think a bounding box around a flipped pair would do it. Make one adjacent tile, take the extents, and finish recursion. Bob's your uncle!
+
+Probably with a clip and svg to png. Two levels of recursion sufficies if the tiles are aligned with an axis, otherwise three.
+
+In inkscape, turn off all tiles except a flipped pair, select all, resize page to selection, turn tiles back on, export to bitmap! IRfanview will make a tiling from the unit tile, works when aligned..
+not when unaligned, fooey!
+
 
 not triphi:
 
 the tag registry would work if the tag parameter had a default.. but it doesn't seem as useful? maybe later.. or a branch? imported elements can just be inserted directly, have the root converted, or convert recursively
-
-
-Need to have distinct containers
-  need fixed/defined keys, but mutable
-
-almost want to go back to the old plain keyworktoattr+deepcopy
-

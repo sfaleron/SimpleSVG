@@ -341,3 +341,39 @@ Also, the fully simplified expression is sqrt(6*(3+sqrt(5)))/8
 
 hmmm, so
 sqrt(6*(3+sqrt(5))) = sqrt(3)+sqrt(15)
+
+Here it is:
+
+https://en.wikipedia.org/wiki/Trigonometric_constants_expressed_in_real_radicals#Simplifying_nested_radical_expressions
+
+apply to s3 = sqrt(3+sqrt(5))
+
+radical reduction:
+  a=3,b=1,c=5
+  R=sqrt(9-5)=2
+
+s3 = sqrt(5/2)+sqrt(1/2) = sqrt(10)/2 + sqrt(2)/2
+
+Python 3.7.0 (default, Sep 15 2018, 19:13:07)
+[GCC 8.2.1 20180831] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> (3+5**.5)**.5,(5/2)**.5+(1/2)**.5,10**.5/2+2**.5/2
+(2.288245611270737, 2.2882456112707374, 2.2882456112707374)
+
+Check!
+
+
+Summary:
+
+Q3=60
+S3=120
+
+S2=Q1 = 60-S1 = 120-Q2
+
+sinS2=sinQ1=sqrt(3/8)=sqrt(6)/4
+
+s1,q1 = 1
+s2,q2 = phi
+
+s3 = sqrt(3+sqrt(5)) = sqrt(5/2)+sqrt(1/2) = (sqrt(10) + sqrt(2))/2
+q3 = sqrt(2)
