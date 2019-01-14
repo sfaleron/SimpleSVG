@@ -9,7 +9,7 @@ from triphi      import defaults, tileOpts, redraw
 from triphi.keyattr import KeywordToAttr
 from triphi.layers  import mixed_up_triangles
 from triphi.tiles   import TileSet, adjacent_tiles
-from triphi.math    import inner
+from triphi.math    import inner, pi
 
 
 def make_tile(stk, path, opts):
@@ -54,13 +54,18 @@ def _make_tiles(stk, tiles, n, noFlips, path, opts):
         _make_tiles(stk, tiles, n-1, noFlips, path_, opts_)
 
 
-def make_tiles(n, noFlips=False, flipZero=False, opts=None):
+def make_tiles(n, noFlips=False, flipZero=False, sideLength=None, rotate=0, turns=0, opts=None):
     if opts is None:
         opts = defaults.copy()
         opts.update(tileOpts)
 
     if flipZero:
         opts.flip = not opts.flip
+
+    if sideLength:
+        opts.side = sideLength
+
+    opts.rotate = rotate or turns*pi/6
 
     redraw(opts)
 
@@ -76,25 +81,36 @@ def make_tiles(n, noFlips=False, flipZero=False, opts=None):
 
     return stk
 
-
-class NonNegative(int):
-    def __new__(cls, valueIn):
-        valueOut = int(valueIn)
+def make_nonnegative(typ):
+    def new(cls, valueIn):
+        valueOut = typ(valueIn)
 
         if valueOut<0:
-            raise ValueError('Non-negative integers only.')
+            raise ValueError('Non-negative values only.')
 
-        return int.__new__(cls, valueOut)
+        return typ.__new__(cls, valueOut)
 
+    return type('NonNegative_'+typ.__name__, (typ,), dict(__new__=new))
+
+# more args: side length, orientation: 0:up, 30:right, 60:down, 90:left
+# take integer, enforce multiple of 30, or multiply by 30? turns:n seems good!
+# not affected by flip!
 
 if __name__ == '__main__':
     from argparse import ArgumentParser
 
     psr = ArgumentParser()
-    psr.add_argument( 'depth',    type=NonNegative)
-    psr.add_argument('-noFlips',  action='store_true')
-    psr.add_argument('-flipZero', action='store_true')
+    psr.add_argument(  'depth',      type=make_nonnegative(int))
+    psr.add_argument( '-noFlips',    action='store_true')
+    psr.add_argument( '-flipZero',   action='store_true')
+    psr.add_argument('--turns',      type=int, default=0)
+    psr.add_argument('--rotate',     type=float, default=0)
+    psr.add_argument('--sideLength', type=make_nonnegative(float))
 
-    args = psr.parse_args()
+    argsKw = vars(psr.parse_args())
 
-    print(make_tiles(args.depth, args.noFlips, args.flipZero))
+    argsKw['rotate'] *= pi/180
+
+    depth  = argsKw.pop('depth')
+
+    print(make_tiles(depth, **argsKw))

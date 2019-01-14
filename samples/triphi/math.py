@@ -56,10 +56,10 @@ def outer(sideLength, rotate=0):
     return tuple(map(transform, pts))
 
 
-####################################################
-# Find the inner triangle with vertices on the sides
-# of the first triangle, and the innermost triangle,
-# whose vertices are the midpoints of the second.
+########################################################################
+# Find the inner triangle with vertices on the sides of the first
+# triangle, and the innermost triangle, whose vertices are the mid-
+# points of the second.
 #
 # D is colinear with AB, and the length of BD is the
 # outermost side length AB divided by phi.
@@ -73,11 +73,11 @@ def outer(sideLength, rotate=0):
 # points of the inner triangle to be colinear with the appropriate
 # vertex of the outer triangle.
 
-# The vertices are arranged such that the labels proceed counterclockwise.
-# Outer  A,B,C: A at the apex and BC horizontal.
-# Middle D,E,F: vertices on the sides of ABC; D opposite A, E:B, F:C.
-# Inner  G,H,I: vertices on midpoints of DEF; G adjacent to A via a long
-# inner segment, H:B, I:C
+# The vertices are labeled in counterclockwise order.
+# Outer A,B,C: A at the apex and BC horizontal.
+# Inner D,E,F: vertices on the sides of ABC; D opposite A, E:B, F:C.
+# Innermost G,H,I: vertices on midpoints of DEF; G adjacent to A via a
+# long inner segment, H:B, I:C
 
 def inner(A, B, C, flip=False):
 

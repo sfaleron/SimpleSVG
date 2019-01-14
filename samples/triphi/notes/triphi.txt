@@ -41,6 +41,8 @@ side 1 is the short interior side
 side 2 is the long interior side (shared)
 side 3 is the exterior side. short:squat, long:slim
 
+S2/Q1  is the angle between the inner and outer triangles.
+
 Q3 is opposite an interior angle of an equilateral triangle
 S3 is Q3's supplement
 Q3=60
@@ -362,6 +364,43 @@ Type "help", "copyright", "credits" or "license" for more information.
 
 Check!
 
+Area of Inner Triangle wrt Outer
+
+Mathomatic version 16.0.5
+Copyright (C) 1987-2012 George Gesslein II.
+200 equation spaces available in RAM; 2 megabytes per equation space.
+ANSI color mode enabled; manage by typing "help color".
+Anything done here is temporary, unless it is saved or redirected.
+1-> (3/16)^.5
+Calculating...
+ answer = 0.43301270189222
+1-> 3^.5+15^.5
+Calculating...
+ answer = 5.6050341537763
+2-> (#1*4)/(#1*4+#2*6)
+Calculating...
+ answer = 0.048980212709914
+3-> repeat simplify
+
+                         1
+                      (3^-)
+                         2
+#3: answer = ------------------------
+                    1            1
+             ((7*(3^-)) + (6*(15^-)))
+                    2            2
+
+3-> 1/(7+6*5^.5)
+Calculating...
+ answer = 0.048980212709914
+4-> simplify
+
+                  1
+             6*(5^-)
+                  2     7
+#4: answer = ------- - ---
+               131     131
+
 
 Summary:
 
@@ -377,3 +416,7 @@ s2,q2 = phi
 
 s3 = sqrt(3+sqrt(5)) = sqrt(5/2)+sqrt(1/2) = (sqrt(10) + sqrt(2))/2
 q3 = sqrt(2)
+
+Areas of slim, squat are sqrt(3)+sqrt(15)
+
+Area of inner triangle wrt outer: (6*sqrt(5)-7)/131

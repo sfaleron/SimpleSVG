@@ -40,7 +40,7 @@ osay, that's a difference of squares!
 2+3+sqrt(5) = x^2 + y^2
   5+sqrt(5) = x^2 + y^2
 
-radical reeduction:
+radical reduction:
   a=5,b=1,c=5
   R=sqrt(25-5) = 2*sqrt(5)
 
@@ -50,7 +50,10 @@ sqrt(10+4*sqrt(5))/2 + sqrt(10-4*sqrt(5))/2
 
 A circle.. interesting!
 
-A circle can be parameterized by angle, and our pair of triangles is characterized by an angle, asin(sqrt(3/8)). What's the relationship?
+A circle can be parameterized by angle, and our pair of triangles is characterized by a shared angle, asin(sqrt(3/8)). What's the relationship?
+
+Curious.. do two equal sides and equal area imply a shared angle?
+
 
 The "characteristic angle" given a,b:
 
