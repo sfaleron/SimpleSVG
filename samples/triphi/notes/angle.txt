@@ -1,0 +1,17 @@
+
+Trying to get this inverse sine resolved into some combination of constants..
+
+Starting with
+sqrt(3/8) = sqrt(3/4)*sqrt(1/2), these were not helpful:
+https://en.wikipedia.org/wiki/List_of_trigonometric_identities#Product-to-sum_and_sum-to-product_identities
+This started going somewhere, but it ended up being only circular.
+
+https://en.wikipedia.org/wiki/List_of_trigonometric_identities#Ptolemy's_theorem
+This seemed promising, but a brute-force search in one-degree increments from -90-90 in three variables failed to find any solutions.
+
+
+Maybe useful identity:
+sin(15) = (sqrt( 6) - sqrt(2)) /4
+        = sqrt(3/8) - sqrt(1/2)/2
+
+Ends up circular. Usually that means additional relationships are needed.

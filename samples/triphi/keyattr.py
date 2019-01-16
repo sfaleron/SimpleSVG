@@ -3,6 +3,7 @@ from attrdictbase import ImmutableDict as ImmDict, LazyEval
 
 from collections  import Mapping
 
+
 class KeywordToAttr(object):
     """Attributes unspecified at instantiation are set to None.
 
@@ -62,3 +63,67 @@ class KeywordToAttr(object):
                     else self._copy(getattr(self, k), **kw.get(k, {}) ) )
 
         return dupe
+
+
+from six import add_metaclass
+import attr
+
+class K2AMeta(type):
+    def __new__(mcs, name, bases, dct):
+        attribs = dct.pop('_attribs', {})
+
+        for k,v in attribs.items():
+            dct[k] = attr.ib(**({} if v is None else v))
+
+        return type.__new__(mcs, name, bases, dct)
+
+@add_metaclass(K2AMeta)
+class _KeywordToAttr(object):
+    """Attributes unspecified at instantiation are set to None.
+
+    copy() method deep-copies instances of this class or its
+    subclasses and all mappings.
+
+    Mappings must be shallow-copyable by passing the instance
+    to its type. For instance, d1 = dict(); d2 = dict(d1)."""
+
+    _noDescent = frozenset()
+
+    def __new__(cls, byPos=(), **kw):
+        items = dict(byPos)
+        items.update(kw)
+
+        return object.__new__(cls, **items)
+
+    def update(self, byPos=(), **kw):
+        items = dict(byPos)
+        items.update(kw)
+
+        for k,v in items.items():
+            setattr(self, k, v)
+
+    def _copy(self, vIn, **kw):
+        if isinstance(vIn, KeywordToAttr):
+            vOut = vIn.copy(**kw.get(vIn, {}))
+
+        else:
+            if isinstance(vIn, Mapping):
+                vOut = type(vIn)(vIn)
+
+                for k,v in kw.items():
+                    vOut[k] = self._copy(v)
+
+            else:
+                vOut = vIn
+
+        return vOut
+
+    def copy(self, **kw):
+        dupe = type(self)()
+        for k in self.__slots__:
+            if hasattr(self, k):
+                setattr(dupe, k, getattr(self, k) if k in self._noDescent
+                    else self._copy(getattr(self, k), **kw.get(k, {}) ) )
+
+        return dupe
+

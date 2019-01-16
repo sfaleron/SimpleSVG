@@ -9,6 +9,11 @@ from  __future__ import division
 from    .keyattr import KeywordToAttr, ImmDict, LazyEval
 from    .math    import Point, pi
 
+from filterplexer import FilterPlexer, FilterPlexerMeta
+
+from six import add_metaclass
+
+
 class Options(KeywordToAttr):
     __slots__ = ('colors', 'side', 'rotate', 'flip', 'attrs', 'points', 'labels')
 
@@ -47,26 +52,23 @@ class Options(KeywordToAttr):
 class Colors(KeywordToAttr):
     __slots__ = ('bg', 'slim', 'squat')
 
+def make_norm_attrs(parent):
+    @add_metaclass(FilterPlexerMeta)
+    class WithNormalizedStrokeWidth(dict):
+        filters = FilterPlexer()
+        @filters.out(['__init__', '__setitem__', 'setdefault', 'update'])
+        def normalize(self, result):
+            if self.get('stroke-width', '').endswith('nm'):
+                self['stroke-width'] = '{:f}px'.format(float(
+                    self['stroke-width'][:-2])*parent.side/standardSide)
 
-# "parent" is first in slots sequence, because it is a dependency of
-# the later ones, and the slots sequence is observed when setting the
-# attributes at instantiation.
+            return result
+
+    return WithNormalizedStrokeWidth
+
 class Attributes(KeywordToAttr):
-    __slots__  = ('parent', 'pgon', 'line')
+    __slots__  = ('pgon', 'line')
     _defaults  = ImmDict(pgon=LazyEval(dict), line=LazyEval(dict))
-    _noDescent = frozenset(['parent'])
-
-    def __setattr__(self, attr, valueIn):
-        valueOut = valueIn
-
-        if attr in self.__slots__[1:]:
-            if 'stroke-width' in valueIn:
-                if valueIn['stroke-width'].endswith('nm'):
-                    valueOut = type(valueIn)(valueIn)
-                    valueOut['stroke-width'] = '{:f}px'.format(float(
-                        valueIn['stroke-width'][:-2])*self.parent.side/standardSide)
-
-        KeywordToAttr.__setattr__(self, attr, valueOut)
 
 class LabelInfo(KeywordToAttr):
     __slots__ = ('dx', 'dy', 'r', 'theta')
@@ -93,7 +95,9 @@ def _make_options():
             ( A,  B,  C,   D,  E,  F,   G,  H,  I) ) )
     )
 
-    opts.attrs = Attributes(parent=opts, pgon=pgonAttrs, line=lineAttrs)
+    NormAttrs  = make_norm_attrs(opts)
+
+    opts.attrs = Attributes(pgon=NormAttrs(pgonAttrs), line=NormAttrs(lineAttrs))
 
     return opts
 
