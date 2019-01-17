@@ -6,12 +6,13 @@ from  __future__ import absolute_import
 
 from  itertools  import combinations
 
-from .keyattr    import KeywordToAttr
+from .keyattr    import KeywordToAttr, kw2aDec, AttribItem
 from .math       import inner, triangles_from_side
 
 
+@kw2aDec
 class Extents(KeywordToAttr):
-    __slots__ = ('xmin', 'xmax', 'ymin', 'ymax', 'empty')
+    _attribs = map(AttribItem, ['xmin', 'xmax', 'ymin', 'ymax', 'empty'])
 
 
 def fixedPt(n, prec=16):

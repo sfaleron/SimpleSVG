@@ -3,19 +3,20 @@
 # | Those options you may be looking for are at the end! |
 # ========================================================
 
-from  __future__ import absolute_import
-from  __future__ import division
+from   __future__ import absolute_import
+from   __future__ import division
 
-from    .keyattr import KeywordToAttr, ImmDict, LazyEval
-from    .math    import Point, pi
+from     .keyattr import KeywordToAttr, kw2aDec, AttribItem
+from     .math    import Point, pi
 
 from filterplexer import FilterPlexer, FilterPlexerMeta
 
-from six import add_metaclass
+from          six import add_metaclass
 
-
+@kw2aDec
 class Options(KeywordToAttr):
-    __slots__ = ('colors', 'side', 'rotate', 'flip', 'attrs', 'points', 'labels')
+    _attribs = map(AttribItem, [
+        'colors', 'side', 'rotate', 'flip', 'attrs', 'points', 'labels'])
 
     def pick_pts(self, *names):
         return tuple([self.points[k] for k in names])
@@ -49,8 +50,9 @@ class Options(KeywordToAttr):
     def center(self):
         return Point(*[sum(i)/3 for i in zip(*self.tri1)])
 
+@kw2aDec
 class Colors(KeywordToAttr):
-    __slots__ = ('bg', 'slim', 'squat')
+    _attribs = map(AttribItem, ['bg', 'slim', 'squat'])
 
 def make_norm_attrs(parent):
     @add_metaclass(FilterPlexerMeta)
@@ -66,13 +68,19 @@ def make_norm_attrs(parent):
 
     return WithNormalizedStrokeWidth
 
+@kw2aDec
 class Attributes(KeywordToAttr):
-    __slots__  = ('pgon', 'line')
-    _defaults  = ImmDict(pgon=LazyEval(dict), line=LazyEval(dict))
+    _attribs  = (
+        AttribItem('pgon', factory=dict),
+        AttribItem('line', factory=dict) )
 
+@kw2aDec
 class LabelInfo(KeywordToAttr):
-    __slots__ = ('dx', 'dy', 'r', 'theta')
-    _defaults = ImmDict(r=None, dx=0, dy=0, theta=0)
+    _attribs = (
+        AttribItem(    'r'            ),
+        AttribItem(   'dx',  default=0),
+        AttribItem(   'dy',  default=0),
+        AttribItem('theta',  default=0) )
 
 
 def redraw(options):
@@ -95,9 +103,9 @@ def _make_options():
             ( A,  B,  C,   D,  E,  F,   G,  H,  I) ) )
     )
 
-    NormAttrs  = make_norm_attrs(opts)
+    NormedAttrs = make_norm_attrs(opts)
 
-    opts.attrs = Attributes(pgon=NormAttrs(pgonAttrs), line=NormAttrs(lineAttrs))
+    opts.attrs  = Attributes(pgon=NormedAttrs(pgonAttrs), line=NormedAttrs(lineAttrs))
 
     return opts
 

@@ -6,7 +6,7 @@ import  os.path     as osp
 from       math import sin, cos
 
 from  simplesvg import Polygon, Text, Line, StyledElement, filled_polygon
-from   .keyattr import KeywordToAttr
+from   .keyattr import KeywordToAttr, kw2aDec, AttribItem
 from   .options import standardSide
 
 from   registry import RegistryMap
@@ -20,8 +20,9 @@ def rotate_right(seq):
 
 layerReg = RegistryMap(passName=True)
 
+@kw2aDec
 class LayerInfo(KeywordToAttr):
-    __slots__ = ('layer', 'path')
+    _attribs = map(AttribItem, ['layer', 'path'])
 
 
 def layer_decorator(visible):

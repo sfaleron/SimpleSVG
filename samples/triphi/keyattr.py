@@ -1,9 +1,34 @@
 
-from attrdictbase import ImmutableDict as ImmDict, LazyEval
+# setting attribs the customary way as individual class attributes is
+# also supported, and may be combined with attribs declared within the
+# _attribs class attribute.
 
-from collections  import Mapping
+from  collections import Mapping, OrderedDict
+from          six import add_metaclass
+
+import       attr
 
 
+class AttribItem(tuple):
+    def __new__(cls, k, **kw):
+        return tuple.__new__(cls, [k, kw or dict(default=None)] )
+
+
+class K2AMeta(type):
+    """_attribs may be a mapping or an iterable of key, value pairs"""
+    def __new__(mcs, name, bases, dct):
+        attribs = dct.pop('_attribs', {})
+
+        if not isinstance(attribs, Mapping):
+            attribs = OrderedDict(attribs)
+
+        for k,v in attribs.items():
+            dct[k] = attr.ib(**v)
+
+        return type.__new__(mcs, name, bases, dct)
+
+
+@add_metaclass(K2AMeta)
 class KeywordToAttr(object):
     """Attributes unspecified at instantiation are set to None.
 
@@ -13,24 +38,7 @@ class KeywordToAttr(object):
     Mappings must be shallow-copyable by passing the instance
     to its type. For instance, d1 = dict(); d2 = dict(d1)."""
 
-    __slots__  = ()
     _noDescent = frozenset()
-    _defaults  = ImmDict()
-
-    def __init__(self, byPos=(), **kw):
-        items = dict(byPos)
-        items.update(kw)
-
-        for k in self.__slots__:
-            if k in items:
-                setattr(self, k, items[k])
-            else:
-                if k in self._defaults:
-                    v = self._defaults[k]
-                    if isinstance(v, LazyEval):
-                        v = v()
-
-                    setattr(self, k, v)
 
     def update(self, byPos=(), **kw):
         items = dict(byPos)
@@ -39,9 +47,10 @@ class KeywordToAttr(object):
         for k,v in items.items():
             setattr(self, k, v)
 
+
     def _copy(self, vIn, **kw):
         if isinstance(vIn, KeywordToAttr):
-            vOut = vIn.copy(**kw.get(vIn, {}))
+            vOut = vIn.copy(**kw)
 
         else:
             if isinstance(vIn, Mapping):
@@ -55,75 +64,29 @@ class KeywordToAttr(object):
 
         return vOut
 
+
     def copy(self, **kw):
-        dupe = type(self)()
-        for k in self.__slots__:
-            if hasattr(self, k):
-                setattr(dupe, k, getattr(self, k) if k in self._noDescent
-                    else self._copy(getattr(self, k), **kw.get(k, {}) ) )
-
-        return dupe
-
-
-from six import add_metaclass
-import attr
-
-class K2AMeta(type):
-    def __new__(mcs, name, bases, dct):
-        attribs = dct.pop('_attribs', {})
-
-        for k,v in attribs.items():
-            dct[k] = attr.ib(**({} if v is None else v))
-
-        return type.__new__(mcs, name, bases, dct)
-
-@add_metaclass(K2AMeta)
-class _KeywordToAttr(object):
-    """Attributes unspecified at instantiation are set to None.
-
-    copy() method deep-copies instances of this class or its
-    subclasses and all mappings.
-
-    Mappings must be shallow-copyable by passing the instance
-    to its type. For instance, d1 = dict(); d2 = dict(d1)."""
-
-    _noDescent = frozenset()
-
-    def __new__(cls, byPos=(), **kw):
-        items = dict(byPos)
-        items.update(kw)
-
-        return object.__new__(cls, **items)
-
-    def update(self, byPos=(), **kw):
-        items = dict(byPos)
-        items.update(kw)
-
-        for k,v in items.items():
-            setattr(self, k, v)
-
-    def _copy(self, vIn, **kw):
-        if isinstance(vIn, KeywordToAttr):
-            vOut = vIn.copy(**kw.get(vIn, {}))
-
-        else:
-            if isinstance(vIn, Mapping):
-                vOut = type(vIn)(vIn)
-
-                for k,v in kw.items():
-                    vOut[k] = self._copy(v)
-
+        dupe = attr.evolve(self)
+        for k,v in attr.asdict(dupe, recurse=False).items():
+            if k in self._noDescent:
+                v.update(kw.get(k, {}))
             else:
-                vOut = vIn
-
-        return vOut
-
-    def copy(self, **kw):
-        dupe = type(self)()
-        for k in self.__slots__:
-            if hasattr(self, k):
-                setattr(dupe, k, getattr(self, k) if k in self._noDescent
-                    else self._copy(getattr(self, k), **kw.get(k, {}) ) )
+                setattr(dupe, k, self._copy(v, **kw.get(k, {}) ) )
 
         return dupe
+
+
+def kw2aDec(clsIn):
+    def initinit(self, byPos=(), **kw):
+        items = dict(byPos)
+        items.update(kw)
+
+        nextinit(self, **items)
+
+    clsOut   = attr.s(slots=True)(clsIn)
+    nextinit = clsOut.__init__
+
+    clsOut.__init__ = initinit
+
+    return clsOut
 
