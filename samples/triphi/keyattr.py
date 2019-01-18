@@ -30,8 +30,7 @@ class K2AMeta(type):
 
 @add_metaclass(K2AMeta)
 class KeywordToAttr(object):
-    """Attributes unspecified at instantiation are set to None.
-
+    """
     copy() method deep-copies instances of this class or its
     subclasses and all mappings.
 
