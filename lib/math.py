@@ -24,7 +24,7 @@ class Point(namedtuple('Point', 'x y')):
             return NotImplemented
 
 def between(p1, p2, pos):
-    return Point((p1.x-p2.x)*pos+p2.x, (p1.y-p2.y)*pos+p2.y)
+    return Point((p2.x-p1.x)*pos+p1.x, (p2.y-p1.y)*pos+p1.y)
 
 def midpoint(p1, p2):
     return Point((p1.x+p2.x)/2, (p1.y+p2.y)/2)
