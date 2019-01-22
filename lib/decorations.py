@@ -46,8 +46,6 @@ class Decorations(object):
                 p1 = between(ctr, leg1, r/dist(ctr, leg0))
                 incAngle = not incAngle
 
-        p.close()
-
         return p
 
     def ticks(self, p0, p1, n, **kw):
@@ -57,7 +55,26 @@ class Decorations(object):
         crossings = [between(p0, p1, tick0+inc*i) for i in range(n)]
         slope     = -(p1.x-p0.x)/(p1.y-p0.y)
 
-        # A slope and a point defines a line; the point is also
-        # the center of a circle, the diameter is the tick length.
+        # A slope and a point define a line; the point is also the
+        # center of a circle, the diameter of which is the tick length.
         # The intersection defines the endpoints of the tick mark.
 
+        pi = crossings[0]
+        z  = tickLength/2/sqrt(1+slope**2)
+
+        p0 = Point(pi.x-z, pi.y-slope*z)
+        p1 = Point(pi.x+z, pi.y+slope*z)
+
+        p  = Path(p0, **kw)
+
+        while crossings:
+            p.lineTo(p1-p0)
+
+            crossings.pop(0)
+
+            if crossings:
+                p0 = Point(pi.x-z, pi.y-slope*z)
+                p.moveTo(p0-p1)
+                p1 = Point(pi.x+z, pi.y+slope*z)
+
+        return p

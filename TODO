@@ -25,3 +25,23 @@ not when unaligned, fooey!
 not triphi:
 
 the tag registry would work if the tag parameter had a default.. but it doesn't seem as useful? maybe later.. or a branch? imported elements can just be inserted directly, have the root converted, or convert recursively
+
+make inkscape support optional
+
+triphi has a lot of dependencies the library doesn't use. might have to split? sad!
+It's also grown a lot, kinda swamps the rest
+not so much, you're thinking of the rollingngon.
+was planning to add argsplusplus, but that's only one.. it uses adb, which uses unexpressions. unexpressions is okay, adb might try to get rid of.
+
+path.close() draws a line back to the start, it isn't required or implicit after gc etc.
+Some demos may use it unecessarily.
+
+Paths.. well, also others? no.
+  got some ideas for supporting absolute movements in Paths. Accept None as starting opint, raise ValueError if relative move is attempted without an absolute first. Alternatively, set position to 0,0.
+
+  Methods lookup their path subcmd, have a common backend method that does the call, with either absolute or relative variants. They have the same signatures.
+
+  delegate the methods through attributes. p=Path(); p.abs.fooCmd() or p.rel.fooCmd()
+
+  horizontal/vertical lines would be easy and Nice To Have
+
