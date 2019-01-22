@@ -4,7 +4,7 @@ from __future__ import division
 
 from      .math import Point, dist, between, atan2, pi
 
-import attr
+import     attr
 
 @attr.s(cmp=False)
 class Decorations(object):

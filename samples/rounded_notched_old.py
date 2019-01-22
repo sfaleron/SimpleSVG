@@ -18,9 +18,11 @@ if __name__ == '__main__':
     RADIUS = 1.5
     STRAIGHT_SIDE = 28.4
 
+    # stroke-width = 0.01 for an actual Ponoko submission,
+    # but that is basically invisible when rendered on-screen.
     attrs = {
         'stroke'        : '#0000ff',
-        'stroke-width'  : 0.01,
+        'stroke-width'  : 0.1,
         'stroke-opacity': 1,
         'fill-opacity'  : 0
     }
