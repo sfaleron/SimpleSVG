@@ -5,11 +5,17 @@ from __future__ import division
 from      .math import Point, sqrt, dist, between, atan2, pi
 from     ..     import Path
 
+import attr
 
-def make_decorations(tickLength, arcRadius, spacing):
-    def arcs(ctr, leg0, leg1, bigArc=False, n=1, **kw):
-        p0 = between(ctr, leg0, arcRadius/dist(ctr, leg0))
-        p1 = between(ctr, leg1, arcRadius/dist(ctr, leg1))
+
+@attr.s(cmp=False)
+class ArcDecorations(object):
+    radius  = attr.ib()
+    spacing = attr.ib()
+
+    def __call__(self, ctr, leg0, leg1, bigArc=False, n=1, **kw):
+        p0 = between(ctr, leg0, self.radius/dist(ctr, leg0))
+        p1 = between(ctr, leg1, self.radius/dist(ctr, leg1))
 
         a0 = atan2(p0.y-ctr.y, p0.x-ctr.x)
         a1 = atan2(p1.y-ctr.y, p1.x-ctr.x)
@@ -24,7 +30,7 @@ def make_decorations(tickLength, arcRadius, spacing):
 
         p = Path(p0, **kw)
 
-        r = arcRadius
+        r = self.radius
 
         while n:
             p.arcTo(p1-p0, r, r, 0, bigArc, incAngle)
@@ -32,7 +38,7 @@ def make_decorations(tickLength, arcRadius, spacing):
             n -= 1
 
             if n:
-                r += spacing
+                r += self.spacing
                 leg0, leg1 = leg1,leg0
 
                 p0 = between(ctr, leg0, r/dist(ctr, leg0))
@@ -43,8 +49,14 @@ def make_decorations(tickLength, arcRadius, spacing):
 
         return p
 
-    def ticks(p0, p1, n=1, **kw):
-        inc   = spacing / dist(p0, p1)
+
+@attr.s(cmp=False)
+class TickDecorations(object):
+    length  = attr.ib()
+    spacing = attr.ib()
+
+    def __call__(self, p0, p1, n=1, **kw):
+        inc   = self.spacing / dist(p0, p1)
         tick0 = .5 - (n-1)/2*inc
 
         crossings = [between(p0, p1, tick0+inc*i) for i in range(n)]
@@ -61,11 +73,11 @@ def make_decorations(tickLength, arcRadius, spacing):
         pi = crossings[0]
 
         if slope is None:
-            z  = tickLength/2
+            z  = self.length/2
             p0 = Point(pi.x, pi.y-z)
             p1 = Point(pi.x, pi.y+z)
         else:
-            z  = tickLength/2/sqrt(1+slope**2)
+            z  = self.length/2/sqrt(1+slope**2)
             p0 = Point(pi.x-z, pi.y-slope*z)
             p1 = Point(pi.x+z, pi.y+slope*z)
 
@@ -89,5 +101,3 @@ def make_decorations(tickLength, arcRadius, spacing):
                     p1 = Point(pi.x+z, pi.y+slope*z)
 
         return p
-
-    return ticks, arcs

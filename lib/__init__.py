@@ -2,4 +2,4 @@
 from __future__ import absolute_import
 
 from    .rtangles import *
-from .decorations import make_decorations
+from .decorations import ArcDecorations, TickDecorations
