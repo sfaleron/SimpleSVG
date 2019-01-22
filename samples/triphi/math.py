@@ -1,19 +1,10 @@
 
-from __future__ import division
-from __future__ import absolute_import
+from  __future__ import division
+from  __future__ import absolute_import
 
-from math import sin, cos, pi, atan2
+from        math import sin, cos, pi, atan2, sqrt
 
-from collections import namedtuple
-
-
-Point = namedtuple('Point', ('x', 'y'))
-
-def between(p1, p2, pos):
-    return Point((p1.x-p2.x)*pos+p2.x, (p1.y-p2.y)*pos+p2.y)
-
-def midpoint(p1, p2):
-    return Point((p1.x+p2.x)/2, (p1.y+p2.y)/2)
+from simplesvg.lib.math import Point, midpoint, between, dist
 
 
 # Construct a figure like that at http://www.cut-the-knot.org/do_you_know/Buratino7.shtml
@@ -40,7 +31,7 @@ def outer(sideLength, rotate=0):
     """sideLength is in pixels, rotate in radians"""
 
     # side/sqrt(3), or half of the height of the triangle
-    r = sideLength*3**-2**-1
+    r = sideLength/sqrt(3)
 
     pts = [ Point(r*cos(a), r*sin(a)) for a in [
         (2./3*i+.5)*pi+rotate for i in range(3)] ]
@@ -81,7 +72,7 @@ def outer(sideLength, rotate=0):
 
 def inner(A, B, C, flip=False):
 
-    invphi = 2/(1+5**2**-1)
+    invphi = 2/(1+sqrt(5))
 
     if flip:
         invphi = 1-invphi
@@ -145,8 +136,8 @@ def triangles_from_side(p1, p2, sideLength=None):
     else:
         a,b = sideLength, 1
 
-    k = a/2 * (3*b / (
-        p1.x**2 + p2.x**2 + p1.y**2 + p2.y**2 - 2*(p1.x*p2.x + p1.y*p2.y)))**.5
+    k = a/2 * sqrt(3*b / (
+        p1.x**2 + p2.x**2 + p1.y**2 + p2.y**2 - 2*(p1.x*p2.x + p1.y*p2.y)))
 
     p3a = Point(midPt.x - (p2.y-p1.y)*k, midPt.y + (p2.x-p1.x)*k)
     p3b = Point(midPt.x + (p2.y-p1.y)*k, midPt.y - (p2.x-p1.x)*k)

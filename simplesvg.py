@@ -236,6 +236,9 @@ class Path(StyledElement):
         StyledElement.__init__(self, 'path', **attrs)
         self.steps = ['M%s,%s' % tuple(initial_pos)]
 
+    def moveTo(self, pt):
+        self.steps.append('m%s %s' % tuple(pt))
+
     def lineTo(self, pt):
         self.steps.append('l%s %s' % tuple(pt))
 

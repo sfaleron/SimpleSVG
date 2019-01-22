@@ -39,6 +39,17 @@ class KeywordToAttr(object):
 
     _noDescent = frozenset()
 
+    def __eq__(self, other):
+        if isinstance(other, KeywordToAttr):
+            return all((getattr(self, name) == getattr(other, name)
+                for name in attr.fields(type(self))))
+        else:
+            return NotImplemented
+
+    def __ne__(self, other):
+        x = self==other
+        return x if x is NotImplemented else not x
+
     def update(self, byPos=(), **kw):
         items = dict(byPos)
         items.update(kw)
@@ -82,7 +93,7 @@ def kw2aDec(clsIn):
 
         nextinit(self, **items)
 
-    clsOut   = attr.s(slots=True)(clsIn)
+    clsOut   = attr.s(slots=True, cmp=False)(clsIn)
     nextinit = clsOut.__init__
 
     clsOut.__init__ = initinit
