@@ -14,8 +14,10 @@ class ArcDecorations(object):
     spacing = attr.ib()
 
     def __call__(self, ctr, leg0, leg1, bigArc=False, n=1, **kw):
-        p0 = between(ctr, leg0, self.radius/dist(ctr, leg0))
-        p1 = between(ctr, leg1, self.radius/dist(ctr, leg1))
+        radius = kw.pop('radius', self.radius)
+
+        p0 = between(ctr, leg0, radius/dist(ctr, leg0))
+        p1 = between(ctr, leg1, radius/dist(ctr, leg1))
 
         a0 = atan2(p0.y-ctr.y, p0.x-ctr.x)
         a1 = atan2(p1.y-ctr.y, p1.x-ctr.x)
@@ -30,21 +32,19 @@ class ArcDecorations(object):
 
         p = Path(p0, **kw)
 
-        r = self.radius
-
         while n:
-            p.arcTo(p1-p0, r, r, 0, bigArc, incAngle)
+            p.arcTo(p1-p0, radius, radius, 0, bigArc, incAngle)
 
             n -= 1
 
             if n:
-                r += self.spacing
+                radius += self.spacing
                 leg0, leg1 = leg1,leg0
 
-                p0 = between(ctr, leg0, r/dist(ctr, leg0))
+                p0 = between(ctr, leg0, radius/dist(ctr, leg0))
                 p.moveTo(p0-p1)
 
-                p1 = between(ctr, leg1, r/dist(ctr, leg0))
+                p1 = between(ctr, leg1, radius/dist(ctr, leg0))
                 incAngle = not incAngle
 
         return p

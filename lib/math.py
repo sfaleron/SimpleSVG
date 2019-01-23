@@ -3,10 +3,31 @@ from  __future__ import absolute_import
 from  __future__ import division
 
 from collections import namedtuple
+from     numbers import Number
 from        math import sqrt, atan2, pi
 
 
 class Point(namedtuple('Point', 'x y')):
+    def __mul__(self, other):
+        cls = type(self)
+
+        if isinstance(other, Number):
+            return cls(self.x*other, self.y*other)
+        else:
+            return NotImplemented
+
+    __rmul__ = __mul__
+
+    def __truediv__(self, other):
+        cls = type(self)
+
+        if isinstance(other, Number):
+            return cls(self.x/other, self.y/other)
+        else:
+            return NotImplemented
+
+    __div__ = __truediv__
+
     def __sub__(self, other):
         cls = type(self)
 
