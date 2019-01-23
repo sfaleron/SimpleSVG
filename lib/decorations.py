@@ -26,10 +26,11 @@ class ArcDecorations(object):
             p0,p1 = p1,p0
             a0,a1 = a1,a0
 
-            leg0, leg1 = leg1,leg0
+            leg0,leg1 = leg1,leg0
 
         incAngle = bigArc if a1-a0 > pi else not bigArc
 
+        kw['fill-opacity'] = 0
         p = Path(p0, **kw)
 
         while n:
@@ -44,7 +45,7 @@ class ArcDecorations(object):
                 p0 = between(ctr, leg0, radius/dist(ctr, leg0))
                 p.moveTo(p0-p1)
 
-                p1 = between(ctr, leg1, radius/dist(ctr, leg0))
+                p1 = between(ctr, leg1, radius/dist(ctr, leg1))
                 incAngle = not incAngle
 
         return p

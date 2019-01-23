@@ -20,8 +20,8 @@ o = Point(1.15, 1.15)
 
 
 if __name__ == '__main__':
-    lineAttrs = {'stroke-width' : .01 * SCL, 'stroke': '#0000ff', 'fill-opacity':0}
-    decAttrs  = {'stroke-width' : .0035*SCL, 'stroke': '#0000ff', 'fill-opacity':0}
+    pgonAttrs = {'stroke-width' : .01 * SCL, 'stroke': '#0000ff', 'fill-opacity':0}
+    decAttrs  = {'stroke-width' : .0035*SCL, 'stroke': '#0000ff'}
 
     stk   = SVGStack(width=2.3*SCL, height=2.3*SCL)
 
@@ -29,7 +29,7 @@ if __name__ == '__main__':
     ticks = TickDecorations(length=0.08*SCL, spacing=0.02 *SCL)
 
     pts = [SCL*(Point(cos(a), sin(a))+o) for a in [2*pi/N*i+OFF for i in range(N)]]
-    stk.add(Polygon(pts, **lineAttrs))
+    stk.add(Polygon(pts, **pgonAttrs))
 
     for i in range(N):
         stk.add(ticks(pts[i], pts[(i+1)%N], i+1, **decAttrs))
