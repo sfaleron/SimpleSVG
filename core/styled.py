@@ -3,6 +3,8 @@ from __future__ import absolute_import
 
 from .root import Element, Style, StyledElement, PY2
 
+from .path import Path
+
 
 def unexpression_adder(appendable):
     def dec(unexpression):
@@ -46,5 +48,3 @@ class Text(StyledElement):
     def __init__(self, pt, text, **attrs):
         StyledElement.__init__(self, 'text', x=pt[0], y=pt[1], **attrs)
         self.add_child(text)
-
-from .path import Path

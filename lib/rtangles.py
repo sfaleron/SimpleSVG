@@ -44,7 +44,7 @@ class NotTurtle(Path):
         orientation, sgnx, sgny, incAngle = TURNS[(self._orientation, whichway)]
 
         if r:
-            self.arcTo((sgnx*r, sgny*r), r, r, 0, False, incAngle)
+            self.rel.arcTo((sgnx*r, sgny*r), r, r, 0, False, incAngle)
 
         self._orientation = orientation
 
@@ -55,7 +55,7 @@ class NotTurtle(Path):
         self._doTurn(RIGHT, r)
 
     def forward(self, howFar):
-        self.lineTo( {
+        self.rel.lineTo( {
             UP:    (0, -howFar),
             DOWN:  (0,  howFar),
             LEFT:  (-howFar, 0),
@@ -114,7 +114,7 @@ class Quadrant(Path):
             dx *= -1
             dy *= -1
 
-        self.arcTo((dx, dy), r, r, 0, False, incAngle)
+        self.rel.arcTo((dx, dy), r, r, 0, False, incAngle)
 
 
 __all__ = ('NotTurtle', 'RoundedRect', 'Quadrant', 'Dir')

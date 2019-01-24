@@ -34,7 +34,7 @@ class ArcDecorations(object):
         p = Path(p0, **kw)
 
         while n:
-            p.arcTo(p1-p0, radius, radius, 0, bigArc, incAngle)
+            p.abs.arcTo(p1, radius, radius, 0, bigArc, incAngle)
 
             n -= 1
 
@@ -43,7 +43,7 @@ class ArcDecorations(object):
                 leg0, leg1 = leg1,leg0
 
                 p0 = between(ctr, leg0, radius/dist(ctr, leg0))
-                p.moveTo(p0-p1)
+                p.abs.moveTo(p0)
 
                 p1 = between(ctr, leg1, radius/dist(ctr, leg1))
                 incAngle = not incAngle
@@ -85,7 +85,7 @@ class TickDecorations(object):
         p  = Path(p0, **kw)
 
         while crossings:
-            p.lineTo(p1-p0)
+            p.abs.lineTo(p1)
 
             crossings.pop(0)
 
@@ -94,11 +94,11 @@ class TickDecorations(object):
 
                 if slope is None:
                     p0 = Point(pi.x, pi.y-z)
-                    p.moveTo(p0-p1)
+                    p.abs.moveTo(p0)
                     p1 = Point(pi.x, pi.y+z)
                 else:
                     p0 = Point(pi.x-z, pi.y-slope*z)
-                    p.moveTo(p0-p1)
+                    p.abs.moveTo(p0)
                     p1 = Point(pi.x+z, pi.y+slope*z)
 
         return p

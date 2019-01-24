@@ -33,37 +33,37 @@ if __name__ == '__main__':
     path.quadrant( 2, RADIUS)
 
     if WIDER:
-        path.lineTo((WIDER, 0.0))
+        path.rel.lineTo((WIDER, 0.0))
 
     path.quadrant( 1, RADIUS)
     path.quadrant( 3, RADIUS, incAngle=False)
 
-    path.lineTo((GAP, 0.0))
+    path.rel.lineTo((GAP, 0.0))
 
     path.quadrant( 4, RADIUS, incAngle=False)
     path.quadrant( 2, RADIUS)
 
     if WIDER:
-        path.lineTo((WIDER, 0.0))
+        path.rel.lineTo((WIDER, 0.0))
 
     path.quadrant( 1, RADIUS)
-    path.lineTo((0.0, STRAIGHT_SIDE))
+    path.rel.lineTo((0.0, STRAIGHT_SIDE))
 
     path.quadrant( 4, RADIUS)
 
     if WIDER:
-        path.lineTo((-WIDER, 0.0))
+        path.rel.lineTo((-WIDER, 0.0))
 
     path.quadrant( 3, RADIUS)
     path.quadrant( 1, RADIUS, incAngle=False)
 
-    path.lineTo((-GAP, 0.0))
+    path.rel.lineTo((-GAP, 0.0))
 
     path.quadrant( 2, RADIUS, incAngle=False)
     path.quadrant( 4, RADIUS)
 
     if WIDER:
-        path.lineTo((-WIDER, 0.0))
+        path.rel.lineTo((-WIDER, 0.0))
 
     path.quadrant( 3, RADIUS)
 

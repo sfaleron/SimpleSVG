@@ -28,6 +28,14 @@ class SVG(Element):
     # of the root node's children. It is when the root is the top element..
     # so the stack should operate somehow on the top node's children?
 
+    # If that works out, these methods could go to the stack type, and
+    # this class to root, and this module to the bit bucket!
+
+    # then absolute coordinates for path, and implement Element.copy()
+    # or kill it. maybe the elements should be immutanle, then it's not
+    # needed?
+
+
     def remove_child(self, e):
         if self._stack and isinstance(e, Layer):
             self._stack.remove_layer(e)

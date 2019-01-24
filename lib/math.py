@@ -4,6 +4,8 @@ from  __future__ import division
 
 from collections import namedtuple
 from     numbers import Number
+
+# extra symbols for "chained" importing
 from        math import sqrt, atan2, pi
 
 
