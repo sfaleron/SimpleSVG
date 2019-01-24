@@ -1,11 +1,9 @@
 
 make inkscape support optional
 it's pretty harmless.. add something to the libs to postprocess it out
+  xmlns:netscape attribute in the svg node
+  layers should be removed or converted to normal groups
+  that it?
 
-Limit as many dependencies as possible to lib subpackage
-
-Paths
-  delegate the methods through attributes. p=Path(); p.abs.fooCmd() or p.rel.fooCmd()
-
-  horizontal/vertical lines would be easy and Nice To Have
+fix the invisible layer stuff in Element and SVGStack, it's pretty nutty
 
