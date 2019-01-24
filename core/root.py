@@ -1,6 +1,10 @@
 
 PY2 = hasattr(dict, 'iteritems')
 
+class StackError(Exception):
+    pass
+
+
 class Element(dict):
     def __init__(self, tag, **attrs):
         self._tag = tag

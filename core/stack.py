@@ -1,15 +1,11 @@
 
 from __future__ import absolute_import
 
-from .root import Element
+from .root import Element, StackError
 
 from .base import SVG
 
 from .misc import Layer, Group, Clip, Defs
-
-
-class StackError(Exception):
-    pass
 
 
 class _Stack(list):
@@ -47,8 +43,7 @@ class SVGStack(_Stack):
 
         self[0].set_stack(self)
 
-        self._layers = []
-        self._n = 0
+        self._layers = 0
 
     @property
     def layers(self):
@@ -58,24 +53,9 @@ class SVGStack(_Stack):
         if len(self) != 1:
             raise StackError('Layers may only descend from the root.')
 
-        self._n += 1
+        self._layers += 1
 
-        e = self._push(Layer('layer'+str(self._n), label, visible))
-        self._layers.append(e)
-        return e
-
-    def remove_layer(self, e):
-        if e in self._layers:
-            if e in self:
-                raise StackError('Layer is active.')
-
-            self._layers.remove(e)
-
-    def purge_invisible_layers(self):
-        if len(self) != 1:
-            raise StackError('Return to root before modifying layers.')
-
-        self[0].purge_invisible_layers()
+        return self._push(Layer('layer{:d}'.format(self._layers), label, visible))
 
 
 class _EmbeddedCont(Element):

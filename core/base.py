@@ -1,7 +1,7 @@
 
 from __future__ import absolute_import
 
-from .root import Element
+from .root import Element, StackError
 
 from .misc import Layer
 
@@ -22,23 +22,10 @@ class SVG(Element):
     def __str__(self):
         return '<?xml version="1.0" encoding="utf-8"?>\n' + Element.__str__(self)
 
-    # this probably should work for any child, certainly Group instances.
-    # It also seems like it doesn't belong here, which may indicate some-
-    # thing curious about the stack type, if it's just a recapitulation
-    # of the root node's children. It is when the root is the top element..
-    # so the stack should operate somehow on the top node's children?
-
-    # If that works out, these methods could go to the stack type, and
-    # this class to root, and this module to the bit bucket!
-
-    # then absolute coordinates for path, and implement Element.copy()
-    # or kill it. maybe the elements should be immutanle, then it's not
-    # needed?
-
-
     def remove_child(self, e):
-        if self._stack and isinstance(e, Layer):
-            self._stack.remove_layer(e)
+        if isinstance(e, Layer):
+            if self._stack and self._stack[-1] is e:
+                raise StackError('Layer is active.')
 
         Element.remove_child(self, e)
 
