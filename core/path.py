@@ -1,7 +1,7 @@
 
 from __future__ import absolute_import
 
-from    .styled import StyledElement
+from    .root   import StyledElement
 
 
 class PathOps(object):
@@ -36,7 +36,7 @@ class PathOps(object):
         """https://www.w3.org/TR/SVG/implnote.html#ArcImplementationNotes"""
 
         return self._op(self._fmt('a', '{},{} {} {},{} {},{}').format(rx, ry, rot,
-            int(bool(bigArc)), int(bool(incAngle)), *pt), formatOnly)
+            int(bigArc), int(incAngle), *pt), formatOnly)
 
     def lineToMany(self, many, formatOnly=False):
         return self._op(' '.join([self._fmt('l', '{} {}').format(*pt) for pt in many]), formatOnly)

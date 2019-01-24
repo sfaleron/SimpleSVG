@@ -4,14 +4,8 @@ from __future__ import absolute_import
 from .root import Element, Style, StyledElement, PY2
 
 from .path import Path
+from .util import pairsfmt, unexpression_adder
 
-
-def unexpression_adder(appendable):
-    def dec(unexpression):
-        appendable.append(unexpression.__name__)
-        return unexpression
-
-    return appendable, dec
 
 __all__, adder = unexpression_adder(['Path'])
 
@@ -19,7 +13,13 @@ __all__, adder = unexpression_adder(['Path'])
 class Polygon(StyledElement):
     def __init__(self, pts, **attrs):
         StyledElement.__init__(self, 'polygon',
-            points = ' '.join(['%s,%s' % tuple(i) for i in pts]), **attrs)
+            points=pairsfmt(pts), **attrs)
+
+@adder
+class PolyLine(StyledElement):
+    def __init__(self, pts, **attrs):
+        StyledElement.__init__(self, 'polyline',
+            points=pairsfmt(pts), **attrs)
 
 @adder
 def filled_polygon(pts, fillColor, **attrs):
@@ -42,6 +42,11 @@ class Rect(StyledElement):
 class Circle(StyledElement):
     def __init__(self, ctr, r, **attrs):
         StyledElement.__init__(self, 'circle', cx=ctr[0], cy=ctr[1], r=r, **attrs)
+
+@adder
+class Ellipse(StyledElement):
+    def __init__(self, ctr, rx, ry, **attrs):
+        StyledElement.__init__(self, 'ellipse', cx=ctr[0], cy=ctr[1], rx=rx, ry=ry, **attrs)
 
 @adder
 class Text(StyledElement):

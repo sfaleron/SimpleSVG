@@ -18,16 +18,17 @@ if __name__ == '__main__':
     RADIUS = 1.5
     STRAIGHT_SIDE = 28.4
 
-    # stroke-width = 0.01 for an actual Ponoko submission,
+    # stroke-width = 0.01px for an actual Ponoko submission,
     # but that is basically invisible when rendered on-screen.
     attrs = {
         'stroke'        : '#0000ff',
-        'stroke-width'  : 0.1,
+        'stroke-width'  : '0.1px',
         'stroke-opacity': 1,
         'fill-opacity'  : 0
     }
 
-    doc  = SVG()
+    doc  = SVG('Rounded and Notched Rectangle, Old: Quadrant API')
+
     path = doc.add_child(Quadrant(**attrs))
 
     path.quadrant( 2, RADIUS)

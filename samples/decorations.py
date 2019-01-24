@@ -5,7 +5,7 @@ from  __future__   import absolute_import
 
 from itertools     import product
 
-from simplesvg     import SVGStack, Polygon
+from simplesvg     import SVGStack, SVG, Polygon
 from simplesvg.lib import ArcDecorations, TickDecorations
 
 from simplesvg.lib.math import Point
@@ -20,10 +20,10 @@ o = Point(1.15, 1.15)
 
 
 if __name__ == '__main__':
-    pgonAttrs = {'stroke-width' : .01 * SCL, 'stroke': '#0000ff', 'fill-opacity':0}
-    decAttrs  = {'stroke-width' : .0035*SCL, 'stroke': '#0000ff'}
+    pgonAttrs = {'stroke-width' : '{:f}px'.format(.01 * SCL), 'stroke': '#0000ff', 'fill-opacity':0}
+    decAttrs  = {'stroke-width' : '{:f}px'.format(.0035*SCL), 'stroke': '#0000ff'}
 
-    stk   = SVGStack(width=2.3*SCL, height=2.3*SCL)
+    stk   = SVGStack(SVG('Congruency Decorations', width=2.3*SCL, height=2.3*SCL))
 
     arcs  =  ArcDecorations(radius=0.05*SCL, spacing=0.015*SCL)
     ticks = TickDecorations(length=0.08*SCL, spacing=0.02 *SCL)

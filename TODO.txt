@@ -5,5 +5,3 @@ it's pretty harmless.. add something to the libs to postprocess it out
   layers should be removed or converted to normal groups
   that it?
 
-fix the invisible layer stuff in Element and SVGStack, it's pretty nutty
-

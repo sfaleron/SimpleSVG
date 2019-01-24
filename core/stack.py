@@ -9,8 +9,14 @@ from .misc import Layer, Group, Clip, Defs
 
 
 class _Stack(list):
+    def __init__(self, baseNode):
+        list.__init__(self, [baseNode])
+
     def copy(self):
-        return _copy(self)
+        pass
+        # probably want to copy the base node, not the stack
+        #return _copy(self[0])
+        #return _copy(self)
 
     def _push(self, item):
         self.append(self[-1].add_child(item))
@@ -35,11 +41,11 @@ class _Stack(list):
         return str(self[0])
 
 class SVGStack(_Stack):
-    def __init__(self, appendTo=None, **kw):
-        if appendTo and not isinstance(appendTo, SVG):
+    def __init__(self, baseNode):
+        if not isinstance(baseNode, SVG):
             raise StackError('SVGStack may only be associated to the root of a document.')
 
-        _Stack.__init__(self, [appendTo if appendTo else SVG(**kw)])
+        _Stack.__init__(self, baseNode)
 
         self[0].set_stack(self)
 
@@ -58,18 +64,5 @@ class SVGStack(_Stack):
         return self._push(Layer('layer{:d}'.format(self._layers), label, visible))
 
 
-class _EmbeddedCont(Element):
-    def __init__(self):
-        Element.__init__(self, 'embed/null')
-
-    def __str__(self):
-        return '\n'.join(map(str, self._children))
-
 class EmbedStack(_Stack):
-    def __init__(self, *args):
-        args += ([_EmbeddedCont()],)
-        _Stack.__init__(self, *args)
-
-    def embed(self, parent):
-        for e in self:
-            parent.add_child(e)
+    pass

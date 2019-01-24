@@ -59,3 +59,13 @@ class Use(Element):
 class Defs(Element):
     def __init__(self, **attrs):
         Element.__init__(self, 'defs', **attrs)
+
+class Title(Element):
+    def __init__(self, body, **attrs):
+        Element.__init__(self, 'title', **attrs)
+        self.add_child(body)
+
+class Desc(Element):
+    def __init__(self, body, **attrs):
+        Element.__init__(self, 'desc', **attrs)
+        self.add_child(body)

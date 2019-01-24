@@ -1,4 +1,8 @@
 
+from  __future__ import absolute_import
+
+from .util import attrs_to_xml
+
 PY2 = hasattr(dict, 'iteritems')
 
 class StackError(Exception):
@@ -28,8 +32,9 @@ class Element(dict):
         pass
 
     def __str__(self):
-        return '<%s %s%s\n' % (self._tag, ' '.join(['%s="%s"' % i for i in self.items()]),
-            '>\n%s\n</%s>' % ('\n'.join(map(str, self._children)), self._tag) if self._children else ' />')
+        return '<%s %s%s\n' % (self._tag, attrs_to_xml(self),
+            '>\n%s\n</%s>' % ('\n'.join(map(str, self._children)),
+                self._tag) if self._children else ' />')
 
     if PY2:
         @property

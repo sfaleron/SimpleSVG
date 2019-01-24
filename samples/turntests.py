@@ -7,13 +7,14 @@ from itertools          import product
 
 attrs = {
     'stroke'        : '#0000ff',
-    'stroke-width'  : 0.5,
+    'stroke-width'  : '0.5px',
     'stroke-opacity': 1,
     'fill-opacity'  : 0
 }
 
 if __name__ == '__main__':
-    stk = SVGStack(transform='translate(100 80)')
+    stk = SVGStack(SVG('Rounded Rectangle Test and Demonstration',
+        transform='translate(100 80)'))
 
     stk.push_layer('rounded rectangles')
 
