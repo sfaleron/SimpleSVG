@@ -7,13 +7,9 @@
 from __future__ import division
 
 from  simplesvg import Path
+from          . import dirs as Dir
 
-from       enum import Enum
-
-Dir = Enum('Dir', 'UP DOWN LEFT RIGHT')
-
-UP, DOWN, LEFT, RIGHT = Dir.__members__.values()
-
+from .dirs import *
 
 # new orientation, signs of dx/dy, clockwise/increasing angle?
 TURNS = {

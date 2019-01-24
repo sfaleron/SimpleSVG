@@ -14,7 +14,7 @@ from math import sin,cos,pi
 
 SCL =  200
 OFF = pi/8
-N   =    5
+N   =    6
 
 o = Point(1.15, 1.15)
 
@@ -33,6 +33,6 @@ if __name__ == '__main__':
 
     for i in range(N):
         stk.add(ticks(pts[i], pts[(i+1)%N], i+1, **decAttrs))
-        stk.add(arcs( pts[i], pts[(i-1)%N], pts[(i+1)%N], False, i+1, **decAttrs))
+        stk.add(arcs( pts[i], pts[(i-1)%N], pts[(i+1)%N], i&1, i+1, **decAttrs))
 
     print(stk)

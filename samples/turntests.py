@@ -1,9 +1,9 @@
 
-from simplesvg.lib.rtangles import UP, DOWN, LEFT, RIGHT
-from simplesvg.lib import RoundedRect, NotTurtle
-from simplesvg     import SVGStack, Line
+from simplesvg.lib.dirs import *
+from simplesvg.lib      import RoundedRect, NotTurtle
+from simplesvg          import SVGStack, Line
 
-from itertools     import product
+from itertools          import product
 
 attrs = {
     'stroke'        : '#0000ff',
