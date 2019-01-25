@@ -12,12 +12,6 @@ class _Stack(list):
     def __init__(self, baseNode):
         list.__init__(self, [baseNode])
 
-    def copy(self):
-        pass
-        # probably want to copy the base node, not the stack
-        #return _copy(self[0])
-        #return _copy(self)
-
     def _push(self, item):
         self.append(self[-1].add_child(item))
         return item

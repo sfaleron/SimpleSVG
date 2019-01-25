@@ -1,7 +1,7 @@
 
 from simplesvg.lib.dirs import *
 from simplesvg.lib      import RoundedRect, NotTurtle
-from simplesvg          import SVGStack, Line
+from simplesvg          import SVGStack, Line, SVG
 
 from itertools          import product
 

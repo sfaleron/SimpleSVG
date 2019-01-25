@@ -60,7 +60,7 @@ class NotTurtle(Path):
             DOWN:  (0,  howFar),
             LEFT:  (-howFar, 0),
             RIGHT: ( howFar, 0)
-        }[ self._orientation])
+        }[ self._orientation ])
 
 
 from collections import Mapping

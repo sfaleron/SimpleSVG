@@ -9,29 +9,29 @@ class Group(Element):
         Element.__init__(self, 'g', **attrs)
         self['id'] = id_
 
-    def copy(self, newid=None):
-        newgrp = Element.copy(self)
-        if newid:
-            newgrp['id'] = newid
-
-        return newgrp
-
-
 class Layer(Group):
+    _copyAttributes = ('_inkState',)
+
     def __init__(self, id_, label, visible=False, **attrs):
         Group.__init__(self, id_, **attrs)
         self['inkscape:groupmode'] = 'layer'
         self['inkscape:label'] = label
         self['style'] = Style()
 
-        self.visible = visible
+        self.visible  = visible
 
-    def copy(self, newid=None, newlbl=None):
-        newlyr = Group.copy(self, newid)
-        if newlbl:
-            newlyr['inkscape:label'] = newid
+        self.inkState = {}
 
-        return newlyr
+    def _demote(self):
+        for i in ('inkscape:groupmode', 'inkscape:label', 'style'):
+            self._inkState[i] = self.pop(i)
+
+    def _restore(self):
+        self.update(self._inkState)
+
+    @property
+    def label(self):
+        return self['inkscape:label']
 
     def visible_get(self):
         return self['style']['display'] == 'inline'
@@ -40,10 +40,6 @@ class Layer(Group):
         self['style']['display'] = 'inline' if state else 'none'
 
     visible = property(visible_get, visible_set)
-
-    @property
-    def label(self):
-        return self['inkscape:label']
 
 
 class Clip(Element):
