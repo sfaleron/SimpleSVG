@@ -1,9 +1,9 @@
 
 from __future__ import absolute_import
 
-from .root import Element, StackError
+from .base import Element, StackError
 
-from .base import SVG
+from .root import SVG
 
 from .misc import Layer, Group, Clip, Defs
 

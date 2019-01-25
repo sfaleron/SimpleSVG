@@ -1,7 +1,7 @@
 
 from __future__ import absolute_import
 
-from    .root   import StyledElement
+from    .base   import StyledElement
 
 
 class PathOps(object):

@@ -1,4 +1,8 @@
 
+# ==================================
+# | Use of Point type is presumed! |
+# ==================================
+
 from  __future__ import absolute_import
 from  __future__ import division
 

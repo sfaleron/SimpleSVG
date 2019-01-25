@@ -1,7 +1,7 @@
 
 from __future__ import absolute_import
 
-from .root import Element, Style, StyledElement, PY2
+from .base import Element, Style, StyledElement, PY2
 
 from .path import Path
 from .util import pairsfmt, unexpression_adder

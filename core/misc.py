@@ -1,7 +1,7 @@
 
 from __future__ import absolute_import
 
-from .root import Element, Style
+from .base import Element, Style
 
 
 class Group(Element):
