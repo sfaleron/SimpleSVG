@@ -34,6 +34,10 @@ class _Stack(list):
     def __str__(self):
         return str(self[0])
 
+    @property
+    def baseNode(self):
+        return self[0]
+
 class SVGStack(_Stack):
     def __init__(self, baseNode):
         if not isinstance(baseNode, SVG):

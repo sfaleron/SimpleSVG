@@ -6,4 +6,4 @@ from .decorations import ArcDecorations, TickDecorations
 
 import xml.etree.ElementTree as _ET
 
-toET = lambda root: _ET.fromstring(root)
+toET = lambda root: _ET.fromstring(str(root))

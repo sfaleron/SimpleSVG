@@ -4,6 +4,10 @@ Or maybe an ABC for a less directly clashing mix?
 
 Wouldn't want to parse xml, whatever for? It wouldn't be so awful to create a structure from already-parsed xml, though!
 
-Test: toETm, copy
+Test: copy
 
-decorations might include right angle symbol
+decorations might include
+  right angle symbol
+    works like arc
+  perpedicular bars terminating segments
+    work like ticks
