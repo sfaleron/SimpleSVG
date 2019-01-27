@@ -1,4 +1,7 @@
 
+# A couple of standard library ideas.. ABC Mapping for Element?
+# A number of applications for six module
+
 from  __future__ import absolute_import
 
 from .util import attrs_to_xml, PY2
@@ -8,24 +11,41 @@ try:
 except NameError:
     basestring = str
 
-class StackError(Exception):
-    pass
+# For importing
+_tagRegistry = {}
+
+def tagAndRegister(name):
+    def dec(x):
+        _tagRegistry[name] = x
+        x._tag = name
+        return x
+
+    return dec
 
 
 class Element(dict):
     """Iteration is over children, not keys."""
 
-    _copyAttributes = ()
-
-    def __new__(cls, *args, **kw):
-        o = dict.__new__(cls, *args, **kw)
-        o._init_args = (args, kw)
-        return o
-
-    def __init__(self, tag, **attrs):
-        self._tag = tag
+    def __init__(self, **attrs):
         self._children = []
         self.update(attrs)
+
+    # Called after attributes and child nodes are copied.
+    def _copy_init(self, src):
+        self._tag = src._tag
+
+    # Called after xml attributes and child nodes are imported.
+    # src is presumed to be an ElementTree element.
+    def _import_init(self, src):
+        self._tag = src.tag
+
+    # theoretically, Elements with matching attributes could test
+    # as equal, which should be avoided when managing children.
+    def __eq__(self, other):
+        return self is other
+
+    def __ne__(self, other):
+        return not (self is other)
 
     @property
     def tag(self):
@@ -34,11 +54,11 @@ class Element(dict):
     def __iter__(self):
         return iter(self._children)
 
-    def add_child(self, e):
+    def add(self, e):
         self._children.append(e)
         return e
 
-    def remove_child(self, e):
+    def remove(self, e):
         self._children.remove(e)
 
     def freeze_attrs(self, it=None):
@@ -52,37 +72,31 @@ class Element(dict):
 
     def copy(self, **kw):
         """Children are copied recursively, but attributes are a shallow-copy"""
-        args, kw = self._init_args
-        cls  = type(self)
-        dupe = cls(*args, **kw)
+        cls = type(self)
+
+        # doesn't call __init__()
+        dupe = cls.__new__(cls)
+
         dupe.clear()
         dupe.update(self)
         dupe.update(kw)
 
-        for name in cls._copyAttributes:
-            setattr(dupe, name, getattr(self, name))
-
-        # any children added at construction should be removable.
-        # only titles of root nodes are added at construction currently.
-
-        while dupe._children:
-            dupe.remove_child(dupe._children[0])
-
         for e in self:
-            dupe.add_child(e.copy())
+            dupe.add(e.copy())
+
+        dupe._copy_init(self)
 
         return dupe
-
 
     def __str__(self):
         return '<%s %s%s\n' % (self._tag, attrs_to_xml(self),
             '>\n%s\n</%s>' % ('\n'.join(map(str, self)),
                 self._tag) if self._children else ' />')
-
     if PY2:
         @property
         def items(self):
             return self.iteritems
+
 
 class Style(dict):
     """What it says on the tin. A dictionary representation of the style attribute.
@@ -96,7 +110,8 @@ class Style(dict):
         def items(self):
             return self.iteritems
 
+
 class StyledElement(Element):
-    def __init__(self, tag, **attrs):
+    def __init__(self, **attrs):
         attrs['style'] = Style(**attrs.get('style', {}))
-        Element.__init__(self, tag, **attrs)
+        Element.__init__(self, **attrs)

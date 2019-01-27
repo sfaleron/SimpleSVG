@@ -29,7 +29,7 @@ if __name__ == '__main__':
 
     doc  = SVG('Rounded and Notched Rectangle, Old: Quadrant API')
 
-    path = doc.add_child(Quadrant(**attrs))
+    path = doc.add(Quadrant(**attrs))
 
     path.quadrant( 2, RADIUS)
 

@@ -1,11 +1,12 @@
 
 from __future__ import absolute_import
 
-from .base import Element, StackError
-
 from .root import SVG
 
 from .misc import Layer, Group, Clip, Defs
+
+class StackError(Exception):
+    pass
 
 
 class _Stack(list):
@@ -13,14 +14,14 @@ class _Stack(list):
         list.__init__(self, [baseNode])
 
     def _push(self, item):
-        self.append(self[-1].add_child(item))
+        self.append(self[-1].add(item))
         return item
 
     def pop(self):
         return list.pop(self)
 
     def add(self, item):
-        return self[-1].add_child(item)
+        return self[-1].add(item)
 
     def push_group(self, id_):
         return self._push(Group(id_))

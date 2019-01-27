@@ -1,13 +1,23 @@
 
-Elements inherit from dict, but would sequence be better?
-Or maybe an ABC for a less directly clashing mix?
-
 Wouldn't want to parse xml, whatever for? It wouldn't be so awful to create a structure from already-parsed xml, though!
 
-Test: copy
+Removing layers need not be irreversable, keep track of them in the root node
+
+Pass to Element.add() an instance or a class; instances are treated in the usual way. Classes are instantiated and then *args, **kw applied to init()
+_post_init() is not called, only one of these is called.
+
+Adding layers ought to not involve the stack?
+
+Elements should be grouped like they are in the spec, rendering and container; "use" does not belong to either, but it is "structural".
+
+
+Test: copy, EmbedStack, freeze_attrs
 
 decorations might include
   right angle symbol
     works like arc
   perpedicular bars terminating segments
     work like ticks
+
+  text aligned/centered wrt two points, with a perpendicular offset parameter.
+  segment labels suggest point labels. got some of those already, shift em over!

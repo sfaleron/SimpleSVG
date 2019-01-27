@@ -1,27 +1,39 @@
 
 from __future__ import absolute_import
 
-from .base import Element, StackError
+from .base import Element, tagAndRegister
 
 from .misc import Layer, Title
 
 from .util import attrs_to_xml
 
+@tagAndRegister('svg')
 class SVG(Element):
-    _copyAttributes = ('_xAttrs',)
-
     def __init__(self, title, **attrs):
-        self._stack  = None
-        self._xAttrs = attrs.pop('xmlattrs', {})
+        self._stack      = None
+        self._standAlone = None
 
-        Element.__init__(self, 'svg', version='1.1',
+        Element.__init__(self, version='1.1',
             xmlns='http://www.w3.org/2000/svg', **attrs)
 
         self['xmlns:xlink'] = 'http://www.w3.org/1999/xlink'
 
-        self.add_child(Title(title))
+        self.add(Title(title))
 
         self.inkscape_on()
+
+    def standalone_no(self):
+        self._standAlone = False
+
+    def standalone_yes(self):
+        self._standAlone = True
+
+    def standalone_unset(self):
+        self._standAlone = None
+
+    def _copy_init(self, src):
+        self._standAlone = src._standAlone
+        Element._copy_init(self, src)
 
     def set_stack(self, stack):
         self._stack = stack
@@ -30,8 +42,9 @@ class SVG(Element):
         self._stack = None
 
     def __str__(self):
-        return '<?xml version="1.0" encoding="utf-8" {}?>\n{}'.format(
-            attrs_to_xml(self._xAttrs), Element.__str__(self) )
+        return '<?xml version="1.0" encoding="utf-8"{}?>\n{}'.format(
+            '' if self._standAlone is None else ' standalone="{}"'.format(
+                'yes' if  self._standAlone else 'no'), Element.__str__(self) )
 
     @property
     def inky(self):
@@ -66,12 +79,12 @@ class SVG(Element):
             del self['xmlns:inkscape']
 
 
-    def remove_child(self, e):
+    def remove(self, e):
         if isinstance(e, Layer):
             if e in self._stack:
-                raise StackError('Layer is active.')
+                raise ValueError('Layer is active.')
 
-        Element.remove_child(self, e)
+        Element.remove(self, e)
 
     def _get_invisible_layers(self):
         return reversed(filter(
@@ -79,4 +92,4 @@ class SVG(Element):
 
     def purge_invisible_layers(self):
         for e in self._get_invisible_layers():
-            self.remove_child(e)
+            self.remove(e)

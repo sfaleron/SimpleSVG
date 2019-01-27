@@ -28,7 +28,7 @@ if __name__ == '__main__':
     }
 
     doc  = SVG('Rounded and Notched Rectangle, New: NotTurtle API')
-    path = doc.add_child(NotTurtle(**attrs))
+    path = doc.add(NotTurtle(**attrs))
 
     path.turnRight(RADIUS)
 
