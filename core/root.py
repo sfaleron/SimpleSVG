@@ -1,17 +1,16 @@
 
 from __future__ import absolute_import
 
-from .base import Element, tagAndRegister
+from .base import Element, register
 
 from .misc import Layer, Title
 
-from .util import attrs_to_xml
-
-@tagAndRegister('svg')
+@register('svg')
 class SVG(Element):
     def __init__(self, title, **attrs):
-        self._stack      = None
-        self._standAlone = None
+        self._stack       = None
+        self._standAlone  = None
+        self._styleSheets = set()
 
         Element.__init__(self, version='1.1',
             xmlns='http://www.w3.org/2000/svg', **attrs)
@@ -31,6 +30,10 @@ class SVG(Element):
     def standalone_unset(self):
         self._standAlone = None
 
+    @property
+    def styleSheets(self):
+        return self._styleSheets
+
     def _copy_init(self, src):
         self._standAlone = src._standAlone
         Element._copy_init(self, src)
@@ -42,9 +45,11 @@ class SVG(Element):
         self._stack = None
 
     def __str__(self):
-        return '<?xml version="1.0" encoding="utf-8"{}?>\n{}'.format(
-            '' if self._standAlone is None else ' standalone="{}"'.format(
-                'yes' if  self._standAlone else 'no'), Element.__str__(self) )
+        return '<?xml version="1.0" encoding="utf-8" {2}?>\n{0}{1}'.format(
+            ''.join(['<?xml-stylesheet href="{}" type="text/css" ?>\n'.format(
+                sheet) for sheet in self._styleSheets]), Element.__str__(self),
+            {True: 'standalone="yes" ', False: 'standalone="no" ',
+                None: ''}[self._standAlone] )
 
     @property
     def inky(self):

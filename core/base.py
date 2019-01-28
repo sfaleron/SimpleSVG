@@ -11,13 +11,20 @@ try:
 except NameError:
     basestring = str
 
-# For importing
-_tagRegistry = {}
 
-def tagAndRegister(name):
+_elementRegistry = {}
+
+elementFlags = set(['styled'])
+
+def register(name, *flags):
+    for flag in flags:
+        if not flag in elementFlags:
+            raise ValueError("Flag '{}' not recognized.".format(flag))
+
     def dec(x):
-        _tagRegistry[name] = x
-        x._tag = name
+        _elementRegistry[name] = x
+        x._flags = flags
+        x._tag   = name
         return x
 
     return dec
@@ -30,14 +37,39 @@ class Element(dict):
         self._children = []
         self.update(attrs)
 
+        if 'styled' in self._flags:
+            if 'style' in self:
+                if isinstance(self['style'], Style):
+                    self['style'] = self['style'].copy()
+                else:
+                    self['style'] = Style.parse(self['style'])
+            else:
+                self['style'] = Style()
+
     # Called after attributes and child nodes are copied.
     def _copy_init(self, src):
-        self._tag = src._tag
+        self._tag   = src._tag
+        self._flags = src._flags
+
+        if 'styled' in self._flags:
+            if 'style' in self:
+                if isinstance(self['style'], Style):
+                    self['style'] = self['style'].copy()
+                else:
+                    self['style'] = Style.parse(self['style'])
 
     # Called after xml attributes and child nodes are imported.
     # src is presumed to be an ElementTree element.
     def _import_init(self, src):
         self._tag = src.tag
+
+        flags = []
+
+        if 'style' in self:
+            flags.append('styled')
+            self['style'] = Style.parse(self['style'])
+
+        self._flags = tuple(flags)
 
     # theoretically, Elements with matching attributes could test
     # as equal, which should be avoided when managing children.
@@ -50,6 +82,10 @@ class Element(dict):
     @property
     def tag(self):
         return self._tag
+
+    @property
+    def flags(self):
+        return self._flags
 
     def __iter__(self):
         return iter(self._children)
@@ -89,8 +125,8 @@ class Element(dict):
         return dupe
 
     def __str__(self):
-        return '<%s %s%s\n' % (self._tag, attrs_to_xml(self),
-            '>\n%s\n</%s>' % ('\n'.join(map(str, self)),
+        return '<%s%s%s\n' % (self._tag, attrs_to_xml(self),
+            '>\n%s</%s>' % (''.join(['{}\n'.format(i) for i in self]),
                 self._tag) if self._children else ' />')
     if PY2:
         @property
@@ -102,6 +138,11 @@ class Style(dict):
     """What it says on the tin. A dictionary representation of the style attribute.
     Not to be confused with the Style element!"""
 
+    @classmethod
+    def parse(styleAttr):
+        return Style([(j.strip(), k.strip()) for j,k in [
+            i.split(':') for i in styleAttr.split(';') if i]])
+
     def __str__(self):
         return ';'.join(['%s:%s' % i for i in self.items()])
 
@@ -109,9 +150,3 @@ class Style(dict):
         @property
         def items(self):
             return self.iteritems
-
-
-class StyledElement(Element):
-    def __init__(self, **attrs):
-        attrs['style'] = Style(**attrs.get('style', {}))
-        Element.__init__(self, **attrs)

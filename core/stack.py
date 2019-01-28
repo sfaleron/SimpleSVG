@@ -3,7 +3,7 @@ from __future__ import absolute_import
 
 from .root import SVG
 
-from .misc import Layer, Group, Clip, Defs
+from .misc import Layer, Group, ClipPath, Defs
 
 class StackError(Exception):
     pass
@@ -26,8 +26,8 @@ class _Stack(list):
     def push_group(self, id_):
         return self._push(Group(id_))
 
-    def push_clip(self, id_):
-        return self._push(Clip(id_))
+    def push_clippath(self, id_):
+        return self._push(ClipPath(id_))
 
     def push_defs(self):
         return self._push(Defs())

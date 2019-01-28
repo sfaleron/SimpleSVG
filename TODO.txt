@@ -3,13 +3,10 @@ Wouldn't want to parse xml, whatever for? It wouldn't be so awful to create a st
 
 Removing layers need not be irreversable, keep track of them in the root node
 
-Pass to Element.add() an instance or a class; instances are treated in the usual way. Classes are instantiated and then *args, **kw applied to init()
-_post_init() is not called, only one of these is called.
+Symbol element is a straightforward complement to Defs?
 
-Adding layers ought to not involve the stack?
-
-Elements should be grouped like they are in the spec, rendering and container; "use" does not belong to either, but it is "structural".
-
+SVG spec has a few categories, but MDN might be better
+https://developer.mozilla.org/en-US/docs/Web/SVG/Element#SVG_elements_by_category
 
 Test: copy, EmbedStack, freeze_attrs
 

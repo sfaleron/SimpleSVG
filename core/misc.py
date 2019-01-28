@@ -1,21 +1,25 @@
 
 from __future__ import absolute_import
 
-from .base import Element, Style, tagAndRegister
+from .base import Element, Style, register
+from .util import unexpression_adder
 
 
-@tagAndRegister('g')
+__all__, adder = unexpression_adder()
+
+@adder
+@register('g', 'styled')
 class Group(Element):
     def __init__(self, id_, **attrs):
         Element.__init__(self, **attrs)
         self['id'] = id_
 
+@adder
 class Layer(Group):
     def __init__(self, id_, label, visible=False, **attrs):
         Group.__init__(self, id_, **attrs)
         self['inkscape:groupmode'] = 'layer'
         self['inkscape:label'] = label
-        self['style'] = Style()
 
         self.visible  = visible
 
@@ -45,30 +49,34 @@ class Layer(Group):
     visible = property(visible_get, visible_set)
 
 
-@tagAndRegister('clip')
-class Clip(Element):
+@adder
+@register('clipPath', 'styled')
+class ClipPath(Element):
     def __init__(self, id_, **attrs):
         Element.__init__(self, **attrs)
         self['id'] = id_
 
-@tagAndRegister('use')
+@adder
+@register('use')
 class Use(Element):
     def __init__(self, ref, **attrs):
         Element.__init__(self, **attrs)
         self['xlink:href'] = '#'+ref
 
-@tagAndRegister('defs')
+@adder
+@register('defs')
 class Defs(Element):
-    def __init__(self, **attrs):
-        Element.__init__(self, **attrs)
+    pass
 
-@tagAndRegister('title')
+@adder
+@register('title')
 class Title(Element):
     def __init__(self, body, **attrs):
         Element.__init__(self, **attrs)
         self.add(body)
 
-@tagAndRegister('desc')
+@adder
+@register('desc')
 class Desc(Element):
     def __init__(self, body, **attrs):
         Element.__init__(self, **attrs)

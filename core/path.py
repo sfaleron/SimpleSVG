@@ -1,7 +1,7 @@
 
 from __future__ import absolute_import
 
-from    .base   import StyledElement, tagAndRegister
+from    .base   import Element, register
 
 
 class PathOps(object):
@@ -45,14 +45,14 @@ class PathOps(object):
         return self._op(self._fmt('z'), formatOnly)
 
 
-@tagAndRegister('path')
-class Path(StyledElement):
+@register('path', 'styled')
+class Path(Element):
     def __init__(self, initial_pos=None, **attrs):
         """May provide initial position or any valid value for the 'd'
         attribute. If the initial position is provided, any initial
         value will be overwritten."""
 
-        StyledElement.__init__(self, **attrs)
+        Element.__init__(self, **attrs)
 
         self.rel = PathOps(self, False)
         self.abs = PathOps(self, True)
@@ -63,6 +63,8 @@ class Path(StyledElement):
         if initial_pos is None:
             if not attrs.get('d', '')[0].lower() == 'm':
                 raise ValueError("Must provide an initial position or a valid 'd' attribute.")
+            else:
+                self._steps.append(attrs[d])
         else:
             self.abs.moveTo(initial_pos)
 
@@ -105,4 +107,4 @@ class Path(StyledElement):
 
     def __str__(self):
         self['d'] = '\n'.join(self._steps)
-        return StyledElement.__str__(self)
+        return Element.__str__(self)
