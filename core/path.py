@@ -1,7 +1,7 @@
 
 from __future__ import absolute_import
 
-from    .base   import Element, register
+from    .base   import Element, registry
 
 
 class PathOps(object):
@@ -45,7 +45,7 @@ class PathOps(object):
         return self._op(self._fmt('z'), formatOnly)
 
 
-@register('path', 'styled')
+@registry.add('path', 'styled')
 class Path(Element):
     def __init__(self, initial_pos=None, **attrs):
         """May provide initial position or any valid value for the 'd'
@@ -64,7 +64,7 @@ class Path(Element):
             if not attrs.get('d', '')[0].lower() == 'm':
                 raise ValueError("Must provide an initial position or a valid 'd' attribute.")
             else:
-                self._steps.append(attrs[d])
+                self._steps.append(attrs['d'])
         else:
             self.abs.moveTo(initial_pos)
 

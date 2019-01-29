@@ -4,7 +4,7 @@
 
 from  __future__ import absolute_import
 
-from .util import attrs_to_xml, PY2
+from .util import attrs_to_xml
 
 try:
     basestring
@@ -12,22 +12,39 @@ except NameError:
     basestring = str
 
 
-_elementRegistry = {}
+class Registry(object):
+    def __init__(self):
+        self._store = {}
+        self._flags = set(['styled'])
 
-elementFlags = set(['styled'])
+    @property
+    def flags(self):
+        return self._flags
 
-def register(name, *flags):
-    for flag in flags:
-        if not flag in elementFlags:
-            raise ValueError("Flag '{}' not recognized.".format(flag))
+    def add(self, tag, *flags):
+        for flag in flags:
+            if not flag in self._flags:
+                raise ValueError("Flag '{}' not recognized.".format(flag))
 
-    def dec(x):
-        _elementRegistry[name] = x
-        x._flags = flags
-        x._tag   = name
-        return x
+        def dec(x):
+            self._store[tag] = x
 
-    return dec
+            x._flags = flags
+            x._tag   = tag
+            return x
+
+        return dec
+
+    def __contains__(self, tag):
+        return tag in self._store
+
+    def deregister(self, tag):
+        if tag in self:
+            return self._store.pop(tag)
+        else:
+            raise ValueError('Tag "{}" not found.'.format(tag))
+
+registry = Registry()
 
 
 class Element(dict):
@@ -37,7 +54,7 @@ class Element(dict):
         self._children = []
         self.update(attrs)
 
-        if 'styled' in self._flags:
+        if 'styled' in self.flags:
             if 'style' in self:
                 if isinstance(self['style'], Style):
                     self['style'] = self['style'].copy()
@@ -48,10 +65,7 @@ class Element(dict):
 
     # Called after attributes and child nodes are copied.
     def _copy_init(self, src):
-        self._tag   = src._tag
-        self._flags = src._flags
-
-        if 'styled' in self._flags:
+        if 'styled' in self.flags:
             if 'style' in self:
                 if isinstance(self['style'], Style):
                     self['style'] = self['style'].copy()
@@ -60,6 +74,8 @@ class Element(dict):
 
     # Called after xml attributes and child nodes are imported.
     # src is presumed to be an ElementTree element.
+    #
+    # ** This should be done by the importer with a new class **
     def _import_init(self, src):
         self._tag = src.tag
 
@@ -81,11 +97,11 @@ class Element(dict):
 
     @property
     def tag(self):
-        return self._tag
+        return type(self)._tag
 
     @property
     def flags(self):
-        return self._flags
+        return type(self)._flags
 
     def __iter__(self):
         return iter(self._children)
@@ -128,10 +144,9 @@ class Element(dict):
         return '<%s%s%s\n' % (self._tag, attrs_to_xml(self),
             '>\n%s</%s>' % (''.join(['{}\n'.format(i) for i in self]),
                 self._tag) if self._children else ' />')
-    if PY2:
-        @property
-        def items(self):
-            return self.iteritems
+
+    if hasattr(dict, 'iteritems'):
+        items = dict.iteritems
 
 
 class Style(dict):
@@ -146,7 +161,5 @@ class Style(dict):
     def __str__(self):
         return ';'.join(['%s:%s' % i for i in self.items()])
 
-    if PY2:
-        @property
-        def items(self):
-            return self.iteritems
+    if hasattr(dict, 'iteritems'):
+        items = dict.iteritems

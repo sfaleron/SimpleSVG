@@ -1,14 +1,14 @@
 
 from __future__ import absolute_import
 
-from .base import Element, Style, register
+from .base import Element, Style, registry
 from .util import unexpression_adder
 
 
 __all__, adder = unexpression_adder()
 
 @adder
-@register('g', 'styled')
+@registry.add('g', 'styled')
 class Group(Element):
     def __init__(self, id_, **attrs):
         Element.__init__(self, **attrs)
@@ -50,33 +50,33 @@ class Layer(Group):
 
 
 @adder
-@register('clipPath', 'styled')
+@registry.add('clipPath', 'styled')
 class ClipPath(Element):
     def __init__(self, id_, **attrs):
         Element.__init__(self, **attrs)
         self['id'] = id_
 
 @adder
-@register('use')
+@registry.add('use')
 class Use(Element):
     def __init__(self, ref, **attrs):
         Element.__init__(self, **attrs)
         self['xlink:href'] = '#'+ref
 
 @adder
-@register('defs')
+@registry.add('defs')
 class Defs(Element):
     pass
 
 @adder
-@register('title')
+@registry.add('title')
 class Title(Element):
     def __init__(self, body, **attrs):
         Element.__init__(self, **attrs)
         self.add(body)
 
 @adder
-@register('desc')
+@registry.add('desc')
 class Desc(Element):
     def __init__(self, body, **attrs):
         Element.__init__(self, **attrs)

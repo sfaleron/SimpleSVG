@@ -7,7 +7,7 @@ even the Standard Libary! EDIT: Oh drat. Almost."""
 
 from __future__ import absolute_import
 
-from .core.base    import Element, Style, register, elementFlags
+from .core.base    import Element, Style, registry
 from .core.stack   import SVGStack, EmbedStack
 from .core.root    import SVG
 from .core.misc    import *

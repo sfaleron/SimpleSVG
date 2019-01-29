@@ -1,11 +1,11 @@
 
 from __future__ import absolute_import
 
-from .base import Element, register
+from .base import Element, registry
 
 from .misc import Layer, Title
 
-@register('svg')
+@registry.add('svg')
 class SVG(Element):
     def __init__(self, title, **attrs):
         self._stack       = None

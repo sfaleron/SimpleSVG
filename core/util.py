@@ -1,6 +1,4 @@
 
-PY2 = hasattr(dict, 'iteritems')
-
 def unexpression_adder(appendable=None):
     if appendable is None:
         appendable = []

@@ -1,7 +1,7 @@
 
-Wouldn't want to parse xml, whatever for? It wouldn't be so awful to create a structure from already-parsed xml, though!
-
 Removing layers need not be irreversable, keep track of them in the root node
+
+
 
 Symbol element is a straightforward complement to Defs?
 
