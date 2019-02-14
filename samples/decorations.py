@@ -4,13 +4,12 @@ from  __future__   import print_function
 from  __future__   import absolute_import
 
 from itertools     import product
+from math          import sin, cos, pi
 
 from simplesvg     import SVGStack, SVG, Polygon
 from simplesvg.lib import ArcDecorations, TickDecorations
 
 from simplesvg.lib.math import Point
-
-from math import sin,cos,pi
 
 SCL =  200
 OFF = pi/8

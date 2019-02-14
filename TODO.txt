@@ -1,9 +1,11 @@
 
 Removing layers need not be irreversable, keep track of them in the root node
 
+importer should keep track of tags added and replaced
 
+The flags stuff, it's not going to work so well. It should work like the argspluplus, with an inheritence stack of mostly independent classes, I think.
 
-Symbol element is a straightforward complement to Defs?
+How to wrap <use>, <clipPath>? The implementation might be restraining.
 
 SVG spec has a few categories, but MDN might be better
 https://developer.mozilla.org/en-US/docs/Web/SVG/Element#SVG_elements_by_category

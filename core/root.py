@@ -12,7 +12,9 @@ class SVG(Element):
         self._standAlone  = None
         self._styleSheets = set()
 
-        Element.__init__(self, version='1.1',
+        version = attrs.pop('version', '1.1')
+
+        Element.__init__(self, version=version,
             xmlns='http://www.w3.org/2000/svg', **attrs)
 
         self['xmlns:xlink'] = 'http://www.w3.org/1999/xlink'
