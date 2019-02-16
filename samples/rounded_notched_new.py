@@ -3,7 +3,7 @@ from __future__ import print_function
 
 """Constructs a rounded-rectangle path with an inset space on the
 (presumably) short side, as might be used to prevent a looping
-attachment from slipping off.
+binding from slipping off.
 
 This is the newer version, using the NotTurtle API.
 """

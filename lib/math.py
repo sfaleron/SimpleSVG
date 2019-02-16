@@ -58,3 +58,15 @@ def midpoint(p1, p2):
 
 def dist(p1, p2):
     return sqrt((p2.x-p1.x)**2+(p2.y-p1.y)**2)
+
+
+def make_scaler(scale):
+    class Scale(float):
+        def __new__(cls, x):
+            return float.__new__(cls, x*scale)
+
+        @property
+        def px(self):
+            return '{:f}px'.format(self)
+
+    return Scale

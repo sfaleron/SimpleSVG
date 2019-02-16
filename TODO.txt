@@ -20,3 +20,6 @@ decorations might include
 
   text aligned/centered wrt two points, with a perpendicular offset parameter.
   segment labels suggest point labels. got some of those already, shift em over!
+
+
+Need a way to reference some document-wide options, such as changing colors or linewidths "globally".

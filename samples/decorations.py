@@ -9,7 +9,7 @@ from math          import sin, cos, pi
 from simplesvg     import SVGStack, SVG, Polygon
 from simplesvg.lib import ArcDecorations, TickDecorations
 
-from simplesvg.lib.math import Point
+from simplesvg.lib.math import Point, make_scaler
 
 SCL =  200
 OFF = pi/8
@@ -17,15 +17,17 @@ N   =    6
 
 o = Point(1.15, 1.15)
 
+Scale = make_scaler(SCL)
+
 
 if __name__ == '__main__':
-    pgonAttrs = {'stroke-width' : '{:f}px'.format(.01 * SCL), 'stroke': '#0000ff', 'fill-opacity':0}
-    decAttrs  = {'stroke-width' : '{:f}px'.format(.0035*SCL), 'stroke': '#0000ff'}
+    pgonAttrs = {'stroke-width': Scale(.01).px,   'stroke': '#0000ff', 'fill-opacity': 0}
+    decAttrs  = {'stroke-width': Scale(.0035).px, 'stroke': '#0000ff'}
 
-    stk   = SVGStack(SVG('Congruency Decorations', width=2.3*SCL, height=2.3*SCL))
+    stk   = SVGStack(SVG('Congruency Decorations', width=Scale(2.3), height=Scale(2.3)))
 
-    arcs  =  ArcDecorations(radius=0.05*SCL, spacing=0.015*SCL)
-    ticks = TickDecorations(length=0.08*SCL, spacing=0.02 *SCL)
+    arcs  =  ArcDecorations(radius=Scale(.05), spacing=Scale(.015))
+    ticks = TickDecorations(length=Scale(.08), spacing=Scale(.02))
 
     pts = [SCL*(Point(cos(a), sin(a))+o) for a in [2*pi/N*i+OFF for i in range(N)]]
     stk.add(Polygon(pts, **pgonAttrs))
