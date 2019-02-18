@@ -7,7 +7,7 @@ from itertools     import product
 from math          import sin, cos, pi
 
 from simplesvg     import SVGStack, SVG, Polygon
-from simplesvg.lib import ArcDecorations, TickDecorations
+from simplesvg.lib import ArcDecorations, HatchDecorations, CornerDecorations
 
 from simplesvg.lib.math import Point, make_scaler
 
@@ -26,14 +26,16 @@ if __name__ == '__main__':
 
     stk   = SVGStack(SVG('Congruency Decorations', width=Scale(2.3), height=Scale(2.3)))
 
-    arcs  =  ArcDecorations(radius=Scale(.05), spacing=Scale(.015))
-    ticks = TickDecorations(length=Scale(.08), spacing=Scale(.02))
+    arcs    =    ArcDecorations(   radius=Scale(.05), spacing=Scale(.0125))
+    hatches =  HatchDecorations(   length=Scale(.08), spacing=Scale(.0160))
+    corners = CornerDecorations(legLength=Scale(.05), spacing=Scale(.0125))
 
     pts = [SCL*(Point(cos(a), sin(a))+o) for a in [2*pi/N*i+OFF for i in range(N)]]
     stk.add(Polygon(pts, **pgonAttrs))
 
     for i in range(N):
-        stk.add(ticks(pts[i], pts[(i+1)%N], i+1, **decAttrs))
-        stk.add(arcs( pts[i], pts[(i-1)%N], pts[(i+1)%N], i&1, i+1, **decAttrs))
+        stk.add(hatches(pts[i], pts[(i+1)%N], i+1, **decAttrs))
+        stk.add(arcs(   pts[i], pts[(i-1)%N], pts[(i+1)%N], i&1, i+1, **decAttrs))
+        stk.add(corners(pts[i], pts[(i-1)%N], pts[(i+1)%N], not i&1, i+1, **decAttrs))
 
     print(stk)
