@@ -190,7 +190,7 @@ class HatchDecorations(object):
 
 class LineLabel(Text):
     # inverting the order of points is identical to inverting the invert flag
-    def __init__(self, pt1, pt2, text, invert=False, **kw):
+    def __init__(self, pt1, pt2, text='', invert=False, **kw):
         midPt = midpoint(pt1, pt2)
 
         kw.update(transform='rotate({:f} {},{})'.format(180/pi *

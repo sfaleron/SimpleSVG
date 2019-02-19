@@ -100,6 +100,10 @@ class Element(dict):
         self._children.append(e)
         return e
 
+    def add_many(self, *es):
+        self._children.extend(es)
+        return es
+
     def remove(self, e):
         self._children.remove(e)
 

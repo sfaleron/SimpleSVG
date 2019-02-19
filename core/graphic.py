@@ -57,6 +57,7 @@ class Ellipse(Element):
 @adder
 @registry.add('text', 'styled')
 class Text(Element):
-    def __init__(self, pt, text, **attrs):
+    def __init__(self, pt, text='', **attrs):
         Element.__init__(self, x=pt[0], y=pt[1], **attrs)
-        self.add(text)
+        if text:
+            self.add(text)

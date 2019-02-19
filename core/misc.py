@@ -81,3 +81,10 @@ class Desc(Element):
     def __init__(self, body, **attrs):
         Element.__init__(self, **attrs)
         self.add(body)
+
+@adder
+@registry.add('tspan')
+class TSpan(Element):
+    def __init__(self, body, **attrs):
+        Element.__init__(self, **attrs)
+        self.add(body)
