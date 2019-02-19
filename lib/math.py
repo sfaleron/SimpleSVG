@@ -50,14 +50,15 @@ class Point(namedtuple('Point', 'x y')):
         else:
             return NotImplemented
 
-def between(p1, p2, pos):
-    return Point((p2.x-p1.x)*pos+p1.x, (p2.y-p1.y)*pos+p1.y)
 
-def midpoint(p1, p2):
-    return Point((p1.x+p2.x)/2, (p1.y+p2.y)/2)
+def between(pt1, pt2, pos):
+    return Point((pt2.x-pt1.x)*pos+pt1.x, (pt2.y-pt1.y)*pos+pt1.y)
 
-def dist(p1, p2):
-    return sqrt((p2.x-p1.x)**2+(p2.y-p1.y)**2)
+def midpoint(pt1, pt2):
+    return Point((pt1.x+pt2.x)/2, (pt1.y+pt2.y)/2)
+
+def dist(pt1, pt2):
+    return sqrt((pt2.x-pt1.x)**2+(pt2.y-pt1.y)**2)
 
 
 def make_scaler(scale):

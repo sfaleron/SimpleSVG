@@ -5,6 +5,6 @@ from      .impexp import *
 from    .rtangles import *
 
 try:
-    from .decorations import ArcDecorations, HatchDecorations, CornerDecorations
+    from .decorations import *
 except ImportError:
     pass

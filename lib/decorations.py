@@ -3,7 +3,9 @@ from __future__ import absolute_import
 from __future__ import division
 
 from      .math import Point, sqrt, dist, between, midpoint, atan2, pi
-from     ..     import Path
+from     ..     import Path, Text
+
+import re
 
 import attr
 
@@ -36,10 +38,10 @@ class ArcDecorations(object):
         incAngle = bigArc if a1-a0 > pi else not bigArc
 
         kw['fill-opacity'] = 0
-        p = Path(p0, **kw)
+        path = Path(p0, **kw)
 
         while n:
-            p.abs.arcTo(p1, radius, radius, 0, bigArc, incAngle)
+            path.abs.arcTo(p1, radius, radius, 0, bigArc, incAngle)
 
             n -= 1
 
@@ -50,12 +52,12 @@ class ArcDecorations(object):
                 dst0, dst1 = dst1,dst0
 
                 p0 = between(ctr, leg0, radius/dst0)
-                p.abs.moveTo(p0)
+                path.abs.moveTo(p0)
 
                 p1 = between(ctr, leg1, radius/dst1)
                 incAngle = not incAngle
 
-        return p
+        return path
 
 
 @attr.s(cmp=False)
@@ -105,12 +107,12 @@ class CornerDecorations(object):
         pv = between(bs0, bs1, diagonal/dm)
 
         kw['fill-opacity'] = 0
-        p = Path(p0, **kw)
+        path = Path(p0, **kw)
 
         while n:
 
-            p.abs.lineTo(pv)
-            p.abs.lineTo(p1)
+            path.abs.lineTo(pv)
+            path.abs.lineTo(p1)
 
             n -= 1
 
@@ -122,12 +124,12 @@ class CornerDecorations(object):
                 dst0, dst1 = dst1, dst0
 
                 p0 = between(ctr, leg0, legLength/dst0)
-                p.abs.moveTo(p0)
+                path.abs.moveTo(p0)
 
                 p1 = between(ctr, leg1, legLength/dst1)
                 pv = between(bs0,  bs1, diagonal/dm)
 
-        return p
+        return path
 
 
 @attr.s(cmp=False)
@@ -135,52 +137,67 @@ class HatchDecorations(object):
     length  = attr.ib()
     spacing = attr.ib()
 
-    def __call__(self, p0, p1, n=1, **kw):
+    def __call__(self, pt0, pt1, n=1, **kw):
         length  = kw.pop( 'length',  self.length)
         spacing = kw.pop('spacing', self.spacing)
 
-        inc   = spacing / dist(p0, p1)
+        inc   = spacing / dist(pt0, pt1)
         tick0 = .5 - (n-1)/2*inc
 
-        crossings = [between(p0, p1, tick0+inc*i) for i in range(n)]
+        crossings = [between(pt0, pt1, tick0+inc*i) for i in range(n)]
 
-        if abs(p1.y-p0.y)<1e-9:
+        if abs(pt1.y-pt0.y)<1e-9:
             slope = None
         else:
-            slope = -(p1.x-p0.x)/(p1.y-p0.y)
+            slope = -(pt1.x-pt0.x)/(pt1.y-pt0.y)
 
         # A slope and a point define a line; the point is also the
         # center of a circle, the diameter of which is the tick length.
         # The intersection defines the endpoints of the tick mark.
 
-        pi = crossings[0]
+        pti = crossings[0]
 
         if slope is None:
-            z  = length/2
-            p0 = Point(pi.x, pi.y-z)
-            p1 = Point(pi.x, pi.y+z)
+            z   = length/2
+            pt0 = Point(pti.x, pti.y-z)
+            pt1 = Point(pti.x, pti.y+z)
         else:
-            z  = length/2/sqrt(1+slope**2)
-            p0 = Point(pi.x-z, pi.y-slope*z)
-            p1 = Point(pi.x+z, pi.y+slope*z)
+            z   = length/2/sqrt(1+slope**2)
+            pt0 = Point(pti.x-z, pti.y-slope*z)
+            pt1 = Point(pti.x+z, pti.y+slope*z)
 
-        p  = Path(p0, **kw)
+        path = Path(pt0, **kw)
 
         while crossings:
-            p.abs.lineTo(p1)
+            path.abs.lineTo(pt1)
 
             crossings.pop(0)
 
             if crossings:
-                pi = crossings[0]
+                pti = crossings[0]
 
                 if slope is None:
-                    p0 = Point(pi.x, pi.y-z)
-                    p.abs.moveTo(p0)
-                    p1 = Point(pi.x, pi.y+z)
+                    pt0 = Point(pti.x, pti.y-z)
+                    path.abs.moveTo(pt0)
+                    pt1 = Point(pti.x, pti.y+z)
                 else:
-                    p0 = Point(pi.x-z, pi.y-slope*z)
-                    p.abs.moveTo(p0)
-                    p1 = Point(pi.x+z, pi.y+slope*z)
+                    pt0 = Point(pti.x-z, pti.y-slope*z)
+                    path.abs.moveTo(pt0)
+                    pt1 = Point(pti.x+z, pti.y+slope*z)
 
-        return p
+        return path
+
+
+class LineLabel(Text):
+    # inverting the order of points is identical to inverting the invert flag
+    def __init__(self, pt1, pt2, text, invert=False, **kw):
+        midPt = midpoint(pt1, pt2)
+
+        kw.update(transform='rotate({:f} {},{})'.format(180/pi *
+            atan2(pt2.y-pt1.y, pt2.x-pt1.x) + (180 if invert else 0), *midPt))
+
+        kw['text-anchor'] = 'middle'
+        Text.__init__(self, midPt, text, **kw)
+
+
+__all__ = [i+'Decorations' for i in ('Arc', 'Hatch', 'Corner')] + ['LineLabel']
