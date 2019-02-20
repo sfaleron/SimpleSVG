@@ -23,3 +23,6 @@ decorations might include
 
 
 Need a way to reference some document-wide options, such as changing colors or linewidths "globally".
+
+push_layer() sets the element id based on the label, that should probably be a default action
+meh.. set key afterwards on returned element is very clear/easy

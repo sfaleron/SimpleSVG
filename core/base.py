@@ -51,7 +51,9 @@ class Element(dict):
     """Iteration is over children, not keys."""
 
     def __init__(self, **attrs):
-        self._children = []
+        self._children  = []
+        self._delimiter = '\n'
+
         self.update(attrs)
 
         if 'styled' in self.flags:
@@ -62,6 +64,14 @@ class Element(dict):
                     self['style'] = Style.parse(self['style'])
             else:
                 self['style'] = Style()
+
+    @property
+    def delimiter(self):
+        return self._delimiter
+
+    @delimiter.setter
+    def delimiter(self, x):
+        self._delimiter = x
 
     # Called after attributes and child nodes are copied.
     def _copy_init(self, src):
@@ -135,9 +145,19 @@ class Element(dict):
         return dupe
 
     def __str__(self):
-        return '<%s%s%s\n' % (self._tag, attrs_to_xml(self),
-            '>\n%s</%s>' % (''.join(['{}\n'.format(i) for i in self]),
-                self._tag) if self._children else ' />')
+        parts = ['<', self._tag, attrs_to_xml(self)]
+
+        if self._children:
+            parts += ['>', self._delimiter]
+
+            for e in self:
+                parts += [str(e), self._delimiter]
+
+            parts += ['</', self._tag, '>']
+        else:
+            parts.append(' />')
+
+        return ''.join(parts)
 
     if hasattr(dict, 'iteritems'):
         items = dict.iteritems

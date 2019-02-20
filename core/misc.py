@@ -87,4 +87,5 @@ class Desc(Element):
 class TSpan(Element):
     def __init__(self, body, **attrs):
         Element.__init__(self, **attrs)
+        self.delimiter = ''
         self.add(body)
