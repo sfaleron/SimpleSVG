@@ -7,17 +7,25 @@ from .misc import Layer, Title
 
 @registry.add('svg')
 class SVG(Element):
-    def __init__(self, title, **attrs):
+    def __init__(self, title, version='1.1', **attrs):
         self._stack       = None
         self._standAlone  = None
         self._styleSheets = set()
 
-        version = attrs.pop('version', '1.1')
+        tmp = version.split('.')
 
-        Element.__init__(self, version=version,
-            xmlns='http://www.w3.org/2000/svg', **attrs)
+        major = tmp[0]
+        minor = tmp[1] if len(tmp)>1 else '0'
 
-        self['xmlns:xlink'] = 'http://www.w3.org/1999/xlink'
+        self._ver = (major, minor)
+
+        Element.__init__(self, xmlns='http://www.w3.org/2000/svg', **attrs)
+
+        self._root = self
+
+        if major == '1':
+            self[  'version'  ] = version
+            self['xmlns:xlink'] = 'http://www.w3.org/1999/xlink'
 
         self.add(Title(title))
 

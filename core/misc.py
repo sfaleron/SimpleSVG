@@ -61,7 +61,12 @@ class ClipPath(Element):
 class Use(Element):
     def __init__(self, ref, **attrs):
         Element.__init__(self, **attrs)
-        self['xlink:href'] = '#'+ref
+        self._href = '#'+ref
+
+    def set_parent(self, e):
+        Element.set_parent(self, e)
+
+        self[('xlink:' if major == 1 else '') + 'href'] = self._href
 
 @adder
 @registry.add('defs')

@@ -26,3 +26,8 @@ Need a way to reference some document-wide options, such as changing colors or l
 
 push_layer() sets the element id based on the label, that should probably be a default action
 meh.. set key afterwards on returned element is very clear/easy
+
+SVG v2 incorporates the elements from xlink namespace, the "xlink:" qualifier is toast, in the standard; implementations will vary. inkscape may be pickier than the browsers; they will probably try harder to retain compatibility.
+
+
+

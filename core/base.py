@@ -51,6 +51,9 @@ class Element(dict):
     """Iteration is over children, not keys."""
 
     def __init__(self, **attrs):
+        self._root = None
+        self._parent = None
+
         self._children  = []
         self._delimiter = '\n'
 
@@ -64,6 +67,26 @@ class Element(dict):
                     self['style'] = Style.parse(self['style'])
             else:
                 self['style'] = Style()
+
+    @property
+    def version(self):
+        return self.root._ver if self.root else ''
+
+    @property
+    def root(self):
+        return self._root
+
+    @property
+    def parent(self):
+        return self._parent
+
+    @parent.setter
+    def parent(self, e):
+        self.set_parent(e)
+
+    def set_parent(self, e):
+        self._parent = e
+        self._root   = e.root
 
     @property
     def delimiter(self):
@@ -108,10 +131,16 @@ class Element(dict):
 
     def add(self, e):
         self._children.append(e)
+
+        if isinstance(e, Element):
+            e.parent = self
+
         return e
 
     def add_many(self, *es):
-        self._children.extend(es)
+        for e in es:
+            self.add(e)
+
         return es
 
     def remove(self, e):
