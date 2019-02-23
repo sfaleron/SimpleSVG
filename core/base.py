@@ -15,7 +15,7 @@ except NameError:
 class Registry(object):
     def __init__(self):
         self._store = {}
-        self._flags = set(['styled'])
+        self._flags = {'styled'}
 
     @property
     def flags(self):
@@ -76,6 +76,16 @@ class Element(dict):
     def root(self):
         return self._root
 
+    @root.setter
+    def root(self, e):
+        self.set_root(e)
+
+    def set_root(self, e):
+        self._root = e
+        for child in self:
+            if isinstance(child, Element):
+                child.root = e
+
     @property
     def parent(self):
         return self._parent
@@ -86,7 +96,6 @@ class Element(dict):
 
     def set_parent(self, e):
         self._parent = e
-        self._root   = e.root
 
     @property
     def delimiter(self):

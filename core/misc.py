@@ -63,10 +63,10 @@ class Use(Element):
         Element.__init__(self, **attrs)
         self._href = '#'+ref
 
-    def set_parent(self, e):
-        Element.set_parent(self, e)
+    def set_root(self, e):
+        Element.set_root(self, e)
 
-        self[('xlink:' if major == 1 else '') + 'href'] = self._href
+        self[('xlink:' if self.version[0] == '1' else '') + 'href'] = self._href
 
 @adder
 @registry.add('defs')

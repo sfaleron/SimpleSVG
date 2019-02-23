@@ -62,3 +62,10 @@ class Text(Element):
         self.delimiter = ''
         if text:
             self.add(text)
+
+    def set_root(self, e):
+        Element.set_root(self, e)
+        if 'inkOffsetFix' in e.docFlags:
+            self.update(
+                x=float(self['x'])+float(self.pop('dx', '0')),
+                y=float(self['y'])+float(self.pop('dy', '0')) )

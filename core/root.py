@@ -5,12 +5,20 @@ from .base import Element, registry
 
 from .misc import Layer, Title
 
+allFlags = {'inkOffsetFix'}
+
 @registry.add('svg')
 class SVG(Element):
-    def __init__(self, title, version='1.1', **attrs):
+    # version should be passed as a string
+    def __init__(self, title, version='1.1', docFlags=frozenset(), **attrs):
         self._stack       = None
         self._standAlone  = None
+
+        self._docFlags    = set()
         self._styleSheets = set()
+
+        for flag in docFlags:
+            self.docFlag_set(flag)
 
         tmp = version.split('.')
 
@@ -21,8 +29,6 @@ class SVG(Element):
 
         Element.__init__(self, xmlns='http://www.w3.org/2000/svg', **attrs)
 
-        self._root = self
-
         if major == '1':
             self[  'version'  ] = version
             self['xmlns:xlink'] = 'http://www.w3.org/1999/xlink'
@@ -30,6 +36,14 @@ class SVG(Element):
         self.add(Title(title))
 
         self.inkscape_on()
+
+    def add(self, e):
+        Element.add(self, e)
+
+        if isinstance(e, Element):
+            e.root = self
+
+        return e
 
     def standalone_no(self):
         self._standAlone = False
@@ -39,6 +53,22 @@ class SVG(Element):
 
     def standalone_unset(self):
         self._standAlone = None
+
+    def docFlag_set(self, flag):
+        if flag in allFlags:
+            self._docFlags.add(flag)
+        else:
+            raise ValueError("Flag '{}' not recognized.".format(flag))
+
+    def docFlag_clear(self, flag):
+        if flag in allFlags:
+            self._docFlags.discard(flag)
+        else:
+            raise ValueError("Flag '{}' not recognized.".format(flag))
+
+    @property
+    def docFlags(self):
+        return self._docFlags
 
     @property
     def styleSheets(self):
