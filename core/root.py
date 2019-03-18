@@ -7,7 +7,7 @@ from .misc import Layer, Title
 
 allFlags = {'inkOffsetFix'}
 
-@registry.add('svg')
+@registry.add('svg', 'styled')
 class SVG(Element):
     # version should be passed as a string
     def __init__(self, title, version='1.1', docFlags=frozenset(), **attrs):
