@@ -62,6 +62,5 @@ class SVGStack(_Stack):
 
         return self._push(Layer('layer{:d}'.format(self._layers), label, visible))
 
-
 class EmbedStack(_Stack):
     pass

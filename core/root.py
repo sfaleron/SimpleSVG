@@ -74,6 +74,9 @@ class SVG(Element):
     def styleSheets(self):
         return self._styleSheets
 
+    def add_styleSheet(self, sheet):
+        self._styleSheets.add(sheet)
+
     def _copy_init(self, src):
         self._standAlone = src._standAlone
         Element._copy_init(self, src)

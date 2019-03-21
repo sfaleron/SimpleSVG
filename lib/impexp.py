@@ -32,7 +32,7 @@ import re
 attrib_r = re.compile(r'([^"\s]+)\s*=\s*"(.*?)"')
 
 class Embed(Element):
-    _tag = 'svg'
+    _tag   = 'svg'
     _flags = ()
 
     def __init__(self, rawSVG):

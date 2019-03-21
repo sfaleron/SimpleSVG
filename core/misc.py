@@ -94,3 +94,20 @@ class TSpan(Element):
         Element.__init__(self, **attrs)
         self.delimiter = ''
         self.add(body)
+
+@adder
+# wouldn't make sense to add this to the registry,
+# but wouldn't be hard to parse, either.
+class CData(str):
+    def __new__(cls, cdata):
+        return str.__new__(cls, '<![CDATA[{}]]>'.format(cdata))
+
+@adder
+@registry.add('style')
+class CSS(Element):
+    def __init__(self, **kw):
+        Element.__init__(self, **{'type':'text/css'})
+
+        self.add(CData(''.join(['\n{} {{\n{}\n}}\n'.format(k,
+            '\n'.join(['{}: {};'.format(*i) for i in v.items()]))
+                for k,v in kw.items() ]) ))

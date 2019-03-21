@@ -30,4 +30,17 @@ meh.. set key afterwards on returned element is very clear/easy
 SVG v2 incorporates the elements from xlink namespace, the "xlink:" qualifier is toast, in the standard; implementations will vary. inkscape may be pickier than the browsers; they will probably try harder to retain compatibility.
 
 
+How to deal consistently, clearly with flipped y-axis. Substitute atan(), sin() seem nice, but probably not comprehensive enough to resolve all cases. a transformation function would be nice, but how to keep track of it, withough making it obligatory to all calls? seems like a class wrapping teh whole library would do this, but that's a big chore.
 
+generalized.py might miss the flipped y corrections.. or not need them?
+
+aiming to put comments tagged "IVY" wherever the inverted-y issue is relevant.. should be done, although misses are conceivable
+
+Add angle labels to the decorations sample
+
+angle labels, webfonts, triphi/simplesvg to github
+
+segregate TODO items, most of that isn't really for general consumption
+  there's an easy answer thath keeps private TODO tracked. a seperate branch! ideally, a separate github branch, but I'm not sure if that's possible/feasible. A new local branch would probably be better. Good idea for new repos, though! Actually, no. The dev/private branch should be the independent one.. maybe a seperate "release" branch, but that isn't the same as a github branch.
+
+  dev wouldn't necessarily be private always. or maybe it should tsart there, and evertually be promoted?

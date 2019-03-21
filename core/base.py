@@ -95,6 +95,10 @@ class Element(dict):
         self.set_parent(e)
 
     def set_parent(self, e):
+        """An element may only have one parent and one root.
+        It is up to the caller to remove the element from
+        the previous (if any) parent's child list."""
+
         self._parent = e
 
     @property
@@ -201,6 +205,7 @@ class Element(dict):
         items = dict.iteritems
 
 
+# Style element is implemented by the CSS class
 class Style(dict):
     """What it says on the tin. A dictionary representation of the style attribute.
     Not to be confused with the Style element!"""
