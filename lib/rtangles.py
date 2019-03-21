@@ -11,6 +11,7 @@ from          . import dirs as Dir
 
 from .dirs import *
 
+# IVY, clarification wanted ##
 # new orientation, signs of dx/dy, clockwise/increasing angle?
 TURNS = {
     (   UP,  LEFT): ( LEFT, -1, -1, False),

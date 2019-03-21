@@ -1,14 +1,18 @@
 
+from __future__ import print_function
+
 from __future__ import absolute_import
 from __future__ import division
 
-from      .math import Point, sqrt, dist, between, midpoint, atan2, pi
 from     ..     import Path, Text
+
+from      .math import (
+    Point, toPoint, sin, between, pi,
+    midpoint, dist, cos, atan2, sqrt )
 
 import re
 
 import attr
-
 
 @attr.s(cmp=False)
 class ArcDecorations(object):
@@ -16,6 +20,8 @@ class ArcDecorations(object):
     spacing = attr.ib()
 
     def __call__(self, ctr, leg0, leg1, bigArc=False, n=1, **kw):
+        ctr, leg0, leg1 = toPoint(ctr, leg0, leg1)
+
         radius  = kw.pop( 'radius',  self.radius)
         spacing = kw.pop('spacing', self.spacing)
 
@@ -25,6 +31,7 @@ class ArcDecorations(object):
         p0 = between(ctr, leg0, radius/dst0)
         p1 = between(ctr, leg1, radius/dst1)
 
+        ## ?? IVY ?? ##
         a0 = atan2(p0.y-ctr.y, p0.x-ctr.x)
         a1 = atan2(p1.y-ctr.y, p1.x-ctr.x)
 
@@ -84,6 +91,8 @@ class CornerDecorations(object):
         return self.legLength * sqrt(2)
 
     def __call__(self, ctr, leg0, leg1, bigArc=False, n=1, **kw):
+        ctr, leg0, leg1 = toPoint(ctr, leg0, leg1)
+
         legLength = kw.pop('legLength', self.legLength)
         diagonal  = kw.pop( 'diagonal',  self.diagonal)
         spacing   = kw.pop(  'spacing',   self.spacing)
@@ -138,6 +147,8 @@ class HatchDecorations(object):
     spacing = attr.ib()
 
     def __call__(self, pt0, pt1, n=1, **kw):
+        pt0, pt1 = toPoint(pt0, pt1)
+
         length  = kw.pop( 'length',  self.length)
         spacing = kw.pop('spacing', self.spacing)
 
@@ -191,16 +202,74 @@ class HatchDecorations(object):
 class LineLabel(Text):
     # inverting the order of points is identical to inverting the rotation
     def __init__(self, pt1, pt2, text='', invert=False, **kw):
+        pt1, pt2 = toPoint(pt1, pt2)
+
         if invert:
             pt1,pt2 = pt2,pt1
 
         midPt = midpoint(pt1, pt2)
 
+        ## ?? IVY ?? ##
         kw.update(transform='rotate({:f} {},{})'.format(
             180/pi * atan2(pt2.y-pt1.y, pt2.x-pt1.x), *midPt))
 
         kw['text-anchor'] = 'middle'
         Text.__init__(self, midPt, text, **kw)
 
+import sys
 
-__all__ = [i+'Decorations' for i in ('Arc', 'Hatch', 'Corner')] + ['LineLabel']
+def float_out(*args):
+    return ','.join(['{:.2f}'.format(arg) for arg in args])
+
+class OhMy(str):
+    def __new__(cls, s):
+        return str.__new__(cls, s)
+
+def print_(*args):
+    for arg in args:
+        if isinstance(arg, OhMy):
+            print(arg, end='', file=sys.stderr)
+
+        else:
+            if not isinstance(arg, Point):
+                arg = [arg]
+
+            print(float_out(*arg), file=sys.stderr)
+
+
+class AngleLabel(Text):
+    def __init__(self, ctr, leg0, leg1, radius=None, text='', rotate=0, dx=None, dy=None, **kw):
+        ctr, leg0, leg1 = toPoint(ctr, leg0, leg1)
+
+        show = kw.pop('show', False)
+
+        dst0 = dist(ctr, leg0)
+        dst1 = dist(ctr, leg1)
+
+        r  = (dst0 + dst1) / 2
+
+        p0 = between(ctr, leg0, r/dst0)
+        p1 = between(ctr, leg1, r/dst1)
+
+        ## ?? IVY ?? ##
+        a0 = atan2(p0.y-ctr.y, p0.x-ctr.x)
+        a1 = atan2(p1.y-ctr.y, p1.x-ctr.x)
+
+        a  = (a0+a1)/2 + rotate
+
+        if show:
+            print_(
+                ctr,r,OhMy('\n'),
+                p0,leg0,dst0,p0.y-ctr.y, p0.x-ctr.x,OhMy('\n'),
+                p1,leg1,dst1,p1.y-ctr.y, p1.x-ctr.x,OhMy('\n'),
+                a0/pi*180,a1/pi*180,a/pi*180 )
+
+        ## ?? IVY ?? ##
+        pt = ctr + Point(
+            radius*cos(a) if dx is None else dx,
+            radius*sin(a) if dy is None else dy )
+
+        kw['text-anchor'] = 'middle'
+        Text.__init__(self, pt, text, **kw)
+
+__all__ = [i+'Decorations' for i in ('Arc', 'Hatch', 'Corner')] + [i+'Label' for i in ('Line', 'Angle')]
