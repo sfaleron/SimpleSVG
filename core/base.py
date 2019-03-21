@@ -211,9 +211,12 @@ class Style(dict):
     Not to be confused with the Style element!"""
 
     @classmethod
-    def parse(styleAttr):
-        return Style([(j.strip(), k.strip()) for j,k in [
+    def parse(cls, styleAttr):
+        return cls([(j.strip(), k.strip()) for j,k in [
             i.split(':') for i in styleAttr.split(';') if i]])
+
+    def copy(self):
+        return Style(**self)
 
     def __str__(self):
         return ';'.join(['%s:%s' % i for i in self.items()])

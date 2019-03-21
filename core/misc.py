@@ -105,9 +105,9 @@ class CData(str):
 @adder
 @registry.add('style')
 class CSS(Element):
-    def __init__(self, **kw):
+    def __init__(self, pairs):
         Element.__init__(self, **{'type':'text/css'})
 
         self.add(CData(''.join(['\n{} {{\n{}\n}}\n'.format(k,
             '\n'.join(['{}: {};'.format(*i) for i in v.items()]))
-                for k,v in kw.items() ]) ))
+                for k,v in pairs ]) ))
