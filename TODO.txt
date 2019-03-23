@@ -37,10 +37,14 @@ generalized.py might miss the flipped y corrections.. or not need them?
 aiming to put comments tagged "IVY" wherever the inverted-y issue is relevant.. should be done, although misses are conceivable
 
 Add angle labels to the decorations sample
+add pen-off to the turntests sample
 
-angle labels, webfonts, triphi/simplesvg to github
+triphi/simplesvg to github
 
 segregate TODO items, most of that isn't really for general consumption
   there's an easy answer thath keeps private TODO tracked. a seperate branch! ideally, a separate github branch, but I'm not sure if that's possible/feasible. A new local branch would probably be better. Good idea for new repos, though! Actually, no. The dev/private branch should be the independent one.. maybe a seperate "release" branch, but that isn't the same as a github branch.
 
   dev wouldn't necessarily be private always. or maybe it should tsart there, and evertually be promoted?
+
+A lot of the math notes in TriPhi are speculative, off on tangents that are not relevant enough or don't finish, or have redundancy. Split into public/private versions!
+TriPhi uses adb and that ought to be cleaned up? If not, take it out of the notes!

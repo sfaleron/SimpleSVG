@@ -24,11 +24,41 @@ TURNS = {
     (RIGHT, RIGHT): ( DOWN,  1,  1,  True)
 }
 
-# merely inspired-by
+# Merely inspired-by
+#
+# Turtle, https://en.wikipedia.org/wiki/Turtle_graphics, is pretty simple.
+# What's missing:
+#   * Good location tracking
+#   * Turns in increments less than ninety degrees
+#   * Changing the color and width of the "pen"
+#
+# Either of the last two would require a fair bit of refactoring, but pen
+# control (updating stroke and stroke-width) would require multiple Path
+# objects, which becomes rather more dramatic.
+#
+# Location tracking is supported, but will likely diverge from what is
+# rendered as the complexity increases.
+#
 class NotTurtle(Path):
     def __init__(self, initial_pos=(0,0), initial_orientation=UP, **attrs):
         Path.__init__(self, initial_pos, **attrs)
         self._orientation = initial_orientation
+        self._location = list(initial_pos)
+        self._drawing = True
+
+    @property
+    def location(self):
+        return self._location
+
+    @property
+    def drawing(self):
+        return self._drawing
+
+    def pen_on(self):
+        self._drawing = True
+
+    def pen_off(self):
+        self._drawing = False
 
     @property
     def orientation(self):
@@ -45,9 +75,16 @@ class NotTurtle(Path):
         orientation, sgnx, sgny, incAngle = TURNS[(self._orientation, whichway)]
 
         if r:
-            self.rel.arcTo((sgnx*r, sgny*r), r, r, 0, False, incAngle)
+            delta = (sgnx*r, sgny*r)
+            if self._drawing:
+                self.rel.arcTo( delta, r, r, 0, False, incAngle)
+            else:
+                self.rel.moveTo(delta)
 
-        self._orientation = orientation
+        self._orientation  = orientation
+
+        self._location[0] += delta[0]
+        self._location[1] += delta[1]
 
     def turnLeft(self, r):
         self._doTurn(LEFT, r)
@@ -56,21 +93,38 @@ class NotTurtle(Path):
         self._doTurn(RIGHT, r)
 
     def forward(self, howFar):
-        self.rel.lineTo( {
+        delta = {
             UP:    (0, -howFar),
             DOWN:  (0,  howFar),
             LEFT:  (-howFar, 0),
             RIGHT: ( howFar, 0)
-        }[ self._orientation ])
+        }[   self._orientation ]
+
+        getattr(self.rel, 'lineTo' if self._drawing else 'moveTo')(delta)
+
+        self._location[0] += delta[0]
+        self._location[1] += delta[1]
 
 
 from collections import Mapping
 
-def RoundedRect(w, h, r, pos=(0.0, 0.0), **attrs):
-    CORNERS = ('ul', 'll', 'lr', 'ur')
-    STROKE_WIDTH = 1.0
-    EPSILON = 1e-6
+class MapOfLists(dict):
+    def __setitem__(self, key, item):
+        if key in self:
+            self[key].append(item)
+        else:
+            dict.__setitem__(self, key, [item])
 
+CORNERS = ('ul', 'll', 'lr', 'ur')
+EPSILON = 1e-9
+
+SIDES = MapOfLists()
+
+for corner in CORNERS:
+    SIDES[corner[0]+'_'] = corner
+    SIDES['_'+corner[1]] = corner
+
+def RoundedRect(w, h, r, pos=(0.0, 0.0), **attrs):
     w = float(w)
     h = float(h)
 
@@ -78,6 +132,11 @@ def RoundedRect(w, h, r, pos=(0.0, 0.0), **attrs):
 
     if not isinstance(r, Mapping):
         r = dict(ul=r, ur=r, ll=r, lr=r)
+    else:
+        for side, corners in SIDES.items():
+            if side in r:
+                for corner in corners:
+                    r[corner] = r[side]
 
     path = NotTurtle( (pos[0]-w/2, pos[1]-h/2+r['ul']), DOWN, **attrs )
 
