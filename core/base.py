@@ -12,7 +12,7 @@ except NameError:
     basestring = str
 
 
-class Registry(object):
+class ElementRegistry(object):
     def __init__(self):
         self._store = {}
         self._flags = {'styled'}
@@ -44,7 +44,7 @@ class Registry(object):
         else:
             raise ValueError('Tag "{}" not found.'.format(tag))
 
-registry = Registry()
+registry = ElementRegistry()
 
 
 class Element(dict):

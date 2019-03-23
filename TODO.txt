@@ -36,15 +36,24 @@ generalized.py might miss the flipped y corrections.. or not need them?
 
 aiming to put comments tagged "IVY" wherever the inverted-y issue is relevant.. should be done, although misses are conceivable
 
+save legend as latex, process offline to svg with mathjax and some browserless javascript. When the lengend is added, include a svg switch for horizontal/ vertical/ landscape/ portrait layout. maybe another switch to reverse order.
+
+library support for svg actions might be nice to have. probably not specific appearance details, though.
+
 Add angle labels to the decorations sample
 add pen-off to the turntests sample
+
+css or some other support for ponoko output
+
+triphi depends on filterplexer and registry, those would need to go public first
+maybe upload the output to github
+looks like the bulk of it goes to the private branch, not just ugly notes
 
 triphi/simplesvg to github
 
 segregate TODO items, most of that isn't really for general consumption
-  there's an easy answer thath keeps private TODO tracked. a seperate branch! ideally, a separate github branch, but I'm not sure if that's possible/feasible. A new local branch would probably be better. Good idea for new repos, though! Actually, no. The dev/private branch should be the independent one.. maybe a seperate "release" branch, but that isn't the same as a github branch.
+  there's an easy answer that keeps private TODO tracked. a seperate branch! ideally, a separate github branch, but I'm not sure if that's possible/feasible. A new local branch would probably be better. Good idea for new repos, though! Actually, no. The dev/private branch should be the independent one.. maybe a seperate "release" branch, but that isn't the same as a github branch.
 
-  dev wouldn't necessarily be private always. or maybe it should tsart there, and evertually be promoted?
+  dev wouldn't necessarily be private always. or maybe it should start there, and eventually be promoted?
 
 A lot of the math notes in TriPhi are speculative, off on tangents that are not relevant enough or don't finish, or have redundancy. Split into public/private versions!
-TriPhi uses adb and that ought to be cleaned up? If not, take it out of the notes!
