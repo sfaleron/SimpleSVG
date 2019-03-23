@@ -104,6 +104,10 @@ class CData(str):
 
 @adder
 @registry.add('style')
+# I've see this wrapped in a defs element often, especially on W3C pages.
+# Not super clear why that might be a good idea, or if it's considered a
+# Best Practice. Easy enough for the calling code to wrap, if desired.
+#
 class CSS(Element):
     def __init__(self, pairs):
         Element.__init__(self, **{'type':'text/css'})

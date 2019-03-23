@@ -24,6 +24,7 @@ https://developer.mozilla.org/en-US/docs/Web/SVG
 
 https://www.w3.org/Graphics/SVG/
 https://jwatt.org/svg/authoring/
+https://flaviocopes.com/svg/
 
 API Documentation is lacking, but the samples should help, as should the motivation for writing this, The `TriPhi`_ application, which generates my avatar and explores the mathematical stucture within.
 
