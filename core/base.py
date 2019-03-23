@@ -204,6 +204,11 @@ class Element(dict):
     if hasattr(dict, 'iteritems'):
         items = dict.iteritems
 
+def make_element(tag, *flags):
+    E = type(tag, (Element,), {})
+    registry.add(tag, *flags)(E)
+    return E
+
 
 # Style element is implemented by the CSS class
 class Style(dict):
