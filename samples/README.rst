@@ -3,8 +3,8 @@
 
 ``turntests.py`` has two parts:
 
-- Demonstration of NotTurtle: a repeating pattern, with a quarter-turn each time.
-- Demonstration of RoundedRect: a collection of disjoint figures demonstrating the  class, which inherits from NotTurtle and allows for individual control of each corner's radius.
+- Demonstration of ``NotTurtle``: a repeating pattern, with a quarter-turn each time.
+- Demonstration of ``RoundedRect``: a collection of disjoint figures demonstrating the  class, which inherits from ``NotTurtle`` and allows for individual control of each corner's radius.
 
 ``decorations.py`` demonstrates the functions and classes provided by the ``lib.decorations`` module, which provides common (and uncommon generalizations of) geometric symbols and notations.
 
