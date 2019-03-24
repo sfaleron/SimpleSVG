@@ -1,7 +1,7 @@
 
 **SimpleSVG** creates `Inkscape`_-aware SVG documents with support for layers and groups. It is equally at home under Python2 or Python3.
 
-No dependencies in the core components; the classes and functions under ``lib/`` use the Standard Library, and the pure-python package `attrs`_. I'm not sure that generating SVG is a typical application in a stripped-down environment, but here it is!
+No dependencies in the core components; the classes and functions under ``lib/`` use the Standard Library and the pure-python package `attrs`_. I'm not sure that generating SVG is a typical application in a stripped-down environment, but here it is!
 
 Arguments dentined to be attribute values are converted to string and left uninterpreted as much as possible. The notable exception made is for booleans. ``str(True)`` and ``str(False)`` don't do the useful thing. For that matter, ``bool('False')`` doesn't either. When passing explicit strings, use what SVG expects, ``'0'`` or ``'1'``.
 
