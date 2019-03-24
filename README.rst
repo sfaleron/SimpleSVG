@@ -3,7 +3,7 @@
 
 No dependencies in the core components; the classes and functions under ``lib/`` use the Standard Library and the pure-python package `attrs`_. I'm not sure that generating SVG is a typical application in a stripped-down environment, but here it is!
 
-Arguments dentined to be attribute values are converted to string and left uninterpreted as much as possible. The notable exception made is for booleans. ``str(True)`` and ``str(False)`` don't do the useful thing. For that matter, ``bool('False')`` doesn't either. When passing explicit strings, use what SVG expects, ``'0'`` or ``'1'``.
+Arguments destined to be attribute values are converted to string and left uninterpreted as much as possible. The notable exception made is for booleans. ``str(True)`` and ``str(False)`` don't do the useful thing. For that matter, ``bool('False')`` doesn't either. When passing explicit strings, use what SVG expects, ``'0'`` or ``'1'``.
 
 Uninterpreted, passed-through keyword arguments are handled similarly. If you have a subclass of bool that you don't want converted to an int before becoming a string, wrap it and delegate ``__str__()`` or ``__format__()``.
 
