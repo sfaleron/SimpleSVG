@@ -96,15 +96,15 @@ class TSpan(Element):
         self.add(body)
 
 @adder
-# wouldn't make sense to add this to the registry,
-# but wouldn't be hard to parse, either.
+# wouldn't make sense to add this to the registry, but it wouldn't be hard
+# to parse, either. Might parse the odd SGML oddness more generally.
 class CData(str):
     def __new__(cls, cdata):
         return str.__new__(cls, '<![CDATA[{}]]>'.format(cdata))
 
 @adder
 @registry.add('style')
-# I've see this wrapped in a defs element often, especially on W3C pages.
+# I've seen this wrapped in a defs element often, especially on W3C pages.
 # Not super clear why that might be a good idea, or if it's considered a
 # Best Practice. Easy enough for the calling code to wrap, if desired.
 #

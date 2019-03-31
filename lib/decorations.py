@@ -7,8 +7,8 @@ from __future__ import division
 from     ..     import Path, Text
 
 from      .math import (
-    Point, toPoint, sin, between, pi,
-    midpoint, dist, cos, atan2, sqrt )
+    Point, sin, cos, between, pi,
+    atan2, midpoint, sqrt, dist )
 
 import re
 
@@ -20,7 +20,7 @@ class ArcDecorations(object):
     spacing = attr.ib()
 
     def __call__(self, ctr, leg0, leg1, bigArc=False, n=1, **kw):
-        ctr, leg0, leg1 = toPoint(ctr, leg0, leg1)
+        ctr, leg0, leg1 = Point.from_any(ctr, leg0, leg1)
 
         radius  = kw.pop( 'radius',  self.radius)
         spacing = kw.pop('spacing', self.spacing)
@@ -91,7 +91,7 @@ class CornerDecorations(object):
         return self.legLength * sqrt(2)
 
     def __call__(self, ctr, leg0, leg1, bigArc=False, n=1, **kw):
-        ctr, leg0, leg1 = toPoint(ctr, leg0, leg1)
+        ctr, leg0, leg1 = Point.from_any(ctr, leg0, leg1)
 
         legLength = kw.pop('legLength', self.legLength)
         diagonal  = kw.pop( 'diagonal',  self.diagonal)
@@ -147,7 +147,7 @@ class HatchDecorations(object):
     spacing = attr.ib()
 
     def __call__(self, pt0, pt1, n=1, **kw):
-        pt0, pt1 = toPoint(pt0, pt1)
+        pt0, pt1 = Point.from_any(pt0, pt1)
 
         length  = kw.pop( 'length',  self.length)
         spacing = kw.pop('spacing', self.spacing)
@@ -202,7 +202,7 @@ class HatchDecorations(object):
 class LineLabel(Text):
     # inverting the order of points is identical to inverting the rotation
     def __init__(self, pt1, pt2, text='', invert=False, **kw):
-        pt1, pt2 = toPoint(pt1, pt2)
+        pt1, pt2 = Point.from_any(pt1, pt2)
 
         if invert:
             pt1,pt2 = pt2,pt1
@@ -239,7 +239,7 @@ def print_(*args):
 
 class AngleLabel(Text):
     def __init__(self, ctr, leg0, leg1, radius=None, text='', rotate=0, dx=None, dy=None, **kw):
-        ctr, leg0, leg1 = toPoint(ctr, leg0, leg1)
+        ctr, leg0, leg1 = Point.from_any(ctr, leg0, leg1)
 
         show = kw.pop('show', False)
 
