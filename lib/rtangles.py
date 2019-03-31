@@ -76,15 +76,16 @@ class NotTurtle(Path):
 
         if r:
             delta = (sgnx*r, sgny*r)
+
             if self._drawing:
                 self.rel.arcTo( delta, r, r, 0, False, incAngle)
             else:
                 self.rel.moveTo(delta)
 
-        self._orientation  = orientation
+            self._location[0] += delta[0]
+            self._location[1] += delta[1]
 
-        self._location[0] += delta[0]
-        self._location[1] += delta[1]
+        self._orientation  = orientation
 
     def turnLeft(self, r):
         self._doTurn(LEFT, r)

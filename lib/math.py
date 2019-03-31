@@ -28,8 +28,8 @@ class IvyTransform(object):
     def __call__(self, x):
         return self.height-x
 
-from mathtups import make_mathtup
-Point = make_mathtup('Point', 2)
+from mathtuple import mathtuple
+Point = mathtuple('Point', 2)
 
 
 def between(pt1, pt2, pos):
