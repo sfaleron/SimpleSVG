@@ -13,7 +13,9 @@ Most core classes are straightforward wrappers, and offer small enhancements ove
 
 One of the libraries is rather niche in its applicability, but it will be greatly appreciated by those who have use of it. Various geometric decorations are provided in the ``lib.decorations`` module. Hatch marks for lines, and the angular analogue, as well as labels for lines and angles are provided. A "corner" variant of the arc markings is available for the familiar right-angle signifiers, but generalizes to any angle.
 
-Export to ElementTree is supported. Importing is a work-in-progress, but may suffice for some purposes. Use with caution.
+I'll spin this off to its own repository before long.
+
+Export to ElementTree is supported.
 
 Only a dozen or so element types are explicitly supported, but arbitary XML is supported via the make_element() factory, or by importing, with the caveats already mentioned.
 

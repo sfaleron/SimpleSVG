@@ -8,6 +8,11 @@
 
 ``decorations.py`` demonstrates the functions and classes provided by the ``lib.decorations`` module, which provides common (and uncommon generalizations of) geometric symbols and notations.
 
+You might also check out my `TriPhi`_ repository, which spun off from this one
+when it grew sufficiently sophisticated. I wrote this library to support creating
+the SVGs it produces. In particular, ``svg/unitpair.svg`` is an (ahem) "real-life"
+example using the decorations library.
 
 .. _Ponoko: https://www.ponoko.com/starter-kits/inkscape
 .. _Turtle: https://en.wikipedia.org/wiki/Turtle_graphics
+.. _TriPhi: https://github.com/sfaleron/TriPhi

@@ -77,11 +77,6 @@ class Path(Element):
         self._steps = src.steps[:]
         Element._copy_init(self, src)
 
-    def _import_init(self):
-        self._all_init()
-        self._steps = [self.pop('d')] if 'd' in self else []
-        Element._import_init(self, src)
-
     def append(self, e):
         self._steps.append(e)
 
