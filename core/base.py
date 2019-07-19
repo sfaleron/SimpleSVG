@@ -118,11 +118,6 @@ class Element(dict):
                 else:
                     self['style'] = Style.parse(self['style'])
 
-    # Called after xml attributes and child nodes are imported.
-    # src is presumed to be an ElementTree element.
-    def _import_init(self, src):
-        pass
-
     # theoretically, Elements with matching attributes could test
     # as equal, which should be avoided when managing children.
     def __eq__(self, other):
