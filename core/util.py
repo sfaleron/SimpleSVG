@@ -1,4 +1,6 @@
 
+from  __future__ import absolute_import
+
 def unexpression_adder(appendable=None):
     if appendable is None:
         appendable = []
@@ -14,10 +16,46 @@ def pairfmt(pair):
 def pairsfmt(pairs):
     return ' '.join(map(pairfmt, pairs))
 
-def attrs_to_xml(dct):
-    """Booleans are caught so that they do not convert to "True" and "False."
+
+_serializers = []
+
+def add_attrSerializer(shortDesc, predicate, transformer,
+    priority=0.0, chain=False, longDesc=None):
+
+    from  .util_ import AttrSerializer
+
+    _serializers.append(AttrSerializer(
+        shortDesc=shortDesc, predicate=predicate, transformer=transformer,
+        priority=priority, chain=chain, longDesc=longDesc ))
+
+add_attrSerializer(
+    shortDesc   = 'Booleans Are Not Strings',
+    predicate   = lambda k,v: isinstance(v, bool),
+    transformer = lambda k,v: int(v),
+    priority    = 9999,
+    chain       = False,
+    longDesc    = """
+    Booleans are caught so that they do not convert to "True" and "False".
     So, if you have a subclass of bool that you don't want converted to an
-    int, wrap it and delegate __str__() or __format__().
+    int, add a serializer with higher priority (lower numerically). Make
+    sure other sorts of booleans are passed through, either by chaining,
+    or a predicate that can't match anything other than your type.
     """
-    return ' '+' '.join(['{}="{}"'.format(k, int(v) if
-        isinstance(v, bool) else v) for k,v in dct.items()]) if dct else ''
+)
+
+def attrs_to_xml(dctIn):
+    dctOut = {}
+
+    for k,v in dctIn.items():
+        matches = [serializer for serializer in _serializers if serializer.predicate(k,v)]
+        matches.sort(key=lambda e: e.priority)
+
+        for serializer in matches:
+            v = serializer.transformer(k,v)
+            if not serializer.chain:
+                break
+
+        dctOut[k] = v
+
+    return ' ' + ' '.join([ '{}="{}"'.format(
+        k, v) for k,v in dctOut.items() ]) if dctIn else ''
