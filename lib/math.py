@@ -42,11 +42,6 @@ def midpoint(pt1, pt2):
 
     return Point((pt1.x+pt2.x)/2, (pt1.y+pt2.y)/2)
 
-def dist(pt1, pt2):
-    pt1, pt2 = Point.from_any(pt1, pt2)
-
-    return pt1.dist(pt2)
-
 
 def make_scaler(scale):
     class Scale(float):
