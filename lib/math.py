@@ -6,7 +6,8 @@ from  __future__ import division
 
 
 # extra symbols for "chained" importing
-from        math import sqrt, cos, sin, pi, hypot, atan2
+from        math import sqrt, cos, sin, pi, atan2
+from   mathtuple import *
 
 import      attr
 
@@ -28,7 +29,6 @@ class IvyTransform(object):
     def __call__(self, x):
         return self.height-x
 
-from mathtuple import mathtuple
 Point = mathtuple('Point', 2)
 
 
@@ -45,7 +45,7 @@ def midpoint(pt1, pt2):
 def dist(pt1, pt2):
     pt1, pt2 = Point.from_any(pt1, pt2)
 
-    return hypot(pt2.x-pt1.x, pt2.y-pt1.y)
+    return pt1.dist(pt2)
 
 
 def make_scaler(scale):
