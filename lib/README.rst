@@ -1,1 +1,6 @@
-This package is functional for some cases some of the time, but is far from 1.0 status. Do not rely on a stable API, or a stable anything else, for that matter!
+
+Several variations on continuous paths composed of horizontal lines, vertical
+lines, and ninety degree arcs, of any radius, reside here. Demonstrations are
+in the `samples` directory.
+
+Additional mathematical features from the add-on simplesvgmath are imported under `.math`, if it is found on the path.

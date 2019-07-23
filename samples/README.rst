@@ -6,12 +6,10 @@
 - Demonstration of ``NotTurtle``: a repeating pattern, with a quarter-turn each time.
 - Demonstration of ``RoundedRect``: a collection of disjoint figures demonstrating the  class, which inherits from ``NotTurtle`` and allows for individual control of each corner's radius.
 
-``decorations.py`` demonstrates the functions and classes provided by the ``lib.decorations`` module, which provides common (and uncommon generalizations of) geometric symbols and notations.
-
 You might also check out my `TriPhi`_ repository, which spun off from this one
 when it grew sufficiently sophisticated. I wrote this library to support creating
 the SVGs it produces. In particular, ``svg/unitpair.svg`` is an (ahem) "real-life"
-example using the decorations library.
+example using the decorations from the add-on simplesvgmath package.
 
 .. _Ponoko: https://www.ponoko.com/starter-kits/inkscape
 .. _Turtle: https://en.wikipedia.org/wiki/Turtle_graphics

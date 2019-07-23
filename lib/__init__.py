@@ -1,12 +1,12 @@
 
-from __future__ import absolute_import
+from  __future__ import absolute_import
 
 import xml.etree.ElementTree as _ET
 
-from        .rtangles import *
+from   .rtangles import *
 
 try:
-    from .decorations import *
+    from . import math
 except ImportError:
     pass
 
