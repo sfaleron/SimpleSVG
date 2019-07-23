@@ -1,0 +1,1 @@
+from simplesvgmath.decorations import *
