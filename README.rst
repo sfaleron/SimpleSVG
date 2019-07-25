@@ -27,7 +27,7 @@ Suggestions for further exploration of SVG:
 - https://jwatt.org/svg/authoring/
 - https://flaviocopes.com/svg/
 
-API Documentation is lacking, but the samples should help, as should the main motivation for writing this, the `TriPhi`_ application, which generates my avatar and explores the mathematical stucture within.
+API Documentation is lacking, but the samples should help, as should the main motivation for writing this, the `TriPhi`_ application, which generates my avatar and explores the mathematical `stucture`_ within.
 
 ----
 
@@ -36,6 +36,7 @@ This package is functional for some cases some of the time, but is far from 1.0 
 
 .. _Inkscape: https://inkscape.org/
 .. _TriPhi: https://github.com/sfaleron/TriPhi
+.. _structure: https://www.mathcha.io/editor/vEBYC1KFnvu2vIy2
 
 .. _svgwrite: https://pypi.org/project/svgwrite/
 .. _pyparser: https://pypi.org/project/pyparsing/
