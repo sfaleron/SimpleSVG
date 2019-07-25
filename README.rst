@@ -27,7 +27,7 @@ Suggestions for further exploration of SVG:
 - https://jwatt.org/svg/authoring/
 - https://flaviocopes.com/svg/
 
-API Documentation is lacking, but the samples should help, as should the main motivation for writing this, the `TriPhi`_ application, which generates my avatar and explores the mathematical `stucture`_ within.
+API Documentation is lacking, but the samples should help, as should the main motivation for writing this, the `TriPhi`_ application, which generates my avatar and explores the mathematical `structure`_ within.
 
 ----
 
