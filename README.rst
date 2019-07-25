@@ -30,6 +30,7 @@ Suggestions for further exploration of SVG:
 API Documentation is lacking, but the samples should help, as should the main motivation for writing this, the `TriPhi`_ application, which generates my avatar and explores the mathematical stucture within.
 
 ----
+
 This package is functional for some cases some of the time, but is far from 1.0 status. Do not rely on a stable API, or a stable anything else, for that matter!
 
 
