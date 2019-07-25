@@ -29,7 +29,7 @@ TURNS = {
 # Turtle, https://en.wikipedia.org/wiki/Turtle_graphics, is pretty simple.
 # What's missing:
 #   * Good location tracking
-#   * Turns in increments less than ninety degrees
+#   * Turns in angles other than multiples of ninety degrees
 #   * Changing the color and width of the "pen"
 #
 # Either of the last two would require a fair bit of refactoring, but pen

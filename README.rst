@@ -6,13 +6,17 @@ No dependencies in the core components; some of the classes and functions under
 
 Arguments destined to be attribute values are converted to strings and left uninterpreted as much as possible. The notable exception made is for booleans. ``str(True)`` and ``str(False)`` don't do the useful thing. For that matter, ``bool('False')`` doesn't either. When passing booleans explicitly as strings, use what SVG expects, ``'0'`` or ``'1'``.
 
-Uninterpreted, passed-through keyword arguments are handled similarly. If you have a subclass of bool that you don't want converted to an int before becoming a string, wrap it and delegate ``__str__()`` or ``__format__()``.
+Uninterpreted, passed-through keyword arguments are handled similarly. If a subclass of bool should't be converted to an int before becoming a string, wrap it and delegate
+``__str__()`` or ``__format__()`` (or define these explicitly, if control over the
+source is available). If a suitable predicate is available, use of customized
+serialization is recommended, via ``add_attrSerializer()``. The boolean handling is
+implemented in this manner, in ``core/util.py``, with explanations. Use it as a template and documentation.
 
 Note that the conversion is only made when the element is serialized, and this occurs on-demand in a synchronous manner, without any retention, so any side-effects occurring within nontrivial objects stored as attributes will remain as long as the object is among an element's attributes. The ``freeze_attrs()`` method will permanently stringify an iterable of attribute names, or all of them, if no iterable is provided.
 
-Most core classes are straightforward wrappers, and offer small enhancements over building XML from one of the usual suspects. SVGStack and the other small enhacements may be enough collectively to make this library useful, but where it really shines is the Path class and the library classes that build upon it. Check 'em out!
+Most core classes are straightforward wrappers, and offer small enhancements over building XML from one of the usual suspects. SVGStack and the other small enhancements may be enough collectively to make this library useful, but where it really shines is the Path class and the library classes that build upon it. Check 'em out!
 
-Export to ElementTree is supported.
+Export to `ElementTree`_ is supported.
 
 Only a dozen or so element types are explicitly supported, but arbitary XML is supported via the make_element() factory.
 
@@ -27,7 +31,7 @@ Suggestions for further exploration of SVG:
 - https://jwatt.org/svg/authoring/
 - https://flaviocopes.com/svg/
 
-API Documentation is lacking, but the samples should help, as should the main motivation for writing this, the `TriPhi`_ application, which generates my avatar and explores the `mathematical structure`_ within.
+API Documentation is lacking, but the ``samples/`` should help, as should the main motivation for writing this, the `TriPhi`_ application, which generates my avatar and explores the `mathematical structure`_ within.
 
 ----
 
@@ -40,3 +44,5 @@ This package is functional for some cases some of the time, but is far from 1.0 
 
 .. _svgwrite: https://pypi.org/project/svgwrite/
 .. _pyparser: https://pypi.org/project/pyparsing/
+
+.. _ElementTree: https://docs.python.org/library/xml.etree.elementtree.html
