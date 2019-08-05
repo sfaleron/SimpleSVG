@@ -1,4 +1,8 @@
 
+from __future__ import absolute_import
+
+from    .util_  import add_attrSerializer, _serializers
+
 import sys
 
 PY2 = sys.version_info[0] == 2
@@ -18,17 +22,6 @@ def pairfmt(pair):
 def pairsfmt(pairs):
     return ' '.join(map(pairfmt, pairs))
 
-
-_serializers = []
-
-def add_attrSerializer(shortDesc, predicate, transformer,
-    priority=0.0, chain=False, longDesc=None):
-
-    from  .util_ import AttrSerializer
-
-    _serializers.append(AttrSerializer(
-        shortDesc=shortDesc, predicate=predicate, transformer=transformer,
-        priority=priority, chain=chain, longDesc=longDesc ))
 
 add_attrSerializer(
     shortDesc   = 'Booleans Are Not Strings',
@@ -62,9 +55,7 @@ def attrs_to_xml(dctIn):
     return ' ' + ' '.join([ '{}="{}"'.format(
         k, v) for k,v in dctOut.items() ]) if dctIn else ''
 
-from collections import OrderedDict
-
-class SixDict3(OrderedDict):
+class SixDict3(dict):
     """Python2 compatible Python3-dict.
     Methods keys(), values(), and items() are set to their view counterparts."""
 
@@ -76,4 +67,4 @@ class SixDict3(OrderedDict):
         values = dict.viewvalues
 
     def __init__(self, *args, **kw):
-        OrderedDict.__init__(self, *args, **kw)
+        dict.__init__(self, *args, **kw)
