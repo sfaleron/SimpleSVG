@@ -41,7 +41,7 @@ add_attrSerializer(
 def attrs_to_xml(dctIn):
     dctOut = {}
 
-    for k,v in dctIn.items():
+    for k,v in sorted(dctIn.items()):
         matches = [serializer for serializer in _serializers if serializer.predicate(k,v)]
         matches.sort(key=lambda e: e.priority)
 
@@ -65,6 +65,3 @@ class SixDict3(dict):
         keys   = dict.viewkeys
         items  = dict.viewitems
         values = dict.viewvalues
-
-    def __init__(self, *args, **kw):
-        dict.__init__(self, *args, **kw)
