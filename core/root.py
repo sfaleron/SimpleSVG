@@ -1,14 +1,13 @@
 
 from __future__ import absolute_import
 
-from .base import Element, registry
+from .base import StyledElement, Element
 
 from .misc import Layer, Title
 
 allFlags = {'inkOffsetFix'}
 
-@registry.add('svg', 'styled')
-class SVG(Element):
+class SVG(StyledElement):
     # version should be passed as a string
     def __init__(self, title, version='1.1', docFlags=frozenset(), **attrs):
         self._stack       = None
@@ -27,7 +26,7 @@ class SVG(Element):
 
         self._ver = (major, minor)
 
-        Element.__init__(self, xmlns='http://www.w3.org/2000/svg', **attrs)
+        StyledElement.__init__(self, 'svg', xmlns='http://www.w3.org/2000/svg', **attrs)
 
         if major == '1':
             self[  'version'  ] = version
@@ -38,7 +37,7 @@ class SVG(Element):
         self.inkscape_on()
 
     def add(self, e):
-        Element.add(self, e)
+        StyledElement.add(self, e)
 
         if isinstance(e, Element):
             e.root = self
@@ -79,7 +78,7 @@ class SVG(Element):
 
     def _copy_init(self, src):
         self._standAlone = src._standAlone
-        Element._copy_init(self, src)
+        StyledElement._copy_init(self, src)
 
     def set_stack(self, stack):
         self._stack = stack
@@ -90,7 +89,7 @@ class SVG(Element):
     def __str__(self):
         return '<?xml version="1.0" encoding="utf-8" {2}?>\n{0}{1}'.format(
             ''.join(['<?xml-stylesheet href="{}" type="text/css" ?>\n'.format(
-                sheet) for sheet in self._styleSheets]), Element.__str__(self),
+                sheet) for sheet in self._styleSheets]), StyledElement.__str__(self),
             {True: 'standalone="yes" ', False: 'standalone="no" ',
                 None: ''}[self._standAlone] )
 
@@ -132,7 +131,7 @@ class SVG(Element):
             if e in self._stack:
                 raise ValueError('Layer is active.')
 
-        Element.remove(self, e)
+        StyledElement.remove(self, e)
 
     def _get_invisible_layers(self):
         return reversed(filter(

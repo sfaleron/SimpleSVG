@@ -1,17 +1,16 @@
 
 from __future__ import absolute_import
 
-from .base import Element, Style, registry
+from .base import Element, StyledElement
 from .util import unexpression_adder
 
 
 __all__, adder = unexpression_adder()
 
 @adder
-@registry.add('g', 'styled')
-class Group(Element):
+class Group(StyledElement):
     def __init__(self, id_, **attrs):
-        Element.__init__(self, **attrs)
+        StyledElement.__init__(self, 'g', **attrs)
         self['id'] = id_
 
 @adder
@@ -27,7 +26,7 @@ class Layer(Group):
 
     def _copy_init(self, src):
         self._inkState = src._inkState
-        Element._copy_init(self, src)
+        Group._copy_init(self, src)
 
     def _demote(self):
         for i in ('inkscape:groupmode', 'inkscape:label', 'style'):
@@ -50,17 +49,15 @@ class Layer(Group):
 
 
 @adder
-@registry.add('clipPath', 'styled')
-class ClipPath(Element):
+class ClipPath(StyledElement):
     def __init__(self, id_, **attrs):
-        Element.__init__(self, **attrs)
+        StyledElement.__init__(self, 'clipPath', **attrs)
         self['id'] = id_
 
 @adder
-@registry.add('use')
 class Use(Element):
     def __init__(self, ref, **attrs):
-        Element.__init__(self, **attrs)
+        Element.__init__(self, 'use', **attrs)
         self._href = '#'+ref
 
     def set_root(self, e):
@@ -69,49 +66,42 @@ class Use(Element):
         self[('xlink:' if self.version[0] == '1' else '') + 'href'] = self._href
 
 @adder
-@registry.add('defs')
 class Defs(Element):
-    pass
+    def __init__(self, **attrs):
+        Element.__init__(self, 'defs', **attrs)
 
 @adder
-@registry.add('title')
 class Title(Element):
     def __init__(self, body, **attrs):
-        Element.__init__(self, **attrs)
+        Element.__init__(self, 'title', **attrs)
         self.add(body)
 
 @adder
-@registry.add('desc')
 class Desc(Element):
     def __init__(self, body, **attrs):
-        Element.__init__(self, **attrs)
+        Element.__init__(self, 'desc', **attrs)
         self.add(body)
 
 @adder
-@registry.add('tspan')
 class TSpan(Element):
     def __init__(self, body, **attrs):
-        Element.__init__(self, **attrs)
+        Element.__init__(self, 'tspan', **attrs)
         self.delimiter = ''
         self.add(body)
 
 @adder
-# wouldn't make sense to add this to the registry, but it wouldn't be hard
-# to parse, either. Might parse the odd SGML oddness more generally.
 class CData(str):
     def __new__(cls, cdata):
         return str.__new__(cls, '<![CDATA[{}]]>'.format(cdata))
 
 @adder
-@registry.add('style')
 # I've seen this wrapped in a defs element often, especially on W3C pages.
 # Not super clear why that might be a good idea, or if it's considered a
 # Best Practice. Easy enough for the calling code to wrap, if desired.
-#
 class CSS(Element):
-    def __init__(self, pairs):
-        Element.__init__(self, **{'type':'text/css'})
+    def __init__(self, **selectors):
+        Element.__init__(self, 'style', **{'type':'text/css'})
 
         self.add(CData(''.join(['\n{} {{\n{}\n}}\n'.format(k,
-            '\n'.join(['{}: {};'.format(*i) for i in v.items()]))
-                for k,v in pairs ]) ))
+            '\n'.join(['{}: {};'.format(*i) for i in v.items()]) )
+                for k,v in selectors.items() ]) ))

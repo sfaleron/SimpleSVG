@@ -4,7 +4,7 @@
 
 from  __future__ import absolute_import
 
-from .util import attrs_to_xml
+from .util import attrs_to_xml, SixDict3 as dict
 
 try:
     basestring
@@ -12,61 +12,18 @@ except NameError:
     basestring = str
 
 
-class ElementRegistry(object):
-    def __init__(self):
-        self._store = {}
-        self._flags = {'styled'}
-
-    @property
-    def flags(self):
-        return self._flags
-
-    def add(self, tag, *flags):
-        for flag in flags:
-            if not flag in self._flags:
-                raise ValueError("Flag '{}' not recognized.".format(flag))
-
-        def dec(x):
-            self._store[tag] = x
-
-            x._flags = flags
-            x._tag   = tag
-            return x
-
-        return dec
-
-    def __contains__(self, tag):
-        return tag in self._store
-
-    def deregister(self, tag):
-        if tag in self:
-            return self._store.pop(tag)
-        else:
-            raise ValueError('Tag "{}" not found.'.format(tag))
-
-registry = ElementRegistry()
-
-
 class Element(dict):
     """Iteration is over children, not keys."""
 
-    def __init__(self, **attrs):
+    def __init__(self, tag, **attrs):
+        self._tag = tag
         self._root = None
         self._parent = None
 
         self._children  = []
         self._delimiter = '\n'
 
-        self.update(attrs)
-
-        if 'styled' in self.flags:
-            if 'style' in self:
-                if isinstance(self['style'], Style):
-                    self['style'] = self['style'].copy()
-                else:
-                    self['style'] = Style.parse(self['style'])
-            else:
-                self['style'] = Style()
+        dict.__init__(self, **attrs)
 
     @property
     def version(self):
@@ -111,12 +68,7 @@ class Element(dict):
 
     # Called after attributes and child nodes are copied.
     def _copy_init(self, src):
-        if 'styled' in self.flags:
-            if 'style' in self:
-                if isinstance(self['style'], Style):
-                    self['style'] = self['style'].copy()
-                else:
-                    self['style'] = Style.parse(self['style'])
+        pass
 
     # theoretically, Elements with matching attributes could test
     # as equal, which should be avoided when managing children.
@@ -129,10 +81,6 @@ class Element(dict):
     @property
     def tag(self):
         return type(self)._tag
-
-    @property
-    def flags(self):
-        return type(self)._flags
 
     def __iter__(self):
         return iter(self._children)
@@ -196,14 +144,6 @@ class Element(dict):
 
         return ''.join(parts)
 
-    if hasattr(dict, 'iteritems'):
-        items = dict.iteritems
-
-def make_element(tag, *flags):
-    E = type(tag, (Element,), {})
-    registry.add(tag, *flags)(E)
-    return E
-
 
 # Style element is implemented by the CSS class
 class Style(dict):
@@ -221,5 +161,22 @@ class Style(dict):
     def __str__(self):
         return ';'.join(['%s:%s' % i for i in self.items()])
 
-    if hasattr(dict, 'iteritems'):
-        items = dict.iteritems
+
+class StyledElement(Element):
+    def __init__(self, tag, **attrs):
+        Element.__init__(self, tag, **attrs)
+        self._acquire_styles()
+
+    def _acquire_styles(self):
+        if 'style' in self:
+            if isinstance(self['style'], Style):
+                self['style'] = self['style'].copy()
+            else:
+                self['style'] = Style.parse(self['style'])
+        else:
+            self['style'] = Style()
+
+    # Called after attributes and child nodes are copied.
+    def _copy_init(self, src):
+        Element._copy_init(self, src)
+        self._acquire_styles()

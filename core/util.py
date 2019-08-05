@@ -1,5 +1,7 @@
 
-from  __future__ import absolute_import
+import sys
+
+PY2 = sys.version_info[0] == 2
 
 def unexpression_adder(appendable=None):
     if appendable is None:
@@ -59,3 +61,19 @@ def attrs_to_xml(dctIn):
 
     return ' ' + ' '.join([ '{}="{}"'.format(
         k, v) for k,v in dctOut.items() ]) if dctIn else ''
+
+from collections import OrderedDict
+
+class SixDict3(OrderedDict):
+    """Python2 compatible Python3-dict.
+    Methods keys(), values(), and items() are set to their view counterparts."""
+
+    __slots__ = ()
+
+    if PY2:
+        keys   = dict.viewkeys
+        items  = dict.viewitems
+        values = dict.viewvalues
+
+    def __init__(self, *args, **kw):
+        OrderedDict.__init__(self, *args, **kw)
