@@ -39,7 +39,7 @@ add_attrSerializer(
 )
 
 def attrs_to_xml(dctIn):
-    dctOut = {}
+    kvOut = []
 
     for k,v in sorted(dctIn.items()):
         matches = [serializer for serializer in _serializers if serializer.predicate(k,v)]
@@ -50,10 +50,10 @@ def attrs_to_xml(dctIn):
             if not serializer.chain:
                 break
 
-        dctOut[k] = v
+        kvOut.append((k,v))
 
     return ' ' + ' '.join([ '{}="{}"'.format(
-        k, v) for k,v in dctOut.items() ]) if dctIn else ''
+        k, v) for k,v in kvOut ]) if dctIn else ''
 
 class SixDict3(dict):
     """Python2 compatible Python3-dict.

@@ -3,6 +3,8 @@ from __future__ import absolute_import
 
 from    .base   import StyledElement
 
+# need a custom serializer here too. maybe unify both!
+
 
 class PathOps(object):
     def __init__(self, host, absolute):
