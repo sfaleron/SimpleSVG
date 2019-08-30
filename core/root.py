@@ -134,8 +134,8 @@ class SVG(StyledElement):
         StyledElement.remove(self, e)
 
     def _get_invisible_layers(self):
-        return reversed(filter(
-            lambda e: isinstance(e, Layer) and not e.visible, self))
+        return reversed(tuple(filter(
+            lambda e: isinstance(e, Layer) and not e.visible, self)))
 
     def purge_invisible_layers(self):
         for e in self._get_invisible_layers():
